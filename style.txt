@@ -1,0 +1,75 @@
+GIT
+
+0. Make and assign issue
+1. Make a new branch (see below)
+2. Write code
+3. Commit with issue number (see below)
+4. Push branch
+5. Open PR
+6. Review PR
+7. Squash commits (see below)
+8. Push squashed commit to master
+
+How to properly make a new branch:
+
+0. Check out the master branch.
+   EX: git checkout master
+
+1. Check out a new branch with your initials and a brief dash-separated
+   description of your change.
+   EX: git checkout -b mb-fix-xyz-bug
+       (assuming you are Maxwell "Emacs" Bernstein)
+
+How to write a good commit message:
+
+1. Use the first line for a sensible and brief description of your changes. Make
+   it somewhat specific. Try and make sure it starts with a verb and is present
+   tense. Keep it <= 50 characters.
+   EX: Add all the images from the hackathon.
+
+2. Use the lines after the first line (and a blank line) to give some more
+   details about the changes you made. Perhaps give a rationale, a shout-out,
+   etc.
+   EX: Thank you to Logan Garbarini for the amazing shots, and to Max Bernstein
+   for the dope picture of Sam Purcell.
+
+How to squash and rebase commits:
+
+1. Check out a new branch with the name of your current branch plus suffix
+   -squashed. Make sure to use -b so that it clones your current branch.
+   EX: git checkout -b mb-fix-xyz-bug-squashed
+
+2. Rebase the squashed branch so that it only contains one commit with all of
+   your branch's changes.
+   EX: git rebase -i HEAD ~n
+       (where n is the number of commits you wrote)
+
+3. Rebase the squashed branch back into master after fetching and rebasing
+   other people's updates.
+   EX: git checkout master
+       git fetch origin master
+       git rebase origin/master
+       git rebase mb-fix-xyz-bug-squashed
+
+CODE
+
+0. Indentation with 4 spaces
+   0a. Makes nested things easier to read
+1. 80 columns
+2. Braces on the next line
+   2a. Braces
+3. Function call / control flow spacing as seen in style-after.c. Braces on
+   same line, else on different line, no space before function definition or
+   call
+4. Block comments only
+5. Only really important block comments should look like this:
+       /*
+        * thing thing thing
+	*/
+   Others should look like this:
+       /* thing thing thing */
+
+COMMUNICATION
+
+1. Non-code discussions on Slack
+2. Code discussions in issue or pull request
