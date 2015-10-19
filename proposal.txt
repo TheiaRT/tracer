@@ -1,0 +1,29 @@
+COMP 50CP PROJECT PROPOSAL
+
+GROUP
+
+#ConcurrentSwag, pronounced "littletictactoeboard concurrent swag", the group
+formerly known as "octothorpe concurrent swag"
+
+MEMBERS
+
+Arthur Berman, Thomas Colgrove, Kate Wasynczuk, Maxwell Bernstein
+
+IDEA
+
+Distributed ray tracer
+
+DETAIL
+
+0. ABSTRACT
+
+We write a render server that, given n > 0 computers and a list of frames,
+distributes the rendering. This is a classic Producer-Consumer problem.
+
+1. USE CASE
+
+Suppose you have a film you are rendering. This film has a lot of hair, a lot of
+snow, and a lot of water. And they're ALL MOVING. As you may already know, all
+of those things are very computationally difficult to render. What if, though,
+you had a mass of computers at the ready, each with the capacity to render a
+single frame? Brilliant! Problem solved.
