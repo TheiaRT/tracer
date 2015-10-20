@@ -7,23 +7,32 @@ formerly known as "octothorpe concurrent swag"
 
 MEMBERS
 
-Arthur Berman, Thomas Colgrove, Kate Wasynczuk, Maxwell Bernstein
+Arthur "Bermanator" Berman, Thomas "Tommasso" Colgrove, Kate "Kaytea" Wasynczuk,
+Maxwell "Emacs" Bernstein
 
 IDEA
 
-Distributed ray tracer
+Distributed Ray J tracer
 
 DETAIL
 
 0. ABSTRACT
 
 We write a render server that, given n > 0 computers and a list of frames,
-distributes the rendering. This is a classic Producer-Consumer problem.
+distributes the rendering. This is a classic Producer-Consumer problem. The
+producers each render frames and the consumer joins them into a movie file,
+perhaps (according to codec) with compression.
 
-1. USE CASE
+1. USE CASES
 
 Suppose you have a film you are rendering. This film has a lot of hair, a lot of
 snow, and a lot of water. And they're ALL MOVING. As you may already know, all
 of those things are very computationally difficult to render. What if, though,
 you had a mass of computers at the ready, each with the capacity to render a
 single frame? Brilliant! Problem solved.
+
+Suppose your computer is so terrible that it takes 5ever to render a single
+frame. Then you might say, "Welp, I'm done for. Can't even render a frame - how
+will I ever render a movie?" THIS JUST IN! Our project can help you split up an
+individual frame and render that across several computers! We just hope for your
+sake that the latency doesn't hurt the effort.
