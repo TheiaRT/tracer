@@ -57,7 +57,7 @@ CODE
    0a. Makes nested things easier to read
 1. 80 columns
 2. Braces on the next line
-   2a. Braces
+   2a. Braces required
 3. Function call / control flow spacing as seen in style-after.c. Braces on
    same line, else on different line, no space before function definition or
    call
