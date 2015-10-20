@@ -1,0 +1,64 @@
+COMP 50CP PROJECT PROPOSAL
+
+GROUP
+
+#ConcurrentSwag, pronounced "littletictactoeboard concurrent swag", the group
+formerly known as "octothorpe concurrent swag"
+
+MEMBERS
+
+Arthur "Bermanator" Berman, Thomas "Tommasso" Colgrove, Kate "Kate" Wasynczuk,
+Maxwell "Emacs" Bernstein
+
+IDEA
+
+Distributed ray tracer
+
+DELIVERABLES
+
+0. MINIMUM
+
+The ray tracer can distribute a set of frames, each to a different thread, for
+processing.
+
+1. MAXIMUM
+
+The ray tracer can distribute a set of frames or parts of a frame, each to a
+different thread (perhaps even on a different computer) for processing.
+
+DETAIL
+
+0. ABSTRACT
+
+We write a render server that, given n > 0 computers and a list of frames,
+distributes the rendering. This is a classic Producer-Consumer problem. The
+producers each render frames and the consumer joins them into a movie file,
+perhaps (according to codec) with compression.
+
+1. USE CASES
+
+Suppose you have a film you are rendering. This film has a lot of hair, a lot of
+snow, and a lot of water. And they're ALL MOVING. As you may already know, all
+of those things are very computationally difficult to render. What if, though,
+you had a mass of computers at the ready, each with the capacity to render a
+single frame? Brilliant! Problem solved.
+
+Suppose your computer is so terrible that it takes 5ever to render a single
+frame. Then you might say, "Welp, I'm done for. Can't even render a frame - how
+will I ever render a movie?" THIS JUST IN! Our project can help you split up an
+individual frame and render that across several computers! We just hope for your
+sake that the latency doesn't hurt the effort.
+
+2. FIRST STEP
+
+We need to learn more about ray tracing theory and technique before writing a
+ray tracer. In fact, before we distribute the work, we should make a
+single-threaded ray tracer.
+
+3. POSSIBLE PROBLEMS
+
+(a) The math may prove too complex or too intractable for the problem
+time-frame.
+
+(b) Frames may not be able to be split into chunks for processing. We don't
+know enough about ray tracing to answer this.
