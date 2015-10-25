@@ -7,7 +7,7 @@ formerly known as "octothorpe concurrent swag"
 
 MEMBERS
 
-Arthur "Bermanator" Berman, Thomas "Tommasso" Colgrove, Kate "Kaytea" Wasynczuk,
+Arthur "Bermanator" Berman, Thomas "Tommasso" Colgrove, Kate "Kate" Wasynczuk,
 Maxwell "Emacs" Bernstein
 
 IDEA
