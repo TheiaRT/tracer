@@ -14,6 +14,18 @@ IDEA
 
 Distributed Ray J tracer
 
+DELIVERABLES
+
+0. MINIMUM
+
+The ray tracer can distribute a set of frames, each to a different thread, for
+processing.
+
+1. MAXIMUM
+
+The ray tracer can distribute a set of frames or parts of a frame, each to a
+different thread (perhaps even on a different computer) for processing.
+
 DETAIL
 
 0. ABSTRACT
@@ -36,3 +48,17 @@ frame. Then you might say, "Welp, I'm done for. Can't even render a frame - how
 will I ever render a movie?" THIS JUST IN! Our project can help you split up an
 individual frame and render that across several computers! We just hope for your
 sake that the latency doesn't hurt the effort.
+
+2. FIRST STEP
+
+We need to learn more about ray tracing theory and technique before writing a
+ray tracer. In fact, before we distribute the work, we should make a
+single-threaded ray tracer.
+
+3. POSSIBLE PROBLEMS
+
+(a) The math may prove too complex or too intractable for the problem
+time-frame.
+
+(b) Frames may not be able to be split into chunks for processing. We don't
+know enough about ray tracing to answer this.
