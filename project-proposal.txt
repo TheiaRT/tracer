@@ -12,7 +12,7 @@ Maxwell "Emacs" Bernstein
 
 IDEA
 
-Distributed Ray J tracer
+Distributed ray tracer
 
 DELIVERABLES
 
