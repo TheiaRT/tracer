@@ -30,3 +30,7 @@
 
 # Debug files
 *.dSYM/
+
+# Linked executables (keep updated)
+src/test
+src/unittest
