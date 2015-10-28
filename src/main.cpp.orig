@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+#include "ray_tracer.h"
+
+int main(int argc, char **argv) {
+    sphere_t sphere(0, 0, 0, 2);
+    RayTracer r(&sphere, 1);
+    PnmImage image = r.render_image(100, 100);
+
+    if (argc != 2) {
+	return 1;
+    }
+
+    FILE *fp = fopen(argv[1], "w+");
+    if (fp == NULL) {
+	return 2;
+    }
+
+    if (!image.write(fp)) {
+	return 3;
+    }
+
+    return 0;
+}
