@@ -6,3 +6,7 @@ ray_tracer: pnm_image
 
 pnm_image:
 	clang++ -g -c pnm_image.cpp
+tests:  pnm_tests
+	clang++ -g pnm_image.o pnm_tests.cpp -o unittest
+pnm_tests: pnm_image
+	clang++ -g -c pnm_tests.cpp
