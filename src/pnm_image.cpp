@@ -31,8 +31,8 @@ bool PnmImage::write(FILE *fp) {
     fprintf(fp, "P3\n");
     fprintf(fp, "%lu %lu\n", this->width, this->height);
     fprintf(fp, "%lu\n", this->denominator);
-    for (size_t x = 0; x < this->width; x++) {
-        for (size_t y = 0; y < this->height; y++) {
+    for (size_t y = 0; y < this->height; y++) {
+        for (size_t x = 0; x < this->width; x++) {
             pixel_t pix = this->pixels[x][y];
             fprintf(fp, " %lu %lu %lu", pix.r, pix.g, pix.b);
         }
