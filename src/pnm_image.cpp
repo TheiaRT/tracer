@@ -28,6 +28,9 @@ PnmImage PnmImage::read(FILE *fp) {
 }
 
 bool PnmImage::write(FILE *fp) {
+    if (fp == NULL) {
+        return false;
+    }
     fprintf(fp, "P3\n");
     fprintf(fp, "%lu %lu\n", this->width, this->height);
     fprintf(fp, "%lu\n", this->denominator);
