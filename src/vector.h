@@ -42,6 +42,10 @@ struct vector3_t {
     vector3_t operator*(double b) {
         return vector3_t(b * x, b * y, b * z);
     }
+
+    double dot(const vector3_t &b) {
+        return x * b.x + y * b.y + z * b.z;
+    }
 };
 
 struct ray_t {

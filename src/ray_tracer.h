@@ -17,6 +17,15 @@ struct sphere_t {
         loc = vector3_t(x, y, z);
         this->radius = radius;
     }
+
+    bool intersect_ray(ray_t ray) {
+        float A = ray.direction.dot(ray.direction);
+        vector3_t dist = ray.start - loc;
+        float B = 2 * ray.direction.dot(dist);
+        float C = dist.dot(dist) - radius * radius;
+        float discr = B * B - 4 * A * C;
+        return disc >= 0;
+    }
 };
 
 class RayTracer {
