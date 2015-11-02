@@ -18,6 +18,8 @@ struct sphere_t {
         this->radius = radius;
     }
 
+    /* I learned how to check if a ray intersects a circle from here:
+       http://www.purplealienplanet.com/node/20 */
     bool intersect_ray(ray_t ray) {
         float A = ray.direction.dot(ray.direction);
         vector3_t dist = ray.start - loc;
