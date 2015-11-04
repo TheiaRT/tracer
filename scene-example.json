@@ -1,0 +1,22 @@
+[
+    {
+	"shape": "sphere",
+	"loc": {
+	    "x": 0,
+	    "y": 0,
+	    "z": 0
+	},
+	"color": "#ffffff",
+	"radius": 10
+    },
+    {
+	"shape": "cube",
+	"loc": {
+	    "x": 0,
+	    "y": 0,
+	    "z": 0
+	},
+	"color": "#000000",
+	"side_length": 15
+    }
+]
