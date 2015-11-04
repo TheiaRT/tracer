@@ -1,0 +1,159 @@
+COMP 50CP PROJECT INITIAL DESIGN
+
+GROUP
+
+#ConcurrentSwag, pronounced "littletictactoeboard concurrent swag", the group
+formerly known as "octothorpe concurrent swag"
+
+MEMBERS
+
+Arthur "BerVim" Berman, Thomas "Atom" Colgrove, Kate "Kate" Wasynczuk,
+Maxwell "Emacs" Bernstein
+
+STORY
+
+1. PROBLEM
+
+We want to parallelize ray tracing across multiple machines instead of just
+multiple processes on one machine. These machines and processes need to
+communicate.
+
+2. WAYS CONSIDERED
+
+(a) A thin-server and heavy-client approach, where each client is knowledgeable
+about the scene and only asks the server for areas of pixels to work on.
+
+(b) A manager/thin-server, and heavy-client approach, where the manager spawns
+the server and clients.
+
+(c) A manager, not-so-thin-server, and heavy-client approach, where the manager
+controls the scene(s) being worked on, and server can communicate scenes to
+clients.
+
+3. WHAT WE CHOSE
+
+We chose (c) because it offers the most extensibility and least amount of
+mutable resource sharing. It is also the easiest to employ in a practical
+manner. For example, imagine rending several scenes - a thin-server would not
+alone be able to distinguish between the scenes.
+
+- Description of obj-diagram.png and ray-tracing-architecture.png:
+
+In this state, we see two clients and one server. The server is attempting to
+render an image with an arbitrary width and height. The server can be in one of
+two states: assigning work, and outputting image. When the server is assigning
+work, it waits for messages from clients, then allocates work to each client
+that asks. The server selects work based on the current front of a circular 
+queue. Once work is complete, it is removed from the queue. 
+Work consists of a named scene description file and a set of
+pixels. Once every pixel has been returned by a client, the server transitions
+to outputtting an image.
+
+When the server is outputting an image, the server writes a file to the
+filesystem containing the rendered image.
+
+There are two clients connected to the server. Client A is looking for work.
+Client B is working. Client A has sent a message to the server requesting a set
+of pixels. When the server responds, Client A will transition to the working
+state.
+
+Client B, in the working state, is iterating through the set of pixels in its
+packet of work. It has opened a shared scene description from the filesystem,
+specified by the filename sent with the work message. For each pixel, it uses a
+traced ray to determine the correct color. Once all pixels have been correctly
+rendered, it returns the set of rendered colors to the server and transitions to
+look for work.
+
+PROGRESS
+
+1. Developed a clear client/server architecture.
+
+2. Extensively researched ray-tracing algorithms.
+
+3. Implemented some simple c++ classes for core data structures and modules (PNM
+   rendering, vector math, objects in 3d space).
+
+4. Built unit tests.
+
+DEVELOPMENT PLAN
+
+0. DONE SO FAR
+
+(a) Base classes and groundwork for ray Tracer implementation
+
+Virtual interface class to describe SceneObjects:
+
+- SceneObject, a description of a 3D objects that exists in the world, which
+  includes a method for intersecting rays
+- Implementation of a Sphere class implementing SceneObject, complete with
+  intersection logic
+- Basic (in progress) implementation of a single threaded ray tracing
+  algorithm
+- Working implementation of important utility classes and structs including:
+    - vector3_t, used for easy vector math with operator overloading
+	- color_t, basic color type describing red, green, blue and alpha values
+	- material_t, describes properties of surfaces on SceneObjects including
+	  diffuse, emission, reflection, etc.
+
+(b) C++ PNM implementation for displaying our rendered images
+
+- Basic pnm_ppm implementation used to render image to a file
+
+(c) Simple JSON format for encoding scene descriptions
+
+1. HOW TO PROCEED & DIVISION OF LABOR
+
+We will operate in one-week sprints as pairs. Programming will be done in the
+COMP 40 pair-programming paradigm, with two members of the group on one
+computer, with one driving and the other providing feedback. In our first
+sprint, one pair will develop a single-threaded ray tracer, while the other
+pair will develop the scene description parser. In the second sprint, we will
+switch partners. One pair will integrate the work done in the first sprint,
+while the other will begin building the message passing RPC system. In future
+sprints, we will split the raytracer into multiple executables that communicate
+via message passing in an RPC system.
+
+2. INTERFACE MANAGEMENT
+
+We have weekly full-group meetings to decide how each pair's interface will be
+structured and what data it should pass around. Within a pair, the interfaces
+are decided by deciding the most useful or elegant way to use the
+interface. Then the library is written and the interface revised to accomdate
+for technical challenges that might crop up.
+
+UPDATE FROM PROJECT PROPOSAL
+
+0. DELIVERABLES
+
+(a) MINIMUM
+
+The ray tracer will now be able to distribute a set of pixels, each to a
+different thread, for processing.
+
+(b) MAXIMUM
+
+The ray tracer will now be able to distribute a set of pixels, each to a
+different thread, perhaps across hosts, for processing.
+
+1. DETAIL
+
+(a) ABSTRACT
+
+We write a render server that clients (producers) can connect to in order to
+receive work. This work is in the form of sets of pixels that the server
+(consumer) can then join to form a single frame.
+
+(b) USE CASES
+
+Unchanged.
+
+(c) FIRST STEP
+
+We are close to completing our single-threaded ray tracer in parallel with a
+scene file parser.
+
+(d) POSSIBLE PROBLEMS
+
+i) The math is no longer too complex.
+
+ii) We can very easily split frames into chunks.
