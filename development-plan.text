@@ -1,0 +1,15 @@
+What we have done so far:
+
+1. Developed a clear client/server architecture. 
+2. Extensively researched ray-tracing algorithms. 
+3. Implemented some simple c++ classes for core data structures and modules (PNM rendering, vector math, objects in 3d space).
+4. Built unit tests. 
+
+Our plan:
+
+We will operate in one-week sprints as pairs. Programming will be done in the Comp40 pair-programming paradigm, with two members of the group
+on one computer, with one driving and the other providing feedback. In our first sprint, one pair will develop a single-threaded ray tracer,
+   while the other pair will develop the scene description parser. In the second sprint, we will switch partners. 
+   One pair will integrate the work done in the first sprint, while the other will begin building the message passing RPC system. 
+   In future sprints, we will integrate
+
