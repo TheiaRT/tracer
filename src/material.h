@@ -58,6 +58,7 @@ struct material_t {
     double shine;
 };
 
+/* http://www.nicoptere.net/dump/materials.html */
 const material_t BRASS = {
     .ambient  = {0.329412, 0.223529, 0.027451, 1},
     .diffuse  = {0.780392, 0.568627, 0.113725, 1},
