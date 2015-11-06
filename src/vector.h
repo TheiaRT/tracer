@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <sstream>
+#include <cmath>
 
 struct vector3_t {
     double x, y, z;

@@ -3,7 +3,7 @@
 
 struct color_t {
     double r, g, b, a;
-}
+};
 
 struct material_t {
     color_t ambient;
@@ -11,14 +11,14 @@ struct material_t {
     color_t specular;
     color_t emission;
     double shine;
-}
+};
 
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */
 class SceneObject
 {
-public:
+  public:
     virtual bool intersect_ray(ray_t ray, vector3_t &point) = 0;
 
-protected:
+  protected:
     material_t material;
-}
+};
