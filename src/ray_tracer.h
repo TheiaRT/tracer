@@ -25,7 +25,7 @@ struct sphere_t {
         vector3_t dist = ray.start - loc;
         float B = 2 * ray.direction.dot(dist);
         float C = dist.dot(dist) - radius * radius;
-        float discr = B * B - 4 * A * C;
+        float disc = B * B - 4 * A * C;
         return disc >= 0;
     }
 };
