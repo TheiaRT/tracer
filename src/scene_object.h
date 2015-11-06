@@ -17,8 +17,7 @@ struct material_t {
 };
 
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */
-class SceneObject
-{
+class SceneObject {
   public:
     virtual bool intersect_ray(ray_t ray, vector3_t &point) = 0;
 
