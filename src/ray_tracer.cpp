@@ -1,3 +1,5 @@
+#include "ray.h"
+#include "pnm_image.h"
 #include "ray_tracer.h"
 
 RayTracer::RayTracer(sphere_t *scene, size_t num_objects)

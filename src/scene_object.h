@@ -1,3 +1,6 @@
+#ifndef SCENE_OBJECT_H
+#define SCENE_OBJECT_H
+
 #include "pnm_image.h"
 #include "vector.h"
 
@@ -22,3 +25,5 @@ class SceneObject
   protected:
     material_t material;
 };
+
+#endif
