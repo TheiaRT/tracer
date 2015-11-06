@@ -11,10 +11,10 @@ PnmImage::PnmImage(size_t width, size_t height) {
 }
 
 PnmImage::~PnmImage() {
-    // for (size_t i = 0; i < height; i++) {
-    //     delete [] this->pixels[i];
-    // }
-    // delete [] this->pixels;
+    for (size_t i = 0; i < height; i++) {
+         delete [] this->pixels[i];
+    }
+    delete [] this->pixels;
 }
 
 void PnmImage::init(size_t width, size_t height, long denom) {

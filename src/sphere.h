@@ -12,6 +12,7 @@ public:
 private:
     vector3_t loc;
     double radius;
+
     void init(vector3_t loc, material_t material, double radius) {
         this->loc = loc;
         this->material = material;

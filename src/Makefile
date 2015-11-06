@@ -2,10 +2,10 @@ CXX = clang++
 CFLAGS = -g -std=c++11
 
 all: ray_tracer
-	$(CXX) $(CFLAGS) pnm_image.o ray_tracer.o main.cpp -o test
+	$(CXX) $(CFLAGS) pnm_image.o ray_tracer.o sphere.o point_light.o main.cpp -o test
 
 ray_tracer: pnm_image
-	$(CXX) $(CFLAGS) -c ray_tracer.cpp
+	$(CXX) $(CFLAGS) -c ray_tracer.cpp sphere.cpp point_light.cpp
 
 pnm_image:
 	$(CXX) $(CFLAGS) -c pnm_image.cpp
