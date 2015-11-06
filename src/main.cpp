@@ -1,15 +1,15 @@
 #include <stdio.h>
+#include <vector>
 
 #include "ray_tracer.h"
 
 int main(int argc, char **argv)
 {
-    sphere_t scene[] = {
-        sphere_t(200, 200, 100, 100),
-        sphere_t(0, 0, 100, 50)
-    };
+    std::vector<SceneObject *> scene;
+    scene.push_back(new Sphere(200, 200, 100, 100));
+    scene.push_back(new Sphere(0, 0, 100, 50));
 
-    RayTracer tracer(scene, 2);
+    RayTracer tracer(scene);
     PnmImage image = tracer.render_image(400, 400);
 
     FILE *fp;

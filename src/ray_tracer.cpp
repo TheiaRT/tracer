@@ -1,10 +1,12 @@
+#include <vector>
+
+#include "vector.h"
 #include "pnm_image.h"
 #include "ray_tracer.h"
 
-RayTracer::RayTracer(sphere_t *scene, size_t num_objects)
+RayTracer::RayTracer(std::vector<SceneObject *> scene)
 {
     this->scene = scene;
-    this->num_objects = num_objects;
 }
 
 RayTracer::~RayTracer()
@@ -12,9 +14,7 @@ RayTracer::~RayTracer()
 
 }
 
-/*
- * Renders the scene into a PnmImage, casting rays.
- */
+/* Renders the scene into a PnmImage, casting rays. */
 PnmImage RayTracer::render_image(size_t width, size_t height)
 {
     PnmImage image(width, height);
@@ -37,10 +37,10 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
  */
 pixel_t RayTracer::cast_ray(ray_t ray)
 {
+    size_t num_objects = scene.size();
     for (size_t i = 0; i < num_objects; i++) {
         vector3_t ipoint;
-        bool does_intersect = scene[i].intersect_ray(ray, ipoint);
-        if (does_intersect) {
+        if (scene[i]->intersect_ray(ray, ipoint)) {
             return pixel_t(255, 255, 255);
         }
     }
