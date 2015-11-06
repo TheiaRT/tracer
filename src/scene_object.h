@@ -3,18 +3,7 @@
 
 #include "pnm_image.h"
 #include "vector.h"
-
-struct color_t {
-    double r, g, b, a;
-};
-
-struct material_t {
-    color_t ambient;
-    color_t diffuse;
-    color_t specular;
-    color_t emission;
-    double shine;
-};
+#include "material.h"
 
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */
 class SceneObject {
