@@ -23,6 +23,7 @@ public:
     PnmImage(size_t width, size_t height, long denom);
     PnmImage(size_t width, size_t height);
     ~PnmImage();
+    void init(size_t width, size_t height, long denom);
     static PnmImage read(FILE *fp);
     bool write(FILE *fp);
     bool set_pixel(size_t x, size_t y, pixel_t pixel);

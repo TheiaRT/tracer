@@ -18,12 +18,12 @@ RayTracer::~RayTracer()
 PnmImage RayTracer::render_image(size_t width, size_t height)
 {
     PnmImage image(width, height);
+    ray_t ray(vector3_t(0, 0, 0), vector3_t(0, 0, 1));
 
     for (size_t x = 0; x < width; x++) {
+        ray.start.x = x;
         for (size_t y = 0; y < height; y++) {
-            vector3_t start(x, y, -1000.0);
-            vector3_t direction(0, 0, 0);
-            ray_t ray(start, direction);
+            ray.start.y = y;
             image.set_pixel(x, y, cast_ray(ray));
         }
     }
@@ -31,7 +31,19 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
     return image;
 }
 
-pixel_t RayTracer::cast_ray(ray_t r)
+/*
+  TODO: figure out which has the smallest distance
+  TODO: make conical ray tracing
+ */
+pixel_t RayTracer::cast_ray(ray_t ray)
 {
-    return pixel_t();
+    for (size_t i = 0; i < num_objects; i++) {
+        vector3_t ipoint;
+        bool does_intersect = scene[i].intersect_ray(ray, ipoint);
+        if (does_intersect) {
+            return pixel_t(255, 255, 255);
+        }
+    }
+
+    return pixel_t(0, 0, 0);
 }

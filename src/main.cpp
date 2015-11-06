@@ -4,9 +4,13 @@
 
 int main(int argc, char **argv)
 {
-    sphere_t sphere(0, 0, 0, 2);
-    RayTracer r(&sphere, 1);
-    PnmImage image = r.render_image(100, 100);
+    sphere_t scene[] = {
+        sphere_t(200, 200, 100, 100),
+        sphere_t(0, 0, 100, 50)
+    };
+
+    RayTracer tracer(scene, 2);
+    PnmImage image = tracer.render_image(400, 400);
 
     FILE *fp;
     if (argc == 1) {
