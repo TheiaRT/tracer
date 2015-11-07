@@ -46,6 +46,10 @@ struct vector3_t {
     double dot(const vector3_t &b) {
         return x * b.x + y * b.y + z * b.z;
     }
+
+    double distance_from(const vector3_t &b) {
+        return (*this - b).magnitude();
+    }
 };
 
 struct ray_t {
