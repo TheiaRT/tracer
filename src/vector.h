@@ -41,6 +41,23 @@ struct vector3_t {
     vector3_t operator*(double b) {
         return vector3_t(b * x, b * y, b * z);
     }
+
+    double dot(const vector3_t &b) {
+        return x * b.x + y * b.y + z * b.z;
+    }
+
+    double distance_from(const vector3_t &b) {
+        return (*this - b).magnitude();
+    }
+};
+
+struct ray_t {
+    vector3_t start, direction;
+
+    ray_t(vector3_t start, vector3_t direction) {
+        this->start = start;
+        this->direction = direction;
+    }
 };
 
 #endif
