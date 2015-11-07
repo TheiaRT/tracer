@@ -2,19 +2,23 @@
 #include <vector>
 
 #include "sphere.h"
+#include "point_light.h"
 #include "ray_tracer.h"
 #include "material.h"
 
 int main(int argc, char **argv)
 {
-    std::vector<SceneObject *> scene;
-    scene.push_back(new Sphere(200, 200, 100, CHROME, 100));
-    scene.push_back(new Sphere(0, 0, 100, JADE, 50));
+    std::vector<SceneObject *> scene_objects;
+    scene_objects.push_back(new Sphere(200, 200, 100, CHROME, 100));
+    scene_objects.push_back(new Sphere(0, 0, 100, JADE, 50));
 
-    RayTracer tracer(scene);
+    std::vector<PointLight *> scene_lights;
+    scene_lights.push_back(new PointLight(100, 100, 200, 255));
+
+    RayTracer tracer(scene_objects);
     PnmImage image = tracer.render_image(400, 400);
 
-    for (SceneObject *s : scene) {
+    for (SceneObject *s : scene_objects) {
         delete (Sphere *) s;
     }
 
