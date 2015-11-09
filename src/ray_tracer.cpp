@@ -1,4 +1,3 @@
-#include "ray.h"
 #include "pnm_image.h"
 #include "ray_tracer.h"
 
