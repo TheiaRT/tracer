@@ -1,0 +1,22 @@
+In this state, we see two clients and one server. The server is attempting to
+render an image with an arbitrary width and height. The server can be in 
+one of two states: assigning work, and outputting image. When the server
+is assigning work, it waits for messages from clients, then allocates
+work to each client that asks. Work consists of a named scene description
+file and a set of pixels. Once every pixel has been returned by a client,
+the server transitions to outputtting an image. 
+
+When the server is outputting an image, the
+server writes a file to the filesystem containing the rendered image. 
+
+
+There are two clients connected to the server. Client A is looking for work.
+Client B is working. Client A has sent a message to the server requesting
+a set of pixels. When the server responds, Client A will transition to the
+working state. 
+
+
+Client B, in the working state, is iterating through the set of pixels in
+its packet of work. For each pixel, it uses a traced ray to determine the
+correct color. Once all pixels have been correctly rendered, it returns
+the set of rendered colors to the server and transitions to look for work. 
