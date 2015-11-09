@@ -39,9 +39,9 @@ alone be able to distinguish between the scenes.
 
 PROGRESS
 
-1. Developed a clear client/server architecture. 
+1. Developed a clear client/server architecture.
 
-2. Extensively researched ray-tracing algorithms. 
+2. Extensively researched ray-tracing algorithms.
 
 3. Implemented some simple c++ classes for core data structures and modules (PNM
    rendering, vector math, objects in 3d space).
@@ -49,6 +49,12 @@ PROGRESS
 4. Built unit tests. 
 
 DEVELOPMENT PLAN
+
+0. DONE SO FAR
+
+
+
+1. HOW TO PROCEED
 
 We will operate in one-week sprints as pairs. Programming will be done in the
 COMP 40 pair-programming paradigm, with two members of the group on one
@@ -58,7 +64,14 @@ will develop the scene description parser. In the second sprint, we will switch
 partners. One pair will integrate the work done in the first sprint, while the
 other will begin building the message passing RPC system. In future sprints, we
 will split the raytracer into multiple executables that communicate via message
-passing in an RPC system. 
+passing in an RPC system.
+
+2. DIVISION OF LABOR
+
+
+3. INTERFACE MANAGEMENT
+
+
 
 UPDATE FROM PROJECT PROPOSAL
 
