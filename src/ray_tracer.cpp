@@ -1,7 +1,10 @@
+<<<<<<< 90db43412b842efc17e9e8c61e02d71d5473db60
 #include <vector>
 #include <cmath>
 
 #include "vector.h"
+=======
+>>>>>>> Add hotfix for ray.h
 #include "pnm_image.h"
 #include "ray_tracer.h"
 #include "point_light.h"
