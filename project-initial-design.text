@@ -57,4 +57,5 @@ sprint, one pair will develop a single-threaded ray tracer, while the other pair
 will develop the scene description parser. In the second sprint, we will switch
 partners. One pair will integrate the work done in the first sprint, while the
 other will begin building the message passing RPC system. In future sprints, we
-will split the raytracer into multiple executables that communicate via message passing in an RPC system. 
+will split the raytracer into multiple executables that communicate via message
+passing in an RPC system. 
