@@ -53,20 +53,25 @@ DEVELOPMENT PLAN
 0. DONE SO FAR
 
 (a) Base Classes and Groundwork for Ray Tracer Implementation:
-    - virtual interface class to describe SceneObjects:
-    SceneObjects are descriptions of 3d objects that exist in the world, which
-    include a method for intersecting rays.
-    - Implementation of a Sphere class implementing SceneObject, complete with
-    intersection logic
-    - basic (in progress) implementation of a single threaded ray tracing
-    algorithm
-    - working implementation of important utility classes and structs including:
-        - vector3_t, used for easy vector math with operator overloading
-        - color_t, basic color type describing red, green, blue and alpha values
-        - material_t, describes properties of surfaces on SceneObjects including
-        diffuse, emission, reflection, etc.
-(b) c++ ppm implementation for displaying our rendered images.
-    - basic pnm_ppm implementation used to rendered image to a file
+
+Virtual interface class to describe SceneObjects:
+
+- SceneObject, a description of a 3D objects that exists in the world, which
+  includes a method for intersecting rays
+- Implementation of a Sphere class implementing SceneObject, complete with
+  intersection logic
+- Basic (in progress) implementation of a single threaded ray tracing
+  algorithm
+- Working implementation of important utility classes and structs including:
+    - vector3_t, used for easy vector math with operator overloading
+	- color_t, basic color type describing red, green, blue and alpha values
+	- material_t, describes properties of surfaces on SceneObjects including
+	  diffuse, emission, reflection, etc.
+
+(b) C++ PNM implementation for displaying our rendered images
+
+- Basic pnm_ppm implementation used to render image to a file
+
 (c) created a simple JSON format for encoding scene descriptions.
 
 1. HOW TO PROCEED & DIVISION OF LABOR
