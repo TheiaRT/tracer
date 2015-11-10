@@ -15,8 +15,8 @@ a set of pixels. When the server responds, Client A will transition to the
 working state. 
 
 Client B, in the working state, is iterating through the set of pixels in
-its packet of work. It has opened a shared scene description, specified
-by the filename sent with the work message. 
+its packet of work. It has opened a shared scene description from the 
+filesystem, specified by the filename sent with the work message. 
 For each pixel, it uses a traced ray to determine the
 correct color. Once all pixels have been correctly rendered, it returns
 the set of rendered colors to the server and transitions to look for work. 
