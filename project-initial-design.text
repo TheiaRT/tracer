@@ -69,7 +69,7 @@ DEVELOPMENT PLAN
     - basic pnm_ppm implementation used to rendered image to a file
 (c) created a simple JSON format for encoding scene descriptions.
 
-1. HOW TO PROCEED
+1. HOW TO PROCEED & DIVISION OF LABOR
 
 We will operate in one-week sprints as pairs. Programming will be done in the
 COMP 40 pair-programming paradigm, with two members of the group on one
@@ -80,3 +80,48 @@ partners. One pair will integrate the work done in the first sprint, while the
 other will begin building the message passing RPC system. In future sprints, we
 will split the raytracer into multiple executables that communicate via message
 passing in an RPC system.
+
+2. INTERFACE MANAGEMENT
+
+We have weekly full-group meetings to decide how each pair's interface will be
+structured and what data it should pass around. Within a pair, the interfaces
+are decided by deciding the most useful or elegant way to use the
+interface. Then the library is written and the interface revised to accomdate
+for technical challenges that might crop up.
+
+UPDATE FROM PROJECT PROPOSAL
+
+0. DELIVERABLES
+
+(a) MINIMUM
+
+The ray tracer will now be able to distribute a set of pixels, each to a
+different thread, for processing.
+
+(b) MAXIMUM
+
+The ray tracer will now be able to distribute a set of pixels, each to a
+different thread, perhaps across hosts, for processing.
+
+1. DETAIL
+
+(a) ABSTRACT
+
+We write a render server that clients (producers) can connect to in order to
+receive work. This work is in the form of sets of pixels that the server
+(consumer) can then join to form a single frame.
+
+(b) USE CASES
+
+Unchanged.
+
+(c) FIRST STEP
+
+We are close to completing our single-threaded ray tracer in parallel with a
+scene file parser.
+
+(d) POSSIBLE PROBLEMS
+
+i) The math is no longer too complex.
+
+ii) We can very easily split frames into chunks.
