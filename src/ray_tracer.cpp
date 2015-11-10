@@ -1,5 +1,6 @@
 #include <vector>
 #include <cmath>
+#include <cassert>
 
 #include "vector.h"
 #include "pnm_image.h"
@@ -8,9 +9,11 @@
 
 #define MAX_DISTANCE INFINITY
 
-RayTracer::RayTracer(std::vector<SceneObject *> scene)
+RayTracer::RayTracer(std::vector<SceneObject *> scene,
+                     std::vector<SceneObject *> lights)
 {
     this->scene = scene;
+    this->lights = lights;
 }
 
 RayTracer::~RayTracer()
@@ -33,7 +36,8 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
             if (cast_ray(ray, distance, material)) {
                 vector3_t intersection_point = ray.start * distance;
                 color_t brightness = cast_shadow_rays(intersection_point);
-                pixel_t pixel = (material.diffuse * brightness).to_pixel();
+                long denom = image.get_denominator();
+                pixel_t pixel = (material.diffuse * brightness).to_pixel(denom);
                 image.set_pixel(x, y, pixel);
             }
         }

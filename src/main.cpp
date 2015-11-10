@@ -12,14 +12,18 @@ int main(int argc, char **argv)
     scene_objects.push_back(new Sphere(200, 200, 100, CHROME, 100));
     scene_objects.push_back(new Sphere(0, 0, 100, JADE, 50));
 
-    std::vector<PointLight *> scene_lights;
+    std::vector<SceneObject *> scene_lights;
     scene_lights.push_back(new PointLight(100, 100, 200, 255));
 
-    RayTracer tracer(scene_objects);
+    RayTracer tracer(scene_objects, scene_lights);
     PnmImage image = tracer.render_image(400, 400);
 
     for (SceneObject *s : scene_objects) {
         delete (Sphere *) s;
+    }
+
+    for (SceneObject *l : scene_lights) {
+        delete (PointLight *) l;
     }
 
     FILE *fp;

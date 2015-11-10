@@ -68,3 +68,8 @@ bool PnmImage::set_pixel(size_t x, size_t y, pixel_t pixel) {
     this->pixels[x][y] = pixel;
     return true;
 }
+
+long PnmImage::get_denominator()
+{
+    return denominator;
+}

@@ -27,7 +27,9 @@ public:
     static PnmImage read(FILE *fp);
     bool write(FILE *fp);
     bool set_pixel(size_t x, size_t y, pixel_t pixel);
+    long get_denominator();
 
+private:
     size_t width, height;
     long denominator;
     pixel_t **pixels;

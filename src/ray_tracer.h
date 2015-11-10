@@ -14,7 +14,8 @@
 
 class RayTracer {
 public:
-    RayTracer(std::vector<SceneObject *> scene);
+    RayTracer(std::vector<SceneObject *> scene,
+              std::vector<SceneObject *> lights);
     ~RayTracer();
     PnmImage render_image(size_t width, size_t height);
 
