@@ -2,7 +2,9 @@ In this state, we see two clients and one server. The server is attempting to
 render an image with an arbitrary width and height. The server can be in one of
 two states: assigning work, and outputting image. When the server is assigning
 work, it waits for messages from clients, then allocates work to each client
-that asks. Work consists of a named scene description file and a set of
+that asks. The server selects work based on the current front of a circular 
+queue. Once work is complete, it is removed from the queue. 
+Work consists of a named scene description file and a set of
 pixels. Once every pixel has been returned by a client, the server transitions
 to outputtting an image.
 
