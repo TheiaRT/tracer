@@ -9,14 +9,14 @@ the server transitions to outputtting an image.
 When the server is outputting an image, the
 server writes a file to the filesystem containing the rendered image. 
 
-
 There are two clients connected to the server. Client A is looking for work.
 Client B is working. Client A has sent a message to the server requesting
 a set of pixels. When the server responds, Client A will transition to the
 working state. 
 
-
 Client B, in the working state, is iterating through the set of pixels in
-its packet of work. For each pixel, it uses a traced ray to determine the
+its packet of work. It has opened a shared scene description, specified
+by the filename sent with the work message. 
+For each pixel, it uses a traced ray to determine the
 correct color. Once all pixels have been correctly rendered, it returns
 the set of rendered colors to the server and transitions to look for work. 
