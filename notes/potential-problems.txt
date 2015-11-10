@@ -1,0 +1,12 @@
+1. Client currently only has two states: NEED_WORK and WORKING. Upon finishing
+work, the client must send the work back in one message and then ask for more in
+another. This may be more overhead than we want.
+
+2a. Server currently sends scenes with each message, which a) may be more
+overhead than is acceptable and b) is not necessary. Adding another message type
+with more information like "I have the scene" could make a difference.
+
+2b. Additionally, sending only the filename of the scene limits the clients to
+one machine or machines with access to a shared filesystem. Clients on remote
+machines in future implementations will need to receive the scene over the
+wire. This has far more significant latency concerns than just a filename.
