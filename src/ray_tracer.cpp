@@ -59,7 +59,7 @@ bool RayTracer::cast_ray(ray_t ray, double &distance, material_t &material)
         }
     }
 
-    if (distance < MAX_DISTANCE) {
+    if (min_distance < MAX_DISTANCE) {
         distance = min_distance;
         return true;
     }
