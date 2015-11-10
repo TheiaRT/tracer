@@ -3,6 +3,7 @@
 
 #include "scene_object.h"
 
+
 class Sphere : public SceneObject {
 public:
     Sphere(vector3_t loc, material_t material, double radius);
