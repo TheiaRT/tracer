@@ -46,9 +46,30 @@ PROGRESS
 3. Implemented some simple c++ classes for core data structures and modules (PNM
    rendering, vector math, objects in 3d space).
 
-4. Built unit tests. 
+4. Built unit tests.
 
 DEVELOPMENT PLAN
+
+0. DONE SO FAR
+
+(a) Base Classes and Groundwork for Ray Tracer Implementation:
+    - virtual interface class to describe SceneObjects:
+    SceneObjects are descriptions of 3d objects that exist in the world, which
+    include a method for intersecting rays.
+    - Implementation of a Sphere class implementing SceneObject, complete with
+    intersection logic
+    - basic (in progress) implementation of a single threaded ray tracing
+    algorithm
+    - working implementation of important utility classes and structs including:
+        - vector3_t, used for easy vector math with operator overloading
+        - color_t, basic color type describing red, green, blue and alpha values
+        - material_t, describes properties of surfaces on SceneObjects including
+        diffuse, emission, reflection, etc.
+(b) c++ ppm implementation for displaying our rendered images.
+    - basic pnm_ppm implementation used to rendered image to a file
+(c) created a simple JSON format for encoding scene descriptions.
+
+1. HOW TO PROCEED
 
 We will operate in one-week sprints as pairs. Programming will be done in the
 COMP 40 pair-programming paradigm, with two members of the group on one
@@ -58,4 +79,4 @@ will develop the scene description parser. In the second sprint, we will switch
 partners. One pair will integrate the work done in the first sprint, while the
 other will begin building the message passing RPC system. In future sprints, we
 will split the raytracer into multiple executables that communicate via message
-passing in an RPC system. 
+passing in an RPC system.
