@@ -2,16 +2,18 @@
 #include "dist/json/json-forwards.h"
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <vector>
 
 using namespace std;
 
-
-int main() 
-{
-    string file = "{\"abc\":\"baloney\", \"def\":5}";
+void parse_file(string filename) {
+    
+    ifstream contents;
+    contents.open(filename);
     Json::Value root;
     Json::Reader reader;
-    bool json_parse_successful = reader.parse(file, root);
+    bool json_parse_successful = reader.parse(contents, root);
 
     if (json_parse_successful) {
         cout << "Json Parsing Success" <<endl;
@@ -22,9 +24,15 @@ int main()
         }
 
         int i = root["def"].asInt();
+        cout << i << endl;
     }
+    
+}
 
 
+int main() 
+{
+    parse_file("example.json");
 
     return 0;
 }

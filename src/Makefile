@@ -1,4 +1,4 @@
-all: ray_tracer
+all: ray_tracer parser
 	clang++ -std=c++11 -g pnm_image.o ray_tracer.o dist/jsoncpp.cpp main.cpp -o test
 
 parser: 
