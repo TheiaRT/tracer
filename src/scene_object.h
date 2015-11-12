@@ -1,8 +1,8 @@
 #ifndef SCENE_OBJECT_H
 #define SCENE_OBJECT_H
 
-#include "pnm_image.h"
-#include "vector.h"
+#include "util/pnm/pnm_image.h"
+#include "util/vector/vector.h"
 #include "material.h"
 
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */

@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "pnm_image.h"
 
 PnmImage::PnmImage(size_t width, size_t height, long denom) {
@@ -21,7 +23,7 @@ void PnmImage::init(size_t width, size_t height, long denom) {
     this->denominator = denom;
 
     this->pixels = new pixel_t*[height];
-    for (size_t i = 0; i < height; i++) {
+    for (size_t i = 0; i < width; i++) {
         this->pixels[i] = new pixel_t[width];
     }
 }
@@ -31,10 +33,19 @@ PnmImage PnmImage::read(FILE *fp) {
     return PnmImage(100, 100, 255);
 }
 
+bool PnmImage::write(std::string filename)
+{
+    FILE *fp = fopen(filename.c_str(), "w+");
+    bool res = write(fp);
+    fclose(fp);
+    return res;
+}
+
 bool PnmImage::write(FILE *fp) {
     if (fp == NULL) {
         return false;
     }
+
     fprintf(fp, "P3\n");
     fprintf(fp, "%lu %lu\n", this->width, this->height);
     fprintf(fp, "%lu\n", this->denominator);
@@ -45,6 +56,7 @@ bool PnmImage::write(FILE *fp) {
         }
         fprintf(fp, "\n");
     }
+
     return true;
 }
 
@@ -61,7 +73,11 @@ bool PnmImage::set_pixel(size_t x, size_t y, pixel_t pixel) {
     return true;
 }
 
-void PnmImage::insert_chunk(pixel_t **chunk, size_t startx, size_t starty, size_t width, size_t height)
+void PnmImage::insert_chunk(pixel_t **chunk,
+                            size_t startx,
+                            size_t starty,
+                            size_t width,
+                            size_t height)
 {
     for (size_t x = 0; x < width; x++) {
         for (size_t y = 0; y < height; y++) {

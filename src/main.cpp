@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <vector>
 #include <iostream>
 
@@ -14,6 +15,7 @@ int main(int argc, char **argv)
 {
     string scene_name = "";
     FILE *out_file = stdout;
+    int vp_width = 2000, vp_height = 1500;
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "-s") == 0) {
             scene_name = string(argv[++i]);
@@ -21,23 +23,18 @@ int main(int argc, char **argv)
         else if (strcmp(argv[i], "-o") == 0) {
             out_file = fopen(argv[++i], "w+");
         }
+        else if (strcmp(argv[i], "-vpw") == 0) {
+            vp_width = atoi(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-vph") == 0) {
+            vp_height = atoi(argv[++i]);
+        }
     }
 
     Parser parser(scene_name);
-    std::vector<SceneObject *> scene_objects;
-    std::vector<SceneObject *> scene_lights;
-
-    parser.parse_file(scene_objects, scene_lights);
-    RayTracer tracer(scene_objects, scene_lights);
-    PnmImage image = tracer.render_image(800, 600);
-
-    for (SceneObject *s : scene_objects) {
-        delete (Sphere *) s;
-    }
-
-    for (SceneObject *l : scene_lights) {
-        delete (PointLight *) l;
-    }
+    scene_t scene = parser.parse();
+    RayTracer tracer(scene);
+    PnmImage image = tracer.render_image(vp_width, vp_height);
 
     if (out_file == NULL) {
         return 2;

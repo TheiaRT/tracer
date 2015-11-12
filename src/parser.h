@@ -6,30 +6,32 @@
 #include <vector>
 #include <map>
 
-#include "vector.h"
+#include "util/vector/vector.h"
 #include "scene_object.h"
 #include "sphere.h"
-#include "material.h"
 #include "point_light.h"
+#include "material.h"
+#include "scene.h"
 
 
 class Parser {
 public:
     Parser(std::string filename);
-    void parse_file(
-            std::vector<SceneObject *> &scene_objs,
-            std::vector<SceneObject *> &scene_lights);
+    Parser(Json::Value root);
+    void init();
+    scene_t parse();
 
 private:
-    std::string filename;
+    Json::Value root;
 
     typedef SceneObject *(Parser::*json_converter)(Json::Value);
     std::map<std::string, json_converter> converters;
 
     bool valid_object_type(std::string type);
-    vector3_t json_to_vector3(Json::Value json_vector);
-    color_t json_to_color(Json::Value json_color);
-    material_t json_to_material(Json::Value json_material);
-    Sphere *json_to_sphere(Json::Value json_sphere);
+
+    vector3_t   json_to_vector3(Json::Value json_vector);
+    color_t     json_to_color(Json::Value json_color);
+    material_t  json_to_material(Json::Value json_material);
+    Sphere     *json_to_sphere(Json::Value json_sphere);
     PointLight *json_to_point_light(Json::Value json_point_light);
 };

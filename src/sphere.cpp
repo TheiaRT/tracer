@@ -12,7 +12,7 @@ Sphere::Sphere(vector3_t loc, material_t material, double radius)
 
 Sphere::Sphere(double x, double y, double z, material_t material, double radius)
 {
-    init(vector3_t(x, y, z), material, radius);
+    init(vector3_t({x, y, z}), material, radius);
 }
 
 /*
@@ -33,18 +33,16 @@ int Sphere::intersect_ray(ray_t ray, double &distance)
     double C = dist.dot(dist) - (radius * radius);
     double disc = B * B - 4 * A * C;
 
-
     if (disc < 0) {
         return MISS;
     }
     else {
+        double dist1 = (-B - sqrt(disc))/(2*A); /* closer intersection */
+        double dist2 = (-B + sqrt(disc))/(2*A); /* farther intersection */
 
-        double dist1 = (-B - sqrt(disc))/(2*A); //closer intersection
-        double dist2 = (-B + sqrt(disc))/(2*A); //farther intersection
-
-        // if the closer distance is negative,
-        // the intersection is from within the sphere
-        if(dist1 < 0 && dist2 > 0) {
+        /* if the closer distance is negative, the intersection is from within
+           the sphere. */
+        if (dist1 < 0 && dist2 > 0) {
             distance = dist2;
             return INSIDE_HIT;
         } else {

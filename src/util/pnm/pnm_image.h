@@ -4,17 +4,8 @@
 #include <cstdio>
 #include <inttypes.h>
 
-struct pixel_t {
-    long r, g, b;
+#include "pixel.h"
 
-    pixel_t() : r(0), g(0), b(0)
-    {
-    }
-
-    pixel_t(long r, long g, long b) : r(r), g(g), b(b)
-    {
-    }
-};
 
 class PnmImage {
 public:
@@ -23,10 +14,15 @@ public:
     ~PnmImage();
     void init(size_t width, size_t height, long denom);
     static PnmImage read(FILE *fp);
+    bool write(std::string filename);
     bool write(FILE *fp);
     bool set_pixel(size_t x, size_t y, pixel_t pixel);
     long get_denominator();
-    void insert_chunk(pixel_t **chunk, size_t x, size_t y, size_t width, size_t height);
+    void insert_chunk(pixel_t **chunk,
+                      size_t x,
+                      size_t y,
+                      size_t width,
+                      size_t height);
 
 private:
     size_t width, height;
