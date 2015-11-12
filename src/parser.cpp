@@ -50,6 +50,7 @@ void parse_file(string filename) {
             cout << member <<endl;
         }
 
+<<<<<<< HEAD
         vector3_t v = json_to_vector3(root["testvector"]);
         cout << v.x << endl;
 
@@ -58,7 +59,13 @@ void parse_file(string filename) {
 
         material_t m = json_to_material(root["testmaterial"]);
         cout << m.shine << endl;
+=======
+        int i = root["def"].asInt();
+        cout << i << endl;
+>>>>>>> 5612279... Refactor parsing step into separate function out of main
     }
+    
+}
 
 }
 
