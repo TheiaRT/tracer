@@ -27,7 +27,7 @@ vector3_t Parser::json_to_vector3(Json::Value json_vector)
         json_vector["x"].asDouble(),
         json_vector["y"].asDouble(),
         json_vector["z"].asDouble()
-    );
+        );
 }
 
 color_t Parser::json_to_color(Json::Value json_color)
@@ -37,7 +37,7 @@ color_t Parser::json_to_color(Json::Value json_color)
         json_color["g"].asDouble(),
         json_color["b"].asDouble(),
         json_color["a"].asDouble()
-    );
+        );
 }
 
 material_t Parser::json_to_material(Json::Value json_material)
@@ -68,7 +68,7 @@ Sphere *Parser::json_to_sphere(Json::Value json_sphere)
         json_to_vector3(json_sphere["loc"]),
         json_to_material(json_sphere["material"]),
         json_sphere["radius"].asDouble()
-    );
+        );
 }
 
 PointLight *Parser::json_to_point_light(Json::Value json_point_light) {
