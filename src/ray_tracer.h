@@ -7,6 +7,7 @@
 
 #include "pnm_image.h"
 #include "vector.h"
+#include "sphere.h"
 
 struct sphere_t {
     vector3_t loc;
