@@ -4,6 +4,8 @@ CFLAGS = -g -std=c++11
 all: ray_tracer
 	$(CXX) $(CFLAGS) pnm_image.o ray_tracer.o main.cpp -o test
 
+parser: 
+	$(CXX) $(CFLAGS) -g dist/jsoncpp.cpp parser.cpp -o parsertest
 ray_tracer: pnm_image
 	$(CXX) $(CFLAGS) -c ray_tracer.cpp
 
