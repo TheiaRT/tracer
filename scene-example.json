@@ -1,6 +1,6 @@
 [
     {
-	"shape": "sphere",
+	"object_type": "sphere",
 	"loc": {
 	    "x": 0,
 	    "y": 0,
