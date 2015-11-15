@@ -41,7 +41,7 @@ void parse_file(string filename) {
     contents.open(filename);
     Json::Value root;
     Json::Reader reader;
-    bool json_parse_successful = reader.parse(file, root);
+    bool json_parse_successful = reader.parse(contents, root);
 
     if (json_parse_successful) {
         cout << "Json Parsing Success" <<endl;
@@ -64,9 +64,12 @@ void parse_file(string filename) {
 
 }
 
-}
 
 
+
+int main() 
+{
+    parse_file("example.json");
 
     return 0;
 }
