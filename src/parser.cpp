@@ -1,3 +1,8 @@
+/* Uses Jsoncpp, reference here:
+ * http://open-source-parsers.github.io/jsoncpp-docs/ 
+ */
+
+
 #include "dist/json/json.h"
 #include "dist/json/json-forwards.h"
 #include <iostream>
@@ -43,15 +48,16 @@ material_t json_to_material(Json::Value json_material) {
         .shine = json_material["shine"].asDouble()};
 }
 
-Sphere json_to_sphere(Json::Value json_sphere) {
-    return Sphere(
+Sphere *json_to_sphere(Json::Value json_sphere) {
+    return new Sphere(
             json_to_vector3(json_sphere["loc"]),
             json_to_material(json_sphere["material"]),
             json_sphere["radius"].asDouble());
 
 }
 
-void parse_file(string filename) {
+std::vector<SceneObject *> parse_file(string filename) {
+    std::vector<SceneObject *> scene_objs;
     ifstream contents;
     contents.open(filename);
     Json::Value root;
@@ -60,25 +66,16 @@ void parse_file(string filename) {
 
     if (json_parse_successful) {
         cout << "Json Parsing Success" <<endl;
-        Json::Value::Members json_members = root.getMemberNames();
-        for (string member : json_members) {
-            cout << member <<endl;
+        Json::Value scene_objs_json = root["scene_objects"];
+        for (Json::ValueIterator itr = scene_objs_json.begin();
+                itr != scene_objs_json.end(); itr++) {
+            if ((*itr)["object_type"] == "sphere") {
+                cout << "SPHERE" << endl;
+                scene_objs.push_back(json_to_sphere(*itr));
+            }
         }
-
-        vector3_t v = json_to_vector3(root["testvector"]);
-        cout << v.x << endl;
-
-        color_t c = json_to_color(root["testcolor"]);
-        cout << c.r << endl;
-
-        material_t m = json_to_material(root["testmaterial"]);
-        cout << m.shine << endl;
-        int i = root["def"].asInt();
-        cout << i << endl;
-        Sphere s = json_to_sphere(root["testsphere"]);
-
     }
-
+    return scene_objs;
 }
 
 
@@ -86,7 +83,8 @@ void parse_file(string filename) {
 
 int main() 
 {
-    parse_file("example.json");
+    vector <SceneObject *> objs = parse_file("scene.json") ;
+    cout << objs[0] << endl;
 
     return 0;
 }
