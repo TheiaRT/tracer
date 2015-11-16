@@ -7,14 +7,12 @@
 struct pixel_t {
     long r, g, b;
 
-    pixel_t() {
-        r = g = b = 0;
+    pixel_t() : r(0), g(0), b(0)
+    {
     }
 
-    pixel_t(long r, long g, long b) {
-        this->r = r;
-        this->g = g;
-        this->b = b;
+    pixel_t(long r, long g, long b) : r(r), g(g), b(b)
+    {
     }
 };
 

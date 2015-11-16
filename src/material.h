@@ -7,30 +7,24 @@
 struct color_t {
     double r, g, b, a;
 
-    color_t()
+    color_t() : r(0), g(0), b(0), a(0)
     {
-        r = g = b = a = 0;
     }
 
-    color_t(double val)
+    color_t(double val) : r(val), g(val), b(val), a(val)
     {
-        r = g = b = a = val;
     }
 
-    color_t(double r, double g, double b, double a)
+    color_t(double r, double g, double b, double a) : r(r), g(g), b(b), a(a)
     {
-        this->r = r;
-        this->g = g;
-        this->b = b;
-        this->a = a;
     }
 
     void operator+=(const color_t &other)
     {
-        this->r += other.r;
-        this->g += other.g;
-        this->b += other.b;
-        this->b += other.a;
+        r += other.r;
+        g += other.g;
+        b += other.b;
+        b += other.a;
     }
 
     color_t operator*(const color_t &other)
