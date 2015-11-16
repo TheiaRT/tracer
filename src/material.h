@@ -57,3 +57,5 @@ struct material_t {
     color_t emission;
     double shine;
 };
+
+#endif

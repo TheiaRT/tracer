@@ -6,6 +6,8 @@
 #include <vector>
 #include "vector.h"
 #include "scene_object.h"
+#include "sphere.h"
+#include "material.h"
 
 using namespace std;
 
@@ -15,6 +17,8 @@ using namespace std;
  * json_to_material
  * json_to_sphere
  */
+
+
 vector3_t json_to_vector3(Json::Value json_vector) {
     return vector3_t(
             json_vector["x"].asDouble(),
@@ -23,12 +27,14 @@ vector3_t json_to_vector3(Json::Value json_vector) {
 }
 
 color_t json_to_color(Json::Value json_color) {
-    return { .r = json_color["r"].asDouble(),
-        .g = json_color["g"].asDouble(),
-        .b = json_color["b"].asDouble(),
-        .a = json_color["a"].asDouble()
-    };
+    return color_t(
+            json_color["r"].asDouble(),
+            json_color["g"].asDouble(),
+            json_color["b"].asDouble(),
+            json_color["a"].asDouble()
+            );
 }
+
 material_t json_to_material(Json::Value json_material) {
     return { .ambient = json_to_color(json_material["ambient"]),
         .diffuse = json_to_color(json_material["diffuse"]),
@@ -36,6 +42,15 @@ material_t json_to_material(Json::Value json_material) {
         .emission = json_to_color(json_material["emission"]),
         .shine = json_material["shine"].asDouble()};
 }
+
+Sphere json_to_sphere(Json::Value json_sphere) {
+    return Sphere(
+            json_to_vector3(json_sphere["loc"]),
+            json_to_material(json_sphere["material"]),
+            json_sphere["radius"].asDouble());
+
+}
+
 void parse_file(string filename) {
     ifstream contents;
     contents.open(filename);
@@ -60,6 +75,8 @@ void parse_file(string filename) {
         cout << m.shine << endl;
         int i = root["def"].asInt();
         cout << i << endl;
+        Sphere s = json_to_sphere(root["testsphere"]);
+
     }
 
 }
