@@ -81,13 +81,17 @@ color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
         ray_t shadow_ray(intersection_point, direction);
 
         double distance;
+        std::cerr << distance << std::endl;
         material_t temp_material;
         bool in_shadow = cast_ray(shadow_ray, distance, temp_material);
         if (!in_shadow) {
             color_t intensity = light->get_intensity_percent();
+            std::cerr << "No shadow " << distance << std::endl;
             brightness_sum += intensity / (distance * distance);
         }
     }
+
+    std::cerr << brightness_sum.r << std::endl;
 
     return brightness_sum;
 }
