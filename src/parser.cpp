@@ -9,13 +9,6 @@ Parser::Parser(std::string filename) {
     this->filename = filename;
 }
 
-/*
- * json_to_vector3
- * json_to_material
- * json_to_sphere
- */
-
-
 vector3_t Parser::json_to_vector3(Json::Value json_vector) {
     return vector3_t(
             json_vector["x"].asDouble(),
@@ -52,17 +45,32 @@ std::vector<SceneObject *> Parser::parse_file() {
     std::vector<SceneObject *> scene_objs;
     std::ifstream contents;
     contents.open(filename);
-    Json::Value root;
+    /* root is the top-level handle on the json object we parse */
+    Json::Value root; 
     Json::Reader reader;
     bool json_parse_successful = reader.parse(contents, root);
 
     if (json_parse_successful) {
+
+        /* The list of scene objects is referenced by key:
+         * "scene_objects"
+         */
         Json::Value scene_objs_json = root["scene_objects"];
+        /* Create scene_obj from each item in JSON "scene_objects"[]
+         * based on object_type; append object into scene_objs vector 
+         */
         for (Json::ValueIterator itr = scene_objs_json.begin();
                 itr != scene_objs_json.end(); itr++) {
+
+            /* We branch based on the type of object we encounter
+             * in the scene file. 
+             * Here, we branch to parse a sphere
+             */
             if ((*itr)["object_type"] == "sphere") {
                 scene_objs.push_back(json_to_sphere(*itr));
             }
+
+            /* More branches to follow... */
         }
     }
     return scene_objs;
