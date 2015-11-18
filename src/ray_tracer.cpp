@@ -8,7 +8,7 @@
 #include "point_light.h"
 
 #define MAX_DISTANCE INFINITY
-
+using namespace std;
 RayTracer::RayTracer(std::vector<SceneObject *> scene,
                      std::vector<SceneObject *> lights)
 {
@@ -25,12 +25,14 @@ RayTracer::~RayTracer()
 PnmImage RayTracer::render_image(size_t width, size_t height)
 {
     PnmImage image(width, height);
+    vector3_t eye = vector3_t(width/2, height/2, -300);
     ray_t ray(vector3_t(0, 0, -10), vector3_t(0, 0, 1));
 
     for (size_t x = 0; x < width; x++) {
         ray.start.x = x;
         for (size_t y = 0; y < height; y++) {
             ray.start.y = y;
+            ray.direction = (ray.start - eye).normalize();
             double distance;
             material_t material;
             if (cast_ray(ray, distance, material)) {
@@ -84,14 +86,20 @@ color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
         material_t temp_material;
         bool in_shadow = cast_ray(shadow_ray, distance, temp_material);
         if (!in_shadow) {
+            cerr << distance << endl;
             color_t intensity = light->get_intensity_percent();
             brightness_sum += intensity / (distance * distance);
         }
 
     }
-    brightness_sum.r  *= (1e7);
-    brightness_sum.g  *= (1e7);
-    brightness_sum.b  *= (1e7);
+
+    brightness_sum.r  *= (1e10);
+    brightness_sum.g  *= (1e10);
+    brightness_sum.b  *= (5e9);
+    /*cerr << "colors"<<endl;
+    cerr << brightness_sum.r << endl;
+    cerr << brightness_sum.g << endl;
+    cerr << brightness_sum.b << endl; */
     if (brightness_sum.r > 1) {
         brightness_sum.r = 1;
     }
