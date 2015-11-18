@@ -25,7 +25,7 @@ RayTracer::~RayTracer()
 PnmImage RayTracer::render_image(size_t width, size_t height)
 {
     PnmImage image(width, height);
-    ray_t ray(vector3_t(0, 0, 0), vector3_t(0, 0, 1));
+    ray_t ray(vector3_t(0, 0, -10), vector3_t(0, 0, 1));
 
     for (size_t x = 0; x < width; x++) {
         ray.start.x = x;
