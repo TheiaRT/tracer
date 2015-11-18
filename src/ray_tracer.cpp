@@ -39,7 +39,7 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
                 long denom = image.get_denominator();
                 pixel_t pixel = (material.diffuse * brightness).to_pixel(denom);
                 image.set_pixel(x, y, pixel);
-            }
+            } 
         }
     }
 
@@ -54,11 +54,12 @@ bool RayTracer::cast_ray(ray_t ray, double &distance, material_t &material)
     double min_distance = MAX_DISTANCE;
     size_t num_objects = scene.size();
     for (size_t i = 0; i < num_objects; i++) {
-        double temp_distance;
+        double temp_distance = MAX_DISTANCE;
         if (scene[i]->intersect_ray(ray, temp_distance)) {
             if (temp_distance < min_distance) {
                 min_distance = temp_distance;
                 material = scene[i]->get_material();
+            } else {
             }
         }
     }
@@ -67,7 +68,6 @@ bool RayTracer::cast_ray(ray_t ray, double &distance, material_t &material)
         distance = min_distance;
         return true;
     }
-
     return false;
 }
 
@@ -78,19 +78,17 @@ color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
         PointLight *light = (PointLight *) lights[i];
         vector3_t light_loc = light->get_location();
         vector3_t direction = light_loc - intersection_point;
-        ray_t shadow_ray(intersection_point, direction);
+        ray_t shadow_ray(intersection_point, direction.normalize());
 
-        double distance;
-        std::cerr << distance << std::endl;
+        double distance = light_loc.distance_from(intersection_point);
         material_t temp_material;
         bool in_shadow = cast_ray(shadow_ray, distance, temp_material);
         if (!in_shadow) {
             color_t intensity = light->get_intensity_percent();
-            std::cerr << "No shadow " << distance << std::endl;
             brightness_sum += intensity / (distance * distance);
         }
-    }
 
+    }
     brightness_sum.r  *= (1e7);
     brightness_sum.g  *= (1e7);
     brightness_sum.b  *= (1e7);
