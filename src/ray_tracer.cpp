@@ -91,7 +91,18 @@ color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
         }
     }
 
-    std::cerr << brightness_sum.r << std::endl;
+    brightness_sum.r  *= (1e7);
+    brightness_sum.g  *= (1e7);
+    brightness_sum.b  *= (1e7);
+    if (brightness_sum.r > 1) {
+        brightness_sum.r = 1;
+    }
+    if (brightness_sum.g > 1) {
+        brightness_sum.g = 1;
+    }
+    if (brightness_sum.b > 1) {
+        brightness_sum.b = 1;
+    }
 
     return brightness_sum;
 }
