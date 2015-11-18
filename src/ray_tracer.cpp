@@ -39,7 +39,7 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
                 long denom = image.get_denominator();
                 pixel_t pixel = (material.diffuse * brightness).to_pixel(denom);
                 image.set_pixel(x, y, pixel);
-            } 
+            }
         }
     }
 
@@ -80,18 +80,20 @@ color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
         vector3_t direction = light_loc - intersection_point;
         ray_t shadow_ray(intersection_point, direction.normalize());
 
-        double distance = light_loc.distance_from(intersection_point);
+        double distance;
         material_t temp_material;
         bool in_shadow = cast_ray(shadow_ray, distance, temp_material);
         if (!in_shadow) {
+            distance = light_loc.distance_from(intersection_point);
             color_t intensity = light->get_intensity_percent();
             brightness_sum += intensity / (distance * distance);
         }
-
     }
+
     brightness_sum.r  *= (1e7);
     brightness_sum.g  *= (1e7);
     brightness_sum.b  *= (1e7);
+
     if (brightness_sum.r > 1) {
         brightness_sum.r = 1;
     }
