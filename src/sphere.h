@@ -9,6 +9,7 @@ public:
     Sphere(vector3_t loc, material_t material, double radius);
     Sphere(double x, double y, double z, material_t material, double radius);
     bool intersect_ray(ray_t ray, double &distance);
+    vector3_t normal_at_point(vector3_t intersection_point);
 
 private:
     vector3_t loc;

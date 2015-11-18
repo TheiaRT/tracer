@@ -37,3 +37,8 @@ bool Sphere::intersect_ray(ray_t ray, double &distance)
         return true;
     }
 }
+
+vector3_t Sphere::normal_at_point(vector3_t intersection_point)
+{
+    return (intersection_point - loc).normalize();
+}

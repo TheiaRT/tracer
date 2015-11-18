@@ -9,6 +9,7 @@
 class SceneObject {
 public:
     virtual bool intersect_ray(ray_t ray, double &distance) = 0;
+    virtual vector3_t normal_at_point(vector3_t intersection_point) = 0;
     material_t get_material() {
         return material;
     }

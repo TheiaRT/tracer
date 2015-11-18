@@ -9,12 +9,14 @@
 int main(int argc, char **argv)
 {
     std::vector<SceneObject *> scene_objects;
-    scene_objects.push_back(new Sphere(50, 120, 50, JADE, 50));
+    scene_objects.push_back(new Sphere(350, 200, 100, JADE, 50));
     scene_objects.push_back(new Sphere(200, 120, 200, material_t(
                     color_t(), color_t(1), color_t(), color_t(), 1), 100));
 
+
     std::vector<SceneObject *> scene_lights;
     scene_lights.push_back(new PointLight(0, 220, -50, 5255));
+    scene_lights.push_back(new PointLight(400, 400, -50, 5255));
 
     RayTracer tracer(scene_objects, scene_lights);
     PnmImage image = tracer.render_image(400, 400);

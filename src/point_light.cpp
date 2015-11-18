@@ -24,6 +24,11 @@ bool PointLight::intersect_ray(ray_t ray, double &distance)
     return false;
 }
 
+vector3_t PointLight::normal_at_point(vector3_t intersection_point)
+{
+    return (intersection_point - loc).normalize();
+}
+
 double PointLight::distance_from(vector3_t point)
 {
     return loc.distance_from(point);

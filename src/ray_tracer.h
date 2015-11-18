@@ -21,8 +21,8 @@ public:
 
 private:
     std::vector<SceneObject *> scene, lights;
-    bool cast_ray(ray_t r, double &distance, material_t &material);
-    color_t cast_shadow_rays(vector3_t intersection_point);
+    bool cast_ray(ray_t r, double &distance, SceneObject *&object);
+    // color_t cast_shadow_rays(SceneObject *object, vector3_t intersection_point);
 };
 
 #endif

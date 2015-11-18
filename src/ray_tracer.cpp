@@ -8,6 +8,7 @@
 #include "point_light.h"
 
 #define MAX_DISTANCE INFINITY
+#define MAX_JUMPS 15
 
 RayTracer::RayTracer(std::vector<SceneObject *> scene,
                      std::vector<SceneObject *> lights)
@@ -31,25 +32,35 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
         ray.start.x = x;
         for (size_t y = 0; y < height; y++) {
             ray.start.y = y;
-            double distance;
-            material_t material;
-            if (cast_ray(ray, distance, material)) {
-                vector3_t intersection_point = ray.start * distance;
-                color_t brightness = cast_shadow_rays(intersection_point);
-                long denom = image.get_denominator();
-                pixel_t pixel = (material.diffuse * brightness).to_pixel(denom);
-                image.set_pixel(x, y, pixel);
+
+            pixel_t pixel = pixel_t();
+
+            for (int level = 0; level < MAX_JUMPS; level++) {
+            //     double distance;
+            //     SceneObject *object;
+            //     if (cast_ray(ray, distance, object)) {
+            //         vector3_t intersection_point = ray.start * distance;
+            //         color_t brightness = cast_shadow_rays(object,
+            //                                               intersection_point);
+            //         long denom = image.get_denominator();
+            //         material_t material = object->get_material();
+            //         pixel += (material.diffuse * brightness).to_pixel(denom);
+            //     }
+                color_t color;
+                if (cast_ray(ray, color)) {
+                    pixel += color.to_pixel();
+                }
             }
+
+            image.set_pixel(x, y, pixel);
         }
     }
 
     return image;
 }
 
-/*
-  TODO: make conical ray tracing
- */
-bool RayTracer::cast_ray(ray_t ray, double &distance, material_t &material)
+/* TODO: make conical ray tracing */
+bool RayTracer::cast_ray(ray_t ray, )
 {
     double min_distance = MAX_DISTANCE;
     size_t num_objects = scene.size();
@@ -58,51 +69,60 @@ bool RayTracer::cast_ray(ray_t ray, double &distance, material_t &material)
         if (scene[i]->intersect_ray(ray, temp_distance)) {
             if (temp_distance < min_distance) {
                 min_distance = temp_distance;
-                material = scene[i]->get_material();
-            } else {
+                object = scene[i];
             }
         }
     }
 
     if (min_distance < MAX_DISTANCE) {
         distance = min_distance;
+        vector3_t intersection_point = ray.start * distance;
+        vector3_t N = object->normal_at_point(intersection_point);
+        vector3_t L = direction.normalize();
+        color_t C = color_t(255);
+        color_t IL = light->get_intensity_percent();
+
+        double lambert = ray.direction.dot(n) * coef;
         return true;
     }
+
     return false;
 }
 
-color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
-    color_t brightness_sum = color_t();
-    size_t num_lights = lights.size();
-    for (size_t i = 0; i < num_lights; i++) {
-        PointLight *light = (PointLight *) lights[i];
-        vector3_t light_loc = light->get_location();
-        vector3_t direction = light_loc - intersection_point;
-        ray_t shadow_ray(intersection_point, direction.normalize());
+// color_t RayTracer::cast_shadow_rays(SceneObject *object,
+//                                     vector3_t intersection_point)
+// {
+//     color_t brightness_sum = color_t();
+//     size_t num_lights = lights.size();
+//     for (size_t i = 0; i < num_lights; i++) {
+//         PointLight *light = (PointLight *) lights[i];
+//         vector3_t light_loc = light->get_location();
+//         vector3_t direction = light_loc - intersection_point;
+//         ray_t shadow_ray(intersection_point, direction.normalize());
 
-        double distance;
-        material_t temp_material;
-        bool in_shadow = cast_ray(shadow_ray, distance, temp_material);
-        if (!in_shadow) {
-            distance = light_loc.distance_from(intersection_point);
-            color_t intensity = light->get_intensity_percent();
-            brightness_sum += intensity / (distance * distance);
-        }
-    }
+//         double distance;
+//         SceneObject *temp_object;
+//         bool in_shadow = cast_ray(shadow_ray, distance, temp_object);
+//         if (!in_shadow) {
+//             distance = light_loc.distance_from(intersection_point);
+//             color_t intensity = light->get_intensity_percent();
+//             brightness_sum += intensity / (distance * distance);
+//         }
+//     }
 
-    brightness_sum.r  *= (1e7);
-    brightness_sum.g  *= (1e7);
-    brightness_sum.b  *= (1e7);
+//     brightness_sum.r  *= (1e7);
+//     brightness_sum.g  *= (1e7);
+//     brightness_sum.b  *= (1e7);
 
-    if (brightness_sum.r > 1) {
-        brightness_sum.r = 1;
-    }
-    if (brightness_sum.g > 1) {
-        brightness_sum.g = 1;
-    }
-    if (brightness_sum.b > 1) {
-        brightness_sum.b = 1;
-    }
+//     if (brightness_sum.r > 1) {
+//         brightness_sum.r = 1;
+//     }
+//     if (brightness_sum.g > 1) {
+//         brightness_sum.g = 1;
+//     }
+//     if (brightness_sum.b > 1) {
+//         brightness_sum.b = 1;
+//     }
 
-    return brightness_sum;
-}
+//     return brightness_sum;
+// }

@@ -11,6 +11,7 @@ public:
     PointLight(double x, double y, double z, double intensity);
     PointLight(vector3_t loc, double intensity);
     bool intersect_ray(ray_t ray, double &distance);
+    vector3_t normal_at_point(vector3_t intersection_point);
     double distance_from(vector3_t point);
     vector3_t get_location();
     color_t get_intensity_percent();
