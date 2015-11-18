@@ -58,12 +58,11 @@ std::vector<SceneObject *> Parser::parse_file() {
     bool json_parse_successful = reader.parse(contents, root);
 
     if (json_parse_successful) {
-        cout << "Json Parsing Success" <<endl;
         Json::Value scene_objs_json = root["scene_objects"];
         for (Json::ValueIterator itr = scene_objs_json.begin();
-                itr != scene_objs_json.end(); itr++) {
+                itr != scene_objs_json.end();
+                itr++) {
             if ((*itr)["object_type"] == "sphere") {
-                cout << "SPHERE" << endl;
                 scene_objs.push_back(json_to_sphere(*itr));
             }
         }
