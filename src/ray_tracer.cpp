@@ -35,7 +35,7 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
 
             pixel_t pixel = pixel_t();
 
-            for (int level = 0; level < MAX_JUMPS; level++) {
+            for (int level = 0; coef > 0.0f && level < MAX_JUMPS; level++) {
             //     double distance;
             //     SceneObject *object;
             //     if (cast_ray(ray, distance, object)) {
@@ -46,9 +46,17 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
             //         material_t material = object->get_material();
             //         pixel += (material.diffuse * brightness).to_pixel(denom);
             //     }
-                color_t color;
-                if (cast_ray(ray, color)) {
-                    pixel += color.to_pixel();
+                SceneObject *object;
+                vector3_t intersection_point;
+                ray_t next_ray;
+                if (cast_ray(ray, object, intersection_point, next_ray)) {
+                    color_t color = cast_shadow_rays(object,
+                                                     intersection_point,
+                                                     coef);
+                    pixel += color.to_pixel(255);
+                }
+                else {
+                    break;
                 }
             }
 
@@ -60,69 +68,80 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
 }
 
 /* TODO: make conical ray tracing */
-bool RayTracer::cast_ray(ray_t ray, )
+bool RayTracer::cast_ray(ray_t ray,
+                         SceneObject *&object,
+                         vector3_t &intersection_point,
+                         ray_t &next_ray)
 {
-    double min_distance = MAX_DISTANCE;
+    double distance = MAX_DISTANCE;
     size_t num_objects = scene.size();
+    SceneObject *object;
     for (size_t i = 0; i < num_objects; i++) {
         double temp_distance = MAX_DISTANCE;
         if (scene[i]->intersect_ray(ray, temp_distance)) {
-            if (temp_distance < min_distance) {
-                min_distance = temp_distance;
+            if (temp_distance < distance) {
+                distance = temp_distance;
                 object = scene[i];
             }
         }
     }
 
-    if (min_distance < MAX_DISTANCE) {
-        distance = min_distance;
-        vector3_t intersection_point = ray.start * distance;
-        vector3_t N = object->normal_at_point(intersection_point);
-        vector3_t L = direction.normalize();
-        color_t C = color_t(255);
-        color_t IL = light->get_intensity_percent();
-
-        double lambert = ray.direction.dot(n) * coef;
+    if (distance < MAX_DISTANCE) {
+        intersection_point = ray.start * distance;
+        next_ray = /* SOMETHING */;
         return true;
     }
 
     return false;
 }
 
-// color_t RayTracer::cast_shadow_rays(SceneObject *object,
-//                                     vector3_t intersection_point)
-// {
-//     color_t brightness_sum = color_t();
-//     size_t num_lights = lights.size();
-//     for (size_t i = 0; i < num_lights; i++) {
-//         PointLight *light = (PointLight *) lights[i];
-//         vector3_t light_loc = light->get_location();
-//         vector3_t direction = light_loc - intersection_point;
-//         ray_t shadow_ray(intersection_point, direction.normalize());
+bool RayTracer::intersects_any_object(ray_t ray)
+{
+    SceneObject *object;
+    vector3_t intersection_point;
+    ray_t next_ray;
+    return cast_ray(ray, object, intersection_point, next_ray);
+}
 
-//         double distance;
-//         SceneObject *temp_object;
-//         bool in_shadow = cast_ray(shadow_ray, distance, temp_object);
-//         if (!in_shadow) {
-//             distance = light_loc.distance_from(intersection_point);
-//             color_t intensity = light->get_intensity_percent();
-//             brightness_sum += intensity / (distance * distance);
-//         }
-//     }
+color_t RayTracer::cast_shadow_rays(SceneObject *object,
+                                    vector3_t intersection_point,
+                                    double &coef)
+{
+    color_t brightness_sum = color_t();
+    material_t material = object->get_material();
+    size_t num_lights = lights.size();
+    for (size_t i = 0; i < num_lights; i++) {
+        PointLight *light = (PointLight *) lights[i];
+        vector3_t light_loc = light->get_location();
+        vector3_t direction = (light_loc - intersection_point).normalize();
+        ray_t shadow_ray(intersection_point, direction);
 
-//     brightness_sum.r  *= (1e7);
-//     brightness_sum.g  *= (1e7);
-//     brightness_sum.b  *= (1e7);
+        bool in_shadow = intersects_any_object(shadow_ray);
+        if (!in_shadow) {
+            vector3_t normal = object->normal_at_point(intersection_point);
+            double lambert = direction.dot(normal) * coef;
+            /* double distance = light_loc.distance_from(intersection_point); */
+            color_t intensity = light->get_intensity();
+            brightness_sum += lambert * intensity * material.diffuse;
+            /* / (distance * distance); */
+        }
+    }
 
-//     if (brightness_sum.r > 1) {
-//         brightness_sum.r = 1;
-//     }
-//     if (brightness_sum.g > 1) {
-//         brightness_sum.g = 1;
-//     }
-//     if (brightness_sum.b > 1) {
-//         brightness_sum.b = 1;
-//     }
+    coef *= material.reflectivity;
 
-//     return brightness_sum;
-// }
+    // brightness_sum.r  *= (1e7);
+    // brightness_sum.g  *= (1e7);
+    // brightness_sum.b  *= (1e7);
+
+    // if (brightness_sum.r > 1) {
+    //     brightness_sum.r = 1;
+    // }
+    // if (brightness_sum.g > 1) {
+    //     brightness_sum.g = 1;
+    // }
+    // if (brightness_sum.b > 1) {
+    //     brightness_sum.b = 1;
+    // }
+
+    return brightness_sum;
+}

@@ -39,7 +39,7 @@ vector3_t PointLight::get_location()
     return loc;
 }
 
-color_t PointLight::get_intensity_percent()
+color_t PointLight::get_intensity()
 {
-    return material.emission / 255.0;
+    return material.emission;
 }

@@ -14,6 +14,14 @@ struct pixel_t {
     pixel_t(long r, long g, long b) : r(r), g(g), b(b)
     {
     }
+
+    pixel_t &operator+=(const pixel_t &other)
+    {
+        r += other.r;
+        g += other.g;
+        b += other.b;
+        return *this;
+    }
 };
 
 class PnmImage {

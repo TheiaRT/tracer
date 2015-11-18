@@ -49,28 +49,27 @@ struct material_t {
     color_t diffuse;
     color_t specular;
     color_t emission;
-    double shine;
+    double reflectivity;
 
     material_t() :
         ambient(color_t()),
         diffuse(color_t()),
         specular(color_t()),
         emission(color_t()),
-        shine(0.0f)
+        reflectivity(0.0f)
     {
-
     }
 
     material_t(color_t ambient,
                color_t diffuse,
                color_t specular,
                color_t emission,
-               double shine) :
+               double reflectivity) :
         ambient(ambient),
         diffuse(diffuse),
         specular(specular),
         emission(emission),
-        shine(shine)
+        reflectivity(reflectivity)
     {
     }
 };
