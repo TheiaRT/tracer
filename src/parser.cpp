@@ -94,7 +94,6 @@ void Parser::parse_file(
          * "scene_objects"
          */
         Json::Value scene_objs_json = root["scene_objects"];
-
         /* Create scene_obj from each item in JSON "scene_objects"[]
          * based on object_type; append object into scene_objs vector
          */
@@ -112,6 +111,8 @@ void Parser::parse_file(
             else {
                 std::cerr << "UNKNOWN TYPE " << type << std::endl;
             }
+
+            /* More branches to follow... */
         }
         Json::Value scene_lights_json = root["scene_lights"];
         for (Json::ValueIterator itr = scene_lights_json.begin();
