@@ -4,9 +4,8 @@
 
 #include "parser.h"
 
-using namespace std;
 
-Parser::Parser(string filename) {
+Parser::Parser(std::string filename) {
     this->filename = filename;
 }
 
@@ -51,7 +50,7 @@ Sphere *Parser::json_to_sphere(Json::Value json_sphere) {
 
 std::vector<SceneObject *> Parser::parse_file() {
     std::vector<SceneObject *> scene_objs;
-    ifstream contents;
+    std::ifstream contents;
     contents.open(filename);
     Json::Value root;
     Json::Reader reader;
@@ -60,8 +59,7 @@ std::vector<SceneObject *> Parser::parse_file() {
     if (json_parse_successful) {
         Json::Value scene_objs_json = root["scene_objects"];
         for (Json::ValueIterator itr = scene_objs_json.begin();
-                itr != scene_objs_json.end();
-                itr++) {
+                itr != scene_objs_json.end(); itr++) {
             if ((*itr)["object_type"] == "sphere") {
                 scene_objs.push_back(json_to_sphere(*itr));
             }
