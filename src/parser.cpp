@@ -1,12 +1,18 @@
 /* Uses Jsoncpp, reference here:
- * http://open-source-parsers.github.io/jsoncpp-docs/ 
+ * http://open-source-parsers.github.io/jsoncpp-docs/
  */
-
 #include "parser.h"
 
 
 Parser::Parser(std::string filename) {
     this->filename = filename;
+    converters.insert(
+        std::make_pair("sphere", (json_converter)&Parser::json_to_sphere)
+    );
+}
+
+bool Parser::valid_object_type(std::string type) {
+    return converters.find(type) != converters.end();
 }
 
 vector3_t Parser::json_to_vector3(Json::Value json_vector) {
@@ -46,10 +52,10 @@ std::vector<SceneObject *> Parser::parse_file() {
     std::ifstream contents;
     contents.open(filename);
     /* root is the top-level handle on the json object we parse */
-    Json::Value root; 
+    Json::Value root;
     Json::Reader reader;
-    bool json_parse_successful = reader.parse(contents, root);
 
+    bool json_parse_successful = reader.parse(contents, root);
     if (json_parse_successful) {
 
         /* The list of scene objects is referenced by key:
@@ -57,17 +63,21 @@ std::vector<SceneObject *> Parser::parse_file() {
          */
         Json::Value scene_objs_json = root["scene_objects"];
         /* Create scene_obj from each item in JSON "scene_objects"[]
-         * based on object_type; append object into scene_objs vector 
+         * based on object_type; append object into scene_objs vector
          */
         for (Json::ValueIterator itr = scene_objs_json.begin();
                 itr != scene_objs_json.end(); itr++) {
 
             /* We branch based on the type of object we encounter
-             * in the scene file. 
-             * Here, we branch to parse a sphere
+             * in the scene file.
              */
-            if ((*itr)["object_type"] == "sphere") {
-                scene_objs.push_back(json_to_sphere(*itr));
+            std::string type = (*itr)["object_type"].asString();
+            if (valid_object_type(type)) {
+                json_converter c = converters[type];
+                scene_objs.push_back((this->*c)(*itr));
+            }
+            else {
+                std::cerr << "UNKNOWN TYPE " << type << std::endl;
             }
 
             /* More branches to follow... */
@@ -75,8 +85,3 @@ std::vector<SceneObject *> Parser::parse_file() {
     }
     return scene_objs;
 }
-
-
-
-
-

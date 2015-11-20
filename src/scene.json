@@ -11,6 +11,9 @@
                 "shine":0.5
             },
             "radius":20.0
+        },
+        {
+            "object_type": "unknown_thing"
         }
     ]
 }
