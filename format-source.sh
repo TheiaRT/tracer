@@ -5,7 +5,7 @@ function format-comp40 {
        --mode=c --break-closing-brackets --add-brackets\
        --align-pointer=name --align-reference=name --indent-switches\
        --indent-cases --break-blocks --pad-oper\
-       --lineend=linux --dry-run --unpad-paren --pad-header $1
+       --lineend=linux --unpad-paren --pad-header $1
 
     # --delete-empty-lines
     # --add-one-line-brackets

@@ -24,7 +24,7 @@ How to write a good commit message:
 
 1. Use the first line for a sensible and brief description of your changes. Make
    it somewhat specific. Try and make sure it starts with a verb and is present
-   tense. Keep it <= 50 characters.
+   tense. Keep it <= 50 characters. Capitalize the first letter.
    EX: Add all the images from the hackathon.
 
 2. Use the lines after the first line (and a blank line) to give some more
@@ -57,7 +57,7 @@ CODE
    0a. Makes nested things easier to read
 1. 80 columns
 2. Braces on the next line
-   2a. Braces
+   2a. Braces required
 3. Function call / control flow spacing as seen in style-after.c. Braces on
    same line, else on different line, no space before function definition or
    call
