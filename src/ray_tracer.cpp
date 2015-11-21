@@ -34,7 +34,7 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
             ray.start.y = y;
 
             pixel_t pixel = pixel_t();
-
+            double coef = 2000.0f;
             for (int level = 0; coef > 0.0f && level < MAX_JUMPS; level++) {
             //     double distance;
             //     SceneObject *object;
@@ -75,7 +75,6 @@ bool RayTracer::cast_ray(ray_t ray,
 {
     double distance = MAX_DISTANCE;
     size_t num_objects = scene.size();
-    SceneObject *object;
     for (size_t i = 0; i < num_objects; i++) {
         double temp_distance = MAX_DISTANCE;
         if (scene[i]->intersect_ray(ray, temp_distance)) {
@@ -88,7 +87,7 @@ bool RayTracer::cast_ray(ray_t ray,
 
     if (distance < MAX_DISTANCE) {
         intersection_point = ray.start * distance;
-        next_ray = /* SOMETHING */;
+        next_ray = ray_t()/* SOMETHING */;
         return true;
     }
 
@@ -122,7 +121,7 @@ color_t RayTracer::cast_shadow_rays(SceneObject *object,
             double lambert = direction.dot(normal) * coef;
             /* double distance = light_loc.distance_from(intersection_point); */
             color_t intensity = light->get_intensity();
-            brightness_sum += lambert * intensity * material.diffuse;
+            brightness_sum += intensity * material.diffuse * lambert;
             /* / (distance * distance); */
         }
     }

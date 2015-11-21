@@ -32,6 +32,11 @@ struct color_t {
         return color_t(r * other.r, g * other.g, b * other.b, a * other.a);
     }
 
+    color_t operator*(double d)
+    {
+        return color_t(r * d, g * d, b * d, a * d);
+    }
+
     color_t operator/(double d)
     {
         return color_t(r / d, g / d, b / d, a / d);
