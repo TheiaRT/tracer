@@ -1,0 +1,40 @@
+{
+    "scene":[
+        {
+            "shape": "sphere",
+            "loc": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "color": "#ffffff",
+            "radius": 10
+        },
+        {
+            "shape": "cube",
+            "loc": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "color":{"r":0.5, "g":0.5, "b":0.5, "a":1},
+            "side_length": 15
+        }
+    ], 
+    "def":5,
+    "testvector":{"x":5, "y":-15, "z":300.0},
+    "testcolor":{"r":0.5, "g":0.5, "b":0.5, "a":1},
+    "testmaterial":{"ambient":{}, "diffuse":{}, "specular":{}, "emission":{}, "shine":0.5},
+    "testsphere":{
+        "loc":{"x":5, "y":-15, "z":300.0},
+        "material":{
+            "ambient":{"r":0.5, "g":0.5, "b":0.5, "a":1},
+            "diffuse":{},
+            "specular":{},
+            "emission":{},
+            "shine":0.5
+        },
+        "radius":20.0
+    }
+
+}

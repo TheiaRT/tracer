@@ -31,6 +31,13 @@ struct vector3_t {
         return strs.str();
     }
 
+    double dot(const vector3_t &b) {
+        return x * b.x + y * b.y + z * b.z;
+    }
+
+    double distance_from(const vector3_t &b) {
+        return (*this - b).magnitude();
+    }
     vector3_t operator+(const vector3_t &b) {
         return vector3_t(x + b.x, y + b.y, z + b.z);
     }
