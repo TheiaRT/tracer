@@ -24,7 +24,7 @@ struct color_t {
         r += other.r;
         g += other.g;
         b += other.b;
-        b += other.a;
+        a += other.a;
     }
 
     color_t operator*(const color_t &other)

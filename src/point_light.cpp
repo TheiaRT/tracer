@@ -16,7 +16,7 @@ void PointLight::init(vector3_t loc, double intensity)
     this->material = material_t();
     this->material.emission = color_t(intensity);
     /* white light */
-    this->material.diffuse = color_t(255, 255, 255, 255);
+    this->material.diffuse = color_t(1, 1, 1, 1);
 }
 
 bool PointLight::intersect_ray(ray_t ray, double &distance)
@@ -36,5 +36,5 @@ vector3_t PointLight::get_location()
 
 color_t PointLight::get_intensity_percent()
 {
-    return material.emission / 255.0;
+    return material.emission;
 }
