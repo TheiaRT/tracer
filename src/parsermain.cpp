@@ -1,12 +1,9 @@
 #include "parser.h"
-using namespace std;
-int main() 
+
+int main()
 {
     Parser parser("scene.json");
-    vector <SceneObject *> objs = parser.parse_file() ;
-    cout << objs[0] << endl;
-
+    std::vector<SceneObject *> objs = parser.parse_file();
+    std::cout << objs[0] << std::endl;
     return 0;
 }
-
-
