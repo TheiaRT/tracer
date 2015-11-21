@@ -1,0 +1,133 @@
+{
+    "scene_objects":[
+        {
+            "object_type":"sphere",
+            "loc":{"x":0, "y":20, "z":50.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "reflection":0
+            },
+            "radius":10.0
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":0, "y":10, "z":50.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "reflection":0
+            },
+            "radius":7.0
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":0, "y":3, "z":50.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "reflection":0
+            },
+            "radius":5.0
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":-2, "y":3.2, "z":45.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7
+            },
+            "radius":0.5
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":2, "y":3.2, "z":45.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7
+            },
+            "radius":0.5
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":0, "y":3.5, "z":45.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7
+            },
+            "radius":0.5
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":1, "y":3.35, "z":45.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7
+            },
+            "radius":0.5
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":-1, "y":3.35, "z":45.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7
+            },
+            "radius":0.5
+        },
+
+        {
+            "object_type":"sphere",
+            "loc":{"x":-1, "y":2, "z":45.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7
+            },
+            "radius":0.75
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":1, "y":2, "z":45.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7
+            },
+            "radius":0.75
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":1, "y":-2.5, "z":5.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "emission":{},
+                "reflection":0.7,
+                "refraction":0.4,
+                "refraction_index":1.4
+            },
+            "radius":0.5
+        }
+
+    ],
+    "scene_lights":[
+        {
+            "object_type":"point_light",
+            "loc":{"x":0, "y":0, "z":-2000},
+            "intensity":{"r":2000000, "g":2000000, "b":2000000}
+        },
+        {
+            "object_type":"point_light",
+            "loc":{"x":10, "y":-15, "z":0},
+            "intensity":{"r":800, "g":800, "b":800}
+        }
+    ]
+}

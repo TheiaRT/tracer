@@ -3,25 +3,26 @@
 
 #include "pnm_image.h"
 #include "vector.h"
-
-struct color_t {
-    double r, g, b, a;
-};
-
-struct material_t {
-    color_t ambient;
-    color_t diffuse;
-    color_t specular;
-    color_t emission;
-    double shine;
-};
+#include "material.h"
 
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */
 class SceneObject {
-  public:
-    virtual bool intersect_ray(ray_t ray, vector3_t &point) = 0;
+public:
+    virtual int intersect_ray(ray_t ray, double &distance) = 0;
+    material_t get_material() {
+        return material;
+    }
 
-  protected:
+    vector3_t get_location() {
+        return loc;
+    }
+    vector3_t normal(vector3_t at_point) {
+        return (at_point - loc).normalize();
+    }
+
+
+protected:
+    vector3_t loc;
     material_t material;
 };
 
