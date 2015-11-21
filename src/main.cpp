@@ -5,14 +5,17 @@
 #include "point_light.h"
 #include "ray_tracer.h"
 #include "material.h"
+#include "parser.h"
 
 int main(int argc, char **argv)
 {
-    std::vector<SceneObject *> scene_objects;
+    Parser parser("scene.json");
+    std::vector<SceneObject *> scene_objects = parser.parse_file();
+    /*
     scene_objects.push_back(new Sphere(50, 120, 50, JADE, 50));
     scene_objects.push_back(new Sphere(200, 120, 200, material_t(
                     color_t(), color_t(1), color_t(), color_t(), 1), 100));
-
+*/
     std::vector<SceneObject *> scene_lights;
     scene_lights.push_back(new PointLight(0, 220, -50, 5255));
 

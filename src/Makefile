@@ -1,8 +1,8 @@
 CXX = clang++
 CFLAGS = -g -std=c++11
 
-all: ray_tracer
-	$(CXX) $(CFLAGS) pnm_image.o ray_tracer.o sphere.o point_light.o main.cpp -o test
+all: ray_tracer parser
+	$(CXX) $(CFLAGS) dist/jsoncpp.cpp pnm_image.o ray_tracer.o sphere.o point_light.o parser.cpp main.cpp -o test
 
 parser: 
 	$(CXX) $(CFLAGS) -g dist/jsoncpp.cpp sphere.cpp parser.cpp parsermain.cpp -o parsertest

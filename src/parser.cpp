@@ -38,13 +38,13 @@ color_t Parser::json_to_color(Json::Value json_color)
 
 material_t Parser::json_to_material(Json::Value json_material)
 {
-    return {
-        .ambient = json_to_color(json_material["ambient"]),
-        .diffuse = json_to_color(json_material["diffuse"]),
-        .specular = json_to_color(json_material["specular"]),
-        .emission = json_to_color(json_material["emission"]),
-        .shine = json_material["shine"].asDouble()
-    };
+    return material_t(
+        json_to_color(json_material["ambient"]),
+        json_to_color(json_material["diffuse"]),
+        json_to_color(json_material["specular"]),
+        json_to_color(json_material["emission"]),
+        json_material["shine"].asDouble()
+        );
 }
 
 Sphere *Parser::json_to_sphere(Json::Value json_sphere)
