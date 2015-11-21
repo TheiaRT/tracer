@@ -15,11 +15,14 @@ bool Parser::valid_object_type(std::string type) {
     return converters.find(type) != converters.end();
 }
 
-vector3_t Parser::json_to_vector3(Json::Value json_vector) {
-    return vector3_t(
-            json_vector["x"].asDouble(),
-            json_vector["y"].asDouble(),
-            json_vector["z"].asDouble());
+template <int N>
+vector_t<N> Parser::json_to_vector(Json::Value json_vector) {
+    std::vector<double> arr;
+    int length = json_vector["length"].asInt();
+    for (Json::Value d : json_vector) {
+        arr.push_back(d.asDouble());
+    }
+    return vector_t<N>(arr);
 }
 
 color_t Parser::json_to_color(Json::Value json_color) {
@@ -41,7 +44,7 @@ material_t Parser::json_to_material(Json::Value json_material) {
 
 Sphere *Parser::json_to_sphere(Json::Value json_sphere) {
     return new Sphere(
-            json_to_vector3(json_sphere["loc"]),
+            json_to_vector<3>(json_sphere["loc"]),
             json_to_material(json_sphere["material"]),
             json_sphere["radius"].asDouble());
 

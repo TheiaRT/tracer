@@ -7,7 +7,7 @@ Sphere::Sphere(vector3_t loc, material_t material, double radius)
 
 Sphere::Sphere(double x, double y, double z, material_t material, double radius)
 {
-    init(vector3_t(x, y, z), material, radius);
+    init(vector3_t({x, y, z}), material, radius);
 }
 
 /*

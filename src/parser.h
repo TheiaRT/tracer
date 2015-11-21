@@ -24,8 +24,10 @@ private:
     std::map<std::string, json_converter> converters;
 
     bool valid_object_type(std::string type);
-    vector3_t json_to_vector3(Json::Value json_vector);
-    color_t json_to_color(Json::Value json_color);
-    material_t json_to_material(Json::Value json_material);
-    Sphere *json_to_sphere(Json::Value json_sphere);
+
+    template <int N>
+    vector_t<N> json_to_vector(Json::Value json_vector);
+    color_t     json_to_color(Json::Value json_color);
+    material_t  json_to_material(Json::Value json_material);
+    Sphere     *json_to_sphere(Json::Value json_sphere);
 };
