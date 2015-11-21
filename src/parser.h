@@ -10,12 +10,15 @@
 #include "scene_object.h"
 #include "sphere.h"
 #include "material.h"
+#include "point_light.h"
 
 
 class Parser {
 public:
     Parser(std::string filename);
-    std::vector<SceneObject *> parse_file();
+    void parse_file(
+            std::vector<SceneObject *> &scene_objs,
+            std::vector<SceneObject *> &scene_lights);
 
 private:
     std::string filename;
@@ -28,4 +31,5 @@ private:
     color_t json_to_color(Json::Value json_color);
     material_t json_to_material(Json::Value json_material);
     Sphere *json_to_sphere(Json::Value json_sphere);
+    PointLight *json_to_point_light(Json::Value json_point_light);
 };

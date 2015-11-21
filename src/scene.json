@@ -1,7 +1,7 @@
 {
     "scene_objects":[
-        {
-            "object_type":"sphere",
+    {
+        "object_type":"sphere",
             "loc":{"x":200, "y":120, "z":200.0},
             "material":{
                 "ambient":{"r":0.5, "g":0.5, "b":0.5, "a":1},
@@ -11,5 +11,14 @@
                 "shine":0.5
             },
             "radius":100.0
-        }    ]
+    }
+    ],
+        "scene_lights":[
+        {
+            "object_type":"point_light",
+            "loc":{"x":0, "y":220, "z":-50},
+            "intensity":5255
+        }
+
+    ]
 }
