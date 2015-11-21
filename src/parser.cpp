@@ -111,7 +111,6 @@ void Parser::parse_file(
             if (valid_object_type(type)) {
                 json_converter c = converters[type];
                 scene_lights.push_back((this->*c)(*itr));
-                std::cerr << "Point Light"<< std::endl;
             }
             else {
                 std::cerr << "UNKNOWN TYPE " << type << std::endl;
