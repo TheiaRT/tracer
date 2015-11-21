@@ -16,8 +16,8 @@
         "scene_lights":[
         {
             "object_type":"point_light",
-            "loc":{"x":0, "y":220, "z":-50},
-            "intensity":5255
+            "loc":{"x":39000, "y":10220, "z":-50},
+            "intensity":525
         }
 
     ]

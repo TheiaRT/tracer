@@ -12,7 +12,18 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    Parser parser("scene.json");
+    string scene_name = "";
+    FILE *out_file = stdout;
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "-s") == 0) {
+            scene_name = string(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-o") == 0) {
+            out_file = fopen(argv[++i], "w+");
+        }
+    }
+
+    Parser parser(scene_name);
     std::vector<SceneObject *> scene_objects;
     /*
        scene_objects.push_back(new Sphere(50, 120, 50, JADE, 50));
@@ -34,7 +45,7 @@ int main(int argc, char **argv)
     for (SceneObject *l : scene_lights) {
         delete (PointLight *) l;
     }
-
+/*
     FILE *fp;
     if (argc == 1) {
         fp = stdout;
@@ -46,15 +57,15 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (fp == NULL) {
+*/
+    if (out_file == NULL) {
         return 2;
     }
 
-    if (image.write(fp) == false) {
+    if (image.write(out_file) == false) {
         return 3;
     }
-
-    fclose(fp);
+    fclose(out_file);
 
     return 0;
 }
