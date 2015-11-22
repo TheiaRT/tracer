@@ -22,19 +22,18 @@ bool Sphere::intersect_ray(ray_t ray, double &distance)
         return false;
     }
 
-    float A = ray.direction.dot(ray.direction);
+    double A = ray.direction.dot(ray.direction);
     vector3_t dist = ray.start - loc;
-    float B = 2 * ray.direction.dot(dist);
-    float C = dist.dot(dist) - radius * radius;
-    float disc = B * B - 4 * A * C;
+    double B = 2 * ray.direction.dot(dist);
+    double C = dist.dot(dist) - (radius * radius);
+    double disc = B * B - 4 * A * C;
     if (disc < 0) {
         return false;
     }
     else {
-        float dist1 = -B + sqrt(B * B - 4 * A * C)/(2 * A);
-        float dist2 = -B - sqrt(B * B - 4 * A * C)/(2 * A);
+        double dist1 = (-B + sqrt(disc))/(2 * A);
+        double dist2 = (-B - sqrt(disc))/(2 * A);
         distance = std::min(dist1, dist2);
-
         return true;
     }
 }

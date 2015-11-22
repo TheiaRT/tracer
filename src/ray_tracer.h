@@ -4,31 +4,25 @@
 #include <inttypes.h>
 #include <cmath>
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
 #include "pnm_image.h"
 #include "vector.h"
-#include "sphere.h"
+#include "scene_object.h"
 
-struct sphere_t {
-    vector3_t loc;
-    double radius;
-
-    sphere_t(double x, double y, double z, double radius) {
-        loc = vector3_t(x, y, z);
-        this->radius = radius;
-    }
-};
 
 class RayTracer {
-    public:
-    RayTracer(sphere_t *scene, size_t num_objects);
+public:
+    RayTracer(std::vector<SceneObject *> scene,
+              std::vector<SceneObject *> lights);
     ~RayTracer();
     PnmImage render_image(size_t width, size_t height);
-    pixel_t cast_ray(ray_t r);
 
-    private:
-    sphere_t *scene;
-    size_t num_objects;
+private:
+    std::vector<SceneObject *> scene, lights;
+    bool cast_ray(ray_t r, double &distance, material_t &material);
+    color_t cast_shadow_rays(vector3_t intersection_point);
 };
 
 #endif

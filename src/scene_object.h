@@ -7,10 +7,13 @@
 
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */
 class SceneObject {
-  public:
+public:
     virtual bool intersect_ray(ray_t ray, double &distance) = 0;
+    material_t get_material() {
+        return material;
+    }
 
-  protected:
+protected:
     material_t material;
 };
 

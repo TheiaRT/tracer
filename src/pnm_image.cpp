@@ -1,25 +1,37 @@
+#include <iostream>
+
 #include "pnm_image.h"
 
 PnmImage::PnmImage(size_t width, size_t height, long denom) {
+    init(width, height, denom);
+}
+
+PnmImage::PnmImage(size_t width, size_t height) {
+    init(width, height, 255);
+}
+
+PnmImage::~PnmImage() {
+    for (size_t i = 0; i < height; i++) {
+         delete [] this->pixels[i];
+    }
+    delete [] this->pixels;
+}
+
+void PnmImage::init(size_t width, size_t height, long denom) {
     this->width = width;
     this->height = height;
     this->denominator = denom;
 
     this->pixels = new pixel_t*[height];
+    if (this->pixels == NULL) {
+        std::cout << "NULL" << std::endl;
+    }
     for (size_t i = 0; i < height; i++) {
         this->pixels[i] = new pixel_t[width];
+        if (this->pixels[i] == NULL) {
+            std::cout << "NULL" << std::endl;
+        }
     }
-}
-
-PnmImage::PnmImage(size_t width, size_t height) {
-    PnmImage(width, height, 255);
-}
-
-PnmImage::~PnmImage() {
-    for (size_t i = 0; i < height; i++) {
-        delete [] this->pixels[i];
-    }
-    delete [] this->pixels;
 }
 
 PnmImage PnmImage::read(FILE *fp) {
@@ -55,4 +67,9 @@ bool PnmImage::set_pixel(size_t x, size_t y, pixel_t pixel) {
 
     this->pixels[x][y] = pixel;
     return true;
+}
+
+long PnmImage::get_denominator()
+{
+    return denominator;
 }

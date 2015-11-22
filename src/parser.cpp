@@ -10,6 +10,9 @@ Parser::Parser(std::string filename)
     converters.insert(
         std::make_pair("sphere", (json_converter)&Parser::json_to_sphere)
     );
+    converters.insert(
+        std::make_pair("point_light", (json_converter)&Parser::json_to_point_light)
+    );
 }
 
 bool Parser::valid_object_type(std::string type)
@@ -38,13 +41,13 @@ color_t Parser::json_to_color(Json::Value json_color)
 
 material_t Parser::json_to_material(Json::Value json_material)
 {
-    return {
-        .ambient = json_to_color(json_material["ambient"]),
-        .diffuse = json_to_color(json_material["diffuse"]),
-        .specular = json_to_color(json_material["specular"]),
-        .emission = json_to_color(json_material["emission"]),
-        .shine = json_material["shine"].asDouble()
-    };
+    return material_t(
+        json_to_color(json_material["ambient"]),
+        json_to_color(json_material["diffuse"]),
+        json_to_color(json_material["specular"]),
+        json_to_color(json_material["emission"]),
+        json_material["shine"].asDouble()
+        );
 }
 
 Sphere *Parser::json_to_sphere(Json::Value json_sphere)
@@ -56,9 +59,17 @@ Sphere *Parser::json_to_sphere(Json::Value json_sphere)
     );
 }
 
-std::vector<SceneObject *> Parser::parse_file()
+PointLight *Parser::json_to_point_light(Json::Value json_point_light) {
+    return new PointLight(
+            json_to_vector3(json_point_light["loc"]),
+            json_point_light["intensity"].asDouble());
+}
+
+
+void Parser::parse_file(
+        std::vector<SceneObject *> &scene_objs,
+        std::vector<SceneObject *> &scene_lights)
 {
-    std::vector<SceneObject *> scene_objs;
     std::ifstream contents;
     contents.open(filename);
     /* root is the top-level handle on the json object we parse */
@@ -90,6 +101,21 @@ std::vector<SceneObject *> Parser::parse_file()
                 std::cerr << "UNKNOWN TYPE " << type << std::endl;
             }
         }
+        Json::Value scene_lights_json = root["scene_lights"];
+        for (Json::ValueIterator itr = scene_lights_json.begin();
+             itr != scene_lights_json.end(); itr++) {
+
+            /* We branch based on the type of object we encounter
+             * in the scene file.
+             */
+            std::string type = (*itr)["object_type"].asString();
+            if (valid_object_type(type)) {
+                json_converter c = converters[type];
+                scene_lights.push_back((this->*c)(*itr));
+            }
+            else {
+                std::cerr << "UNKNOWN TYPE " << type << std::endl;
+            }
+        }
     }
-    return scene_objs;
 }
