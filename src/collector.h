@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <queue>
 
 #include "pnm_image.h"
 
@@ -20,6 +21,7 @@ private:
     std::vector<std::thread> threads;
     std::string scene;
     PnmImage pixmap;
+    std::queue<vector2_t> work_queue;
 
     /*
       in a thread, listens and accepts connections in order to send workers work
