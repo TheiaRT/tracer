@@ -2,7 +2,7 @@
 #define VECTOR_H
 
 #include <sstream>
-#include <cmath>
+#include <math.h>
 
 struct vector3_t {
     double x, y, z;
@@ -17,7 +17,7 @@ struct vector3_t {
 
     double magnitude()
     {
-        return sqrt(x * x + y * y + z * z);
+        return sqrt((x * x) + (y * y) + (z * z));
     }
 
     vector3_t normalize()
