@@ -92,7 +92,8 @@ color_t RayTracer::calculate_specular(
             PointLight *light,
             vector3_t view_dir)
 {
-    vector3_t light_direction = (light->get_location() - intersection_point).normalize();
+    vector3_t light_direction = 
+        (light->get_location() - intersection_point).normalize();
     material_t material = obj->get_material();
     vector3_t normal = (intersection_point - obj->get_location()).normalize();
     double reflection = normal.dot(light_direction) * 2.0;
@@ -107,7 +108,10 @@ color_t RayTracer::calculate_specular(
     return (phong_term < 0 ? color_t() : color_t(phong_term));
 }
 
-color_t RayTracer::calculate_illumination(vector3_t intersection_point, SceneObject *obj, vector3_t view_direction) {
+color_t RayTracer::calculate_illumination(
+        vector3_t intersection_point,
+        SceneObject *obj,
+        vector3_t view_direction) {
 
     material_t obj_material = obj->get_material();
     color_t brightness_sum = obj_material.ambient / 1;
@@ -124,7 +128,13 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point, SceneObj
         double distance = 0;
         material_t temp_material;
         SceneObject *temp_obj;
-        bool in_shadow = cast_ray(shadow_ray, distance, temp_material, temp_obj, obj) || shadow_ray.direction.dot((intersection_point-obj->get_location()).normalize()) < 0;
+        bool in_shadow = cast_ray(shadow_ray,
+                distance,
+                temp_material,
+                temp_obj, obj) || 
+                shadow_ray.direction.dot(
+                        (intersection_point-obj->get_location())
+                        .normalize()) < 0;
         if (!in_shadow) {
             diffuse_sum  += calculate_diffuse(intersection_point, light);
             
