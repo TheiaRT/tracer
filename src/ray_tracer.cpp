@@ -129,27 +129,12 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point, SceneObj
             diffuse_sum  += calculate_diffuse(intersection_point, light);
             
             //specular_sum += calculate_specular(obj, intersection_point, light, view_direction);
-        } else {
-            cerr << "Shadow"<< endl;
-        }
-        vector3_t normal = (intersection_point-obj->get_location()).normalize();
-        vector3_t reflection_direction = view_direction - normal * (2 * normal.dot(view_direction));
-        ray_t reflection_ray(intersection_point, reflection_direction);
-        bool reflected = cast_ray(reflection_ray, distance, temp_material, temp_obj, obj);
-        if (reflected) {
-            //vector3_t reflection_point = reflection_ray.loc + reflection_ray.direction * 
-            //reflection_sum += calculate_illumination(
         }
     }
 
     brightness_sum += diffuse_sum  * obj_material.diffuse;
     brightness_sum += specular_sum * obj_material.specular;
     brightness_sum += reflection_sum * color_t(obj_material.shine);
-    /*
-    brightness_sum.r  *= (1e3);
-    brightness_sum.g  *= (1e3);
-    brightness_sum.b  *= (1e3);
-    */
 
     if (brightness_sum.r > 1) {
         brightness_sum.r = 1;
