@@ -11,7 +11,6 @@ public:
     bool intersect_ray(ray_t ray, double &distance);
 
 private:
-    vector3_t loc;
     double radius;
 
     void init(vector3_t loc, material_t material, double radius) {

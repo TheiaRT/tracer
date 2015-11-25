@@ -13,7 +13,12 @@ public:
         return material;
     }
 
+    vector3_t get_location() {
+        return loc;
+    }
+
 protected:
+    vector3_t loc;
     material_t material;
 };
 

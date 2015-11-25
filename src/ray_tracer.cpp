@@ -35,11 +35,12 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
             ray.direction = (ray.start - eye).normalize();
             double distance;
             material_t material;
-            if (cast_ray(ray, distance, material)) {
-                vector3_t intersection_point = ray.start * distance;
-                color_t brightness = cast_shadow_rays(intersection_point);
+            SceneObject *obj;
+            if (cast_ray(ray, distance, material, obj, NULL)) {
+                vector3_t intersection_point = ray.start + (ray.direction * distance);
+                color_t color = calculate_illumination(intersection_point, obj, ray.direction);
                 long denom = image.get_denominator();
-                pixel_t pixel = (material.diffuse * brightness).to_pixel(denom);
+                pixel_t pixel = color.to_pixel(denom);
                 image.set_pixel(x, y, pixel);
             }
         }
@@ -51,30 +52,68 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
 /*
   TODO: make conical ray tracing
  */
-bool RayTracer::cast_ray(ray_t ray, double &distance, material_t &material)
+bool RayTracer::cast_ray(ray_t ray, double &distance, 
+                material_t &material, SceneObject *&object, SceneObject *ignore)
 {
     double min_distance = MAX_DISTANCE;
     size_t num_objects = scene.size();
     for (size_t i = 0; i < num_objects; i++) {
         double temp_distance = MAX_DISTANCE;
-        if (scene[i]->intersect_ray(ray, temp_distance)) {
+
+        if (scene[i] != ignore && scene[i]->intersect_ray(ray, temp_distance)) {
             if (temp_distance < min_distance) {
                 min_distance = temp_distance;
                 material = scene[i]->get_material();
+                object = scene[i];
             } else {
             }
         }
     }
 
-    if (min_distance < MAX_DISTANCE) {
+    if (min_distance < MAX_DISTANCE && min_distance > 0) {
         distance = min_distance;
         return true;
     }
     return false;
 }
+color_t RayTracer::calculate_diffuse(
+        vector3_t intersection_point,
+        PointLight *light) 
+{
+    vector3_t light_loc = light->get_location();
+    double distance = light_loc.distance_from(intersection_point);
+    color_t intensity = light->get_intensity_percent();
+    return intensity / (distance * distance);
+}
 
-color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
-    color_t brightness_sum = color_t();
+color_t RayTracer::calculate_specular(
+            SceneObject *obj,
+            vector3_t intersection_point,
+            PointLight *light,
+            vector3_t view_dir)
+{
+    vector3_t light_direction = (light->get_location() - intersection_point).normalize();
+    material_t material = obj->get_material();
+    vector3_t normal = (intersection_point - obj->get_location()).normalize();
+    double reflection = normal.dot(light_direction) * 2.0;
+    vector3_t phong_dir = (light_direction - normal) * reflection;
+    double phong_term = phong_dir.dot(view_dir);
+    if (phong_term > 1) {
+        phong_term = 1;
+    }
+    phong_term = pow(phong_term, material.shine);
+    if (phong_term > 1) {
+    }
+    return (phong_term < 0 ? color_t() : color_t(phong_term));
+}
+
+color_t RayTracer::calculate_illumination(vector3_t intersection_point, SceneObject *obj, vector3_t view_direction) {
+
+    material_t obj_material = obj->get_material();
+    color_t brightness_sum = obj_material.ambient / 1;
+    color_t diffuse_sum = color_t();
+    color_t specular_sum = color_t();
+    color_t reflection_sum = color_t();
     size_t num_lights = lights.size();
     for (size_t i = 0; i < num_lights; i++) {
         PointLight *light = (PointLight *) lights[i];
@@ -82,19 +121,35 @@ color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
         vector3_t direction = light_loc - intersection_point;
         ray_t shadow_ray(intersection_point, direction.normalize());
 
-        double distance;
+        double distance = 0;
         material_t temp_material;
-        bool in_shadow = cast_ray(shadow_ray, distance, temp_material);
+        SceneObject *temp_obj;
+        bool in_shadow = cast_ray(shadow_ray, distance, temp_material, temp_obj, obj) || shadow_ray.direction.dot((intersection_point-obj->get_location()).normalize()) < 0;
         if (!in_shadow) {
-            distance = light_loc.distance_from(intersection_point);
-            color_t intensity = light->get_intensity_percent();
-            brightness_sum += intensity / (distance * distance);
+            diffuse_sum  += calculate_diffuse(intersection_point, light);
+            
+            //specular_sum += calculate_specular(obj, intersection_point, light, view_direction);
+        } else {
+            cerr << "Shadow"<< endl;
+        }
+        vector3_t normal = (intersection_point-obj->get_location()).normalize();
+        vector3_t reflection_direction = view_direction - normal * (2 * normal.dot(view_direction));
+        ray_t reflection_ray(intersection_point, reflection_direction);
+        bool reflected = cast_ray(reflection_ray, distance, temp_material, temp_obj, obj);
+        if (reflected) {
+            //vector3_t reflection_point = reflection_ray.loc + reflection_ray.direction * 
+            //reflection_sum += calculate_illumination(
         }
     }
 
-    brightness_sum.r  *= (1e7);
-    brightness_sum.g  *= (1e7);
-    brightness_sum.b  *= (1e7);
+    brightness_sum += diffuse_sum  * obj_material.diffuse;
+    brightness_sum += specular_sum * obj_material.specular;
+    brightness_sum += reflection_sum * color_t(obj_material.shine);
+    /*
+    brightness_sum.r  *= (1e3);
+    brightness_sum.g  *= (1e3);
+    brightness_sum.b  *= (1e3);
+    */
 
     if (brightness_sum.r > 1) {
         brightness_sum.r = 1;
@@ -105,6 +160,7 @@ color_t RayTracer::cast_shadow_rays(vector3_t intersection_point) {
     if (brightness_sum.b > 1) {
         brightness_sum.b = 1;
     }
+
 
     return brightness_sum;
 }
