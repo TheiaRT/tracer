@@ -3,7 +3,6 @@
  */
 #include "parser.h"
 #include <iostream>
-using namespace std;
 
 Parser::Parser(std::string filename)
 {
@@ -62,7 +61,6 @@ Sphere *Parser::json_to_sphere(Json::Value json_sphere)
 
 PointLight *Parser::json_to_point_light(Json::Value json_point_light) {
 
-    cerr << "Light "<<endl;
     return new PointLight(
             json_to_vector3(json_point_light["loc"]),
             json_to_color(json_point_light["intensity"]));
@@ -122,6 +120,5 @@ void Parser::parse_file(
         }
     } else {
 
-        cerr <<"Damn"<<endl;
     }
 }

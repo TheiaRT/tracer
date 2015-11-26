@@ -1,5 +1,4 @@
 #include "point_light.h"
-#include <iostream>
 
 PointLight::PointLight(double x, double y, double z, double intensity)
 {
@@ -20,7 +19,6 @@ void PointLight::init(vector3_t loc, color_t intensity)
     this->loc = loc;
     this->material = material_t();
     this->material.emission = intensity;
-    std::cerr << "Intensity r" << intensity.r << std::endl;
     /* white light */
     this->material.diffuse = color_t(1, 1, 1, 1);
 }
