@@ -5,8 +5,11 @@ all: test
 	./test -s scene.json -o output.pnm; open output.pnm
 
 
-test: ray_tracer.o parser.o jsoncpp.o
-	$(CXX) $(CFLAGS) pnm_image.o jsoncpp.o parser.o ray_tracer.o sphere.o point_light.o main.cpp -o test
+test: ray_tracer.o parser.o jsoncpp.o main.o
+	$(CXX) $(CFLAGS) pnm_image.o jsoncpp.o parser.o ray_tracer.o sphere.o point_light.o main.o -o test
+
+main.o: main.cpp
+	$(CXX) $(CFLAGS) -g -c  main.cpp 
 
 parser.o: jsoncpp.o parser.cpp
 	$(CXX) $(CFLAGS) -g -c  parser.cpp 

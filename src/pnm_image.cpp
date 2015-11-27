@@ -29,7 +29,7 @@ void PnmImage::init(size_t width, size_t height, long denom) {
     for (size_t i = 0; i < height; i++) {
         this->pixels[i] = new pixel_t[width];
         if (this->pixels[i] == NULL) {
-            std::cout << "NULL" << std::endl;
+            std::cerr << "NULL" << std::endl;
         }
     }
 }
@@ -48,7 +48,7 @@ bool PnmImage::write(FILE *fp) {
     fprintf(fp, "%lu\n", this->denominator);
     for (size_t y = 0; y < this->height; y++) {
         for (size_t x = 0; x < this->width; x++) {
-            pixel_t pix = this->pixels[x][y];
+            pixel_t pix = this->pixels[y][x];
             fprintf(fp, " %lu %lu %lu", pix.r, pix.g, pix.b);
         }
         fprintf(fp, "\n");
@@ -65,7 +65,7 @@ bool PnmImage::set_pixel(size_t x, size_t y, pixel_t pixel) {
         return false;
     }
 
-    this->pixels[x][y] = pixel;
+    this->pixels[y][x] = pixel;
     return true;
 }
 
