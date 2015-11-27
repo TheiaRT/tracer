@@ -124,7 +124,7 @@ color_t RayTracer::calculate_illumination(
         vector3_t view_direction) {
 
     material_t obj_material = obj->get_material();
-    color_t brightness_sum = obj_material.ambient / 1;
+    color_t brightness_sum = obj_material.ambient;
     color_t diffuse_sum = color_t();
     color_t specular_sum = color_t();
     color_t reflection_sum = color_t();
