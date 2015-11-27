@@ -27,7 +27,8 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
     PnmImage image(width, height);
     vector3_t eye = vector3_t(0, 0, -3);
     ray_t ray(vector3_t(0, 0, 0), vector3_t(0, 0, 1));
-
+    // We project through a 4:3 viewport that scales with width and height,
+    // Centered at 0,0,0
     for (size_t x = 0; x < width; x++) {
         ray.start.x = -2 + ((x/(double)width) * 4);
         for (size_t y = 0; y < height; y++) {
@@ -36,6 +37,7 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
             double distance;
             material_t material;
             SceneObject *obj;
+
             if (cast_ray(ray, distance, material, obj, NULL)) {
                 vector3_t intersection_point = ray.start + 
                     (ray.direction * distance);
