@@ -8,7 +8,7 @@
 #include "point_light.h"
 
 #define MAX_DISTANCE INFINITY
-using namespace std;
+
 RayTracer::RayTracer(std::vector<SceneObject *> scene,
                      std::vector<SceneObject *> lights)
 {
@@ -65,8 +65,7 @@ bool RayTracer::cast_ray(ray_t ray, double &distance,
                 min_distance = temp_distance;
                 material = scene[i]->get_material();
                 object = scene[i];
-            } else {
-            }
+            } 
         }
     }
 
@@ -104,8 +103,6 @@ color_t RayTracer::calculate_specular(
         phong_term = 1;
     }
     phong_term = pow(phong_term, material.shine);
-    if (phong_term > 1) {
-    }
     return (phong_term < 0 ? color_t() : color_t(phong_term));
 }
 
