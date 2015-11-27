@@ -76,6 +76,7 @@ bool RayTracer::cast_ray(ray_t ray, double &distance,
     }
     return false;
 }
+
 color_t RayTracer::calculate_diffuse(
         vector3_t intersection_point,
         PointLight *light) 
@@ -138,7 +139,10 @@ color_t RayTracer::calculate_illumination(
         if (!in_shadow) {
             diffuse_sum  += calculate_diffuse(intersection_point, light);
             
-            //specular_sum += calculate_specular(obj, intersection_point, light, view_direction);
+            specular_sum += calculate_specular(obj,
+                    intersection_point,
+                    light,
+                    view_direction);
         }
     }
 
