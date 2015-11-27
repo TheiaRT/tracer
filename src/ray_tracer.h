@@ -30,6 +30,7 @@ private:
             SceneObject *obj,
             vector3_t view_direction);
     color_t calculate_diffuse(
+            SceneObject *obj,
             vector3_t intersection_point,
             PointLight *light);
     color_t calculate_specular(

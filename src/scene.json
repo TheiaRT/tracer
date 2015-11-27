@@ -2,56 +2,39 @@
     "scene_objects":[
     {
         "object_type":"sphere",
-            "loc":{"x":200, "y":120, "z":200.0},
+            "loc":{"x":0, "y":0, "z":50.0},
             "material":{
                 "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
-                "diffuse":{"r":0.5, "g":0.5, "b":0.5, "a":1},
-                "specular":{"r":0.25, "g":0.25, "b":0.25},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
                 "emission":{},
                 "shine":1
             },
-            "radius":100.0
-    },
-    {
-        "object_type":"sphere",
-            "loc":{"x":90, "y":120, "z":100.0},
-            "material":{
-                "ambient":{"r":0.5, "g":0.5, "b":0.5, "a":1},
-                "diffuse":{"r":0, "g":0, "b":1, "a":1},
-                "specular":{},
-                "emission":{},
-                "shine":1.0
-            },
             "radius":10.0
     },
     {
         "object_type":"sphere",
-            "loc":{"x":200, "y":20, "z":80.0},
+            "loc":{"x":-13, "y":0, "z":40.0},
             "material":{
-                "ambient":{"r":0.5, "g":0.5, "b":0.5, "a":1},
-                "diffuse":{"r":0, "g":0, "b":1, "a":1},
-                "specular":{},
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
                 "emission":{},
-                "shine":1.0
+                "shine":1
             },
-            "radius":10.0
+            "radius":1.0
     }
     ],
     "scene_lights":[
         {
             "object_type":"point_light",
-            "loc":{"x":0, "y":120, "z":0},
-            "intensity":{"r":25000, "g":25000, "b":25000}
+            "loc":{"x":0, "y":0, "z":-2000},
+            "intensity":{"r":2000000, "g":2000000, "b":2000000}
         },
+
+
         {
             "object_type":"point_light",
-            "loc":{"x":200, "y":0, "z":0},
-            "intensity":{"r":10000, "g":0, "b":0}
-        },
-        {
-            "object_type":"point_light",
-            "loc":{"x":200, "y":250, "z":0},
-            "intensity":{"r":0, "g":0, "b":10000}
+            "loc":{"x":-20, "y":0, "z":30},
+            "intensity":{"r":2000, "g":20, "b":20}
         }
     ]
 }

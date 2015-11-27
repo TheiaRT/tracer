@@ -25,13 +25,13 @@ RayTracer::~RayTracer()
 PnmImage RayTracer::render_image(size_t width, size_t height)
 {
     PnmImage image(width, height);
-    vector3_t eye = vector3_t(width/2, height/2, -300);
-    ray_t ray(vector3_t(0, 0, -10), vector3_t(0, 0, 1));
+    vector3_t eye = vector3_t(0, 0, -3);
+    ray_t ray(vector3_t(0, 0, 0), vector3_t(0, 0, 1));
 
     for (size_t x = 0; x < width; x++) {
-        ray.start.x = x;
+        ray.start.x = -2 + ((x/(double)width) * 4);
         for (size_t y = 0; y < height; y++) {
-            ray.start.y = y;
+            ray.start.y = -1.5 + ((y/(double)height) * 3);
             ray.direction = (ray.start - eye).normalize();
             double distance;
             material_t material;
@@ -77,13 +77,17 @@ bool RayTracer::cast_ray(ray_t ray, double &distance,
 }
 
 color_t RayTracer::calculate_diffuse(
-        vector3_t intersection_point,
-        PointLight *light) 
+            SceneObject *obj,
+            vector3_t intersection_point,
+            PointLight *light)
 {
     vector3_t light_loc = light->get_location();
+    vector3_t light_direction = 
+        (light_loc - intersection_point).normalize();
+    vector3_t normal = (intersection_point - obj->get_location()).normalize();
     double distance = light_loc.distance_from(intersection_point);
-    color_t intensity = light->get_intensity_percent();
-    return intensity / (distance * distance);
+    color_t intensity = light->get_intensity_percent() / (distance * distance);
+    return intensity * normal.dot(light_direction);
 }
 
 color_t RayTracer::calculate_specular(
@@ -92,8 +96,9 @@ color_t RayTracer::calculate_specular(
             PointLight *light,
             vector3_t view_dir)
 {
+    vector3_t light_loc = light->get_location();
     vector3_t light_direction = 
-        (light->get_location() - intersection_point).normalize();
+        (light_loc - intersection_point).normalize();
     material_t material = obj->get_material();
     vector3_t normal = (intersection_point - obj->get_location()).normalize();
     double reflection = normal.dot(light_direction) * 2.0;
@@ -102,8 +107,10 @@ color_t RayTracer::calculate_specular(
     if (phong_term > 1) {
         phong_term = 1;
     }
+    double distance = light_loc.distance_from(intersection_point);
+    color_t intensity = light->get_intensity_percent() / (distance * distance);
     phong_term = pow(phong_term, material.shine);
-    return (phong_term < 0 ? color_t() : color_t(phong_term));
+    return (phong_term < 0 ? color_t() : intensity * phong_term);
 }
 
 color_t RayTracer::calculate_illumination(
@@ -134,7 +141,7 @@ color_t RayTracer::calculate_illumination(
                         (intersection_point-obj->get_location())
                         .normalize()) < 0;
         if (!in_shadow) {
-            diffuse_sum  += calculate_diffuse(intersection_point, light);
+            diffuse_sum  += calculate_diffuse(obj, intersection_point, light);
             
             specular_sum += calculate_specular(obj,
                     intersection_point,
