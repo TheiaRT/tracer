@@ -28,7 +28,8 @@ private:
             SceneObject *ignore);
     color_t calculate_illumination(vector3_t intersection_point,
             SceneObject *obj,
-            vector3_t view_direction);
+            vector3_t view_direction,
+            int depth);
     color_t calculate_diffuse(
             SceneObject *obj,
             vector3_t intersection_point,

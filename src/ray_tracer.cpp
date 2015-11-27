@@ -39,11 +39,12 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
             SceneObject *obj;
 
             if (cast_ray(ray, distance, material, obj, NULL)) {
-                vector3_t intersection_point = ray.start + 
+                vector3_t intersection_point = ray.start +
                     (ray.direction * distance);
                 color_t color = calculate_illumination(intersection_point,
                         obj,
-                        ray.direction);
+                        ray.direction,
+                        10);
                 long denom = image.get_denominator();
                 pixel_t pixel = color.to_pixel(denom);
                 image.set_pixel(x, y, pixel);
@@ -54,14 +55,17 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
     return image;
 }
 
+
+
 /*
 TODO: make conical ray tracing
 */
-bool RayTracer::cast_ray(ray_t ray, double &distance, 
+bool RayTracer::cast_ray(ray_t ray, double &distance,
         material_t &material, SceneObject *&object, SceneObject *ignore)
 {
     double min_distance = MAX_DISTANCE;
     size_t num_objects = scene.size();
+
     for (size_t i = 0; i < num_objects; i++) {
         double temp_distance = MAX_DISTANCE;
 
@@ -70,7 +74,7 @@ bool RayTracer::cast_ray(ray_t ray, double &distance,
                 min_distance = temp_distance;
                 material = scene[i]->get_material();
                 object = scene[i];
-            } 
+            }
         }
     }
 
@@ -87,7 +91,7 @@ color_t RayTracer::calculate_diffuse(
         PointLight *light)
 {
     vector3_t light_loc = light->get_location();
-    vector3_t light_direction = 
+    vector3_t light_direction =
         (light_loc - intersection_point).normalize();
     vector3_t normal = (intersection_point - obj->get_location()).normalize();
     double distance = light_loc.distance_from(intersection_point);
@@ -102,7 +106,7 @@ color_t RayTracer::calculate_specular(
         vector3_t view_dir)
 {
     vector3_t light_loc = light->get_location();
-    vector3_t light_direction = 
+    vector3_t light_direction =
         (light_loc - intersection_point).normalize();
     material_t material = obj->get_material();
     vector3_t normal = (intersection_point - obj->get_location()).normalize();
@@ -121,7 +125,12 @@ color_t RayTracer::calculate_specular(
 color_t RayTracer::calculate_illumination(
         vector3_t intersection_point,
         SceneObject *obj,
-        vector3_t view_direction) {
+        vector3_t view_direction,
+        int depth) {
+
+    if(depth <= 0) {
+        return color_t(0);
+    }
 
     material_t obj_material = obj->get_material();
     color_t brightness_sum = obj_material.ambient;
@@ -141,7 +150,7 @@ color_t RayTracer::calculate_illumination(
         bool in_shadow = cast_ray(shadow_ray,
                 distance,
                 temp_material,
-                temp_obj, obj) || 
+                temp_obj, obj) ||
             shadow_ray.direction.dot(
                     (intersection_point-obj->get_location())
                     .normalize()) < 0;
@@ -154,10 +163,35 @@ color_t RayTracer::calculate_illumination(
                     view_direction);
         }
     }
+    //reflection_sum = calculate_reflection(intersection_point) {
+    //
+    //}
+
+    vector3_t normal = (intersection_point - obj->get_location()).normalize();
+    double reflection = normal.dot(view_direction) * 2;
+    vector3_t reflection_direction = view_direction - (normal * reflection);
+    ray_t reflection_ray(intersection_point, reflection_direction.normalize());
+    SceneObject *reflection_obj = NULL;
+    material_t material;
+    double distance = 0;
+
+    if(obj_material.shine > 0) {
+        if (cast_ray(reflection_ray, distance, material, reflection_obj, obj)) {
+            vector3_t reflection_intersection = reflection_ray.start +
+                (reflection_ray.direction * distance);
+                std::cerr << depth << std::endl;
+                reflection_sum = calculate_illumination(reflection_intersection,
+                                                        reflection_obj,
+                                                        reflection_ray.direction,
+                                                        depth-1);
+                reflection_sum = reflection / (distance*distance);
+        }
+   }
 
     brightness_sum += diffuse_sum  * obj_material.diffuse;
-    brightness_sum += specular_sum * obj_material.specular;
+    //brightness_sum += specular_sum * obj_material.specular;
     brightness_sum += reflection_sum * color_t(obj_material.shine);
+
 
     if (brightness_sum.r > 1) {
         brightness_sum.r = 1;
