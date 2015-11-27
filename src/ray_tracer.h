@@ -21,7 +21,11 @@ public:
 
 private:
     std::vector<SceneObject *> scene, lights;
-    bool cast_ray(ray_t r, double &distance, material_t &material, SceneObject *&obj, SceneObject *ignore);
+    bool cast_ray(ray_t r,
+            double &distance,
+            material_t &material,
+            SceneObject *&obj,
+            SceneObject *ignore);
     color_t calculate_illumination(vector3_t intersection_point,
             SceneObject *obj,
             vector3_t view_direction);
