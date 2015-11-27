@@ -37,8 +37,11 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
             material_t material;
             SceneObject *obj;
             if (cast_ray(ray, distance, material, obj, NULL)) {
-                vector3_t intersection_point = ray.start + (ray.direction * distance);
-                color_t color = calculate_illumination(intersection_point, obj, ray.direction);
+                vector3_t intersection_point = ray.start + 
+                    (ray.direction * distance);
+                color_t color = calculate_illumination(intersection_point,
+                        obj,
+                        ray.direction);
                 long denom = image.get_denominator();
                 pixel_t pixel = color.to_pixel(denom);
                 image.set_pixel(x, y, pixel);
@@ -50,10 +53,10 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
 }
 
 /*
-  TODO: make conical ray tracing
- */
+TODO: make conical ray tracing
+*/
 bool RayTracer::cast_ray(ray_t ray, double &distance, 
-                material_t &material, SceneObject *&object, SceneObject *ignore)
+        material_t &material, SceneObject *&object, SceneObject *ignore)
 {
     double min_distance = MAX_DISTANCE;
     size_t num_objects = scene.size();
@@ -77,9 +80,9 @@ bool RayTracer::cast_ray(ray_t ray, double &distance,
 }
 
 color_t RayTracer::calculate_diffuse(
-            SceneObject *obj,
-            vector3_t intersection_point,
-            PointLight *light)
+        SceneObject *obj,
+        vector3_t intersection_point,
+        PointLight *light)
 {
     vector3_t light_loc = light->get_location();
     vector3_t light_direction = 
@@ -91,10 +94,10 @@ color_t RayTracer::calculate_diffuse(
 }
 
 color_t RayTracer::calculate_specular(
-            SceneObject *obj,
-            vector3_t intersection_point,
-            PointLight *light,
-            vector3_t view_dir)
+        SceneObject *obj,
+        vector3_t intersection_point,
+        PointLight *light,
+        vector3_t view_dir)
 {
     vector3_t light_loc = light->get_location();
     vector3_t light_direction = 
@@ -137,12 +140,12 @@ color_t RayTracer::calculate_illumination(
                 distance,
                 temp_material,
                 temp_obj, obj) || 
-                shadow_ray.direction.dot(
-                        (intersection_point-obj->get_location())
-                        .normalize()) < 0;
+            shadow_ray.direction.dot(
+                    (intersection_point-obj->get_location())
+                    .normalize()) < 0;
         if (!in_shadow) {
             diffuse_sum  += calculate_diffuse(obj, intersection_point, light);
-            
+
             specular_sum += calculate_specular(obj,
                     intersection_point,
                     light,
