@@ -28,9 +28,6 @@ void PnmImage::init(size_t width, size_t height, long denom) {
     }
     for (size_t i = 0; i < height; i++) {
         this->pixels[i] = new pixel_t[width];
-        if (this->pixels[i] == NULL) {
-            std::cerr << "NULL" << std::endl;
-        }
     }
 }
 
