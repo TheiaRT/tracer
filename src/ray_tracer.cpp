@@ -179,12 +179,11 @@ color_t RayTracer::calculate_illumination(
         if (cast_ray(reflection_ray, distance, material, reflection_obj, obj)) {
             vector3_t reflection_intersection = reflection_ray.start +
                 (reflection_ray.direction * distance);
-                std::cerr << depth << std::endl;
                 reflection_sum = calculate_illumination(reflection_intersection,
                                                         reflection_obj,
                                                         reflection_ray.direction,
                                                         depth-1);
-                reflection_sum = reflection / (distance*distance);
+                reflection_sum = reflection_sum / (distance*distance);
         }
    }
 
