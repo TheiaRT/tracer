@@ -181,6 +181,7 @@ color_t RayTracer::calculate_illumination(
                     reflection_ray.direction,
                     depth-1);
             reflection_sum = reflection_sum / (distance*distance);
+
         }
     }
 

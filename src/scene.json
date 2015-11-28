@@ -20,6 +20,28 @@
                 "shine":0
             },
             "radius":1.0
+    },
+    {
+        "object_type":"sphere",
+            "loc":{"x":-5, "y":-4, "z":40.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "shine":1
+            },
+            "radius":1.0
+    },
+    {
+        "object_type":"sphere",
+            "loc":{"x":-10, "y":4, "z":40.0},
+            "material":{
+                "ambient":{"r":0.4, "g":0.1, "b":0.1, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "shine":1
+            },
+            "radius":6.0
     }
 
     ],
@@ -29,10 +51,11 @@
             "loc":{"x":0, "y":0, "z":-2000},
             "intensity":{"r":2000000, "g":2000000, "b":2000000}
         },
+
         {
             "object_type":"point_light",
-            "loc":{"x":-7, "y":0, "z":42},
-            "intensity":{"r":20, "g":20, "b":200}
+            "loc":{"x":10, "y":-15, "z":0},
+            "intensity":{"r":800, "g":800, "b":800}
         }
     ]
 }
