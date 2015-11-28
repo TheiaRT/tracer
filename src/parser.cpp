@@ -41,13 +41,20 @@ color_t Parser::json_to_color(Json::Value json_color)
 
 material_t Parser::json_to_material(Json::Value json_material)
 {
-    return material_t(
+    material_t mat = material_t(
         json_to_color(json_material["ambient"]),
         json_to_color(json_material["diffuse"]),
         json_to_color(json_material["specular"]),
         json_to_color(json_material["emission"]),
         json_material["shine"].asDouble()
-        );
+    );
+
+    // optionally set index of refraction. If material is not refractive,
+    // it need not be specified and will default to 0
+    mat.refraction_index =
+        json_material.get("refraction_index", Json::Value(0.0)).asDouble();
+
+    return mat;
 }
 
 Sphere *Parser::json_to_sphere(Json::Value json_sphere)

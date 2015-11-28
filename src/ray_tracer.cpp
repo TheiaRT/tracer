@@ -8,6 +8,9 @@
 #include "point_light.h"
 
 #define MAX_DISTANCE INFINITY
+#define MAX_DEPTH 10
+#define REFRACTION_INDEX_AIR 1
+#define REFRACTION_INDEX_WATER 1.3330
 
 RayTracer::RayTracer(std::vector<SceneObject *> scene,
                      std::vector<SceneObject *> lights)
@@ -44,7 +47,7 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
                 color_t color = calculate_illumination(intersection_point,
                         obj,
                         ray.direction,
-                        10);
+                        MAX_DEPTH);
                 long denom = image.get_denominator();
                 pixel_t pixel = color.to_pixel(denom);
                 image.set_pixel(x, y, pixel);
@@ -163,9 +166,6 @@ color_t RayTracer::calculate_illumination(
                     view_direction);
         }
     }
-    //reflection_sum = calculate_reflection(intersection_point) {
-    //
-    //}
 
     vector3_t normal = (intersection_point - obj->get_location()).normalize();
     double reflection = normal.dot(view_direction) * 2;
@@ -174,6 +174,7 @@ color_t RayTracer::calculate_illumination(
     SceneObject *reflection_obj = NULL;
     material_t material;
     double distance = 0;
+
 
     if(obj_material.shine > 0) {
         if (cast_ray(reflection_ray, distance, material, reflection_obj, obj)) {
