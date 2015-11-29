@@ -1,5 +1,6 @@
 CXX = clang++
 CFLAGS = -g -std=c++11
+LFLAGS = -lpthread
 
 all: test
 	./test -s scene.json -o output.pnm; open output.pnm
