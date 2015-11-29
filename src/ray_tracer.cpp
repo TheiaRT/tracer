@@ -103,7 +103,7 @@ color_t RayTracer::calculate_diffuse(SceneObject *obj,
     vector3_t light_loc = light->get_location();
     vector3_t light_direction =
         (light_loc - intersection_point).normalize();
-    vector3_t normal = (intersection_point - obj->get_location()).normalize();
+    vector3_t normal = obj->normal(intersection_point);
     double distance = light_loc.distance_from(intersection_point);
     color_t intensity = light->get_intensity() / (distance * distance);
     return intensity * normal.dot(light_direction);
@@ -118,7 +118,7 @@ color_t RayTracer::calculate_specular(SceneObject *obj,
     vector3_t light_direction =
         (light_loc - intersection_point).normalize();
     material_t material = obj->get_material();
-    vector3_t normal = (intersection_point - obj->get_location()).normalize();
+    vector3_t normal = obj->normal(intersection_point);
     double reflection = normal.dot(light_direction) * 2.0;
     vector3_t phong_dir = light_direction - (normal * reflection);
     double phong_term = phong_dir.dot(view_dir);
@@ -170,10 +170,11 @@ color_t RayTracer::calculate_refraction(vector3_t intersection_point,
                                         int inside_obj)
 {
     material_t material;
+    material_t obj_material = obj->get_material();
     SceneObject *refraction_obj;
     double distance = 0;
 
-    double n = obj_refract_index/obj->get_material().refraction_index;
+    double n = obj_refract_index/obj_material.refraction_index;
     cosI = -normal.dot(view_direction);
     double cosT = 1.0 - n * n * (1.0 - cosI * cosI);
     vector3_t refraction_direction =
@@ -196,7 +197,7 @@ color_t RayTracer::calculate_refraction(vector3_t intersection_point,
                                           refraction_obj,
                                           refracted_ray.direction,
                                           result,
-                                          obj->get_material().refraction_index,
+                                          obj_material.refraction_index,
                                           depth-1);
         }
     }
@@ -254,8 +255,7 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     }
 
     SceneObject *refraction_obj = NULL;
-    vector3_t normal =
-        (intersection_point - obj->get_location()).normalize() * inside_obj;
+    vector3_t normal = obj->normal(intersection_point);
     double cosI = normal.dot(view_direction); //cos-theta of incident ray
 
     if(obj_material.reflection > 0) {
