@@ -54,7 +54,7 @@
                 "refraction":1,
                 "refraction_index":2
             },
-            "radius":15.0
+            "radius":3.0
     }
     ],
     "scene_lights":[

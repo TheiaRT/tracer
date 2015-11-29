@@ -32,6 +32,14 @@ private:
                                    int inside_obj,
                                    int refraction_index,
                                    int depth);
+    color_t calculate_reflection(vector3_t intersection_point,
+                                 vector3_t view_direction,
+                                 SceneObject *obj,
+                                 vector3_t normal,
+                                 double cosI,
+                                 double obj_refract_index,
+                                 int depth);
+    color_t calculate_refraction();
     color_t calculate_diffuse(
             SceneObject *obj,
             vector3_t intersection_point,

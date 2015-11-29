@@ -37,10 +37,10 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
     // We project through a 4:3 viewport that scales with width and height,
     // Centered at 0,0,0
     for (size_t x = 0; x < width; x++) {
-        ray.start.x = -(HORIZONTAL_ASPECT/2) 
+        ray.start.x = -(HORIZONTAL_ASPECT/2)
                         + ((x / (double)width) * HORIZONTAL_ASPECT);
         for (size_t y = 0; y < height; y++) {
-            ray.start.y = -(VERTICAL_ASPECT/2) 
+            ray.start.y = -(VERTICAL_ASPECT/2)
                         + ((y/(double)height) * VERTICAL_ASPECT);
             ray.direction = (ray.start - eye).normalize();
             double distance;
@@ -131,12 +131,41 @@ color_t RayTracer::calculate_specular(SceneObject *obj,
     return (phong_term < 0 ? color_t() : intensity * phong_term);
 }
 
+color_t RayTracer::calculate_reflection(vector3_t intersection_point,
+                                        vector3_t view_direction,
+                                        SceneObject *obj,
+                                        vector3_t normal,
+                                        double cosI,
+                                        double obj_refract_index,
+                                        int depth)
+{
+    vector3_t reflection_direction = view_direction - (normal * cosI * 2);
+    ray_t reflected_ray(intersection_point, reflection_direction.normalize());
+    SceneObject *reflection_obj = NULL;
+    material_t material;
+
+    double distance = 0;
+    if (int result = cast_ray(reflected_ray, distance, material,
+        reflection_obj, obj) != 0) {
+        vector3_t reflection_intersection = reflected_ray.start +
+            (reflected_ray.direction * distance);
+            return calculate_illumination(reflection_intersection,
+                                                    reflection_obj,
+                                                    reflected_ray.direction,
+                                                    result,
+                                                    obj_refract_index,
+                                                    depth-1) /
+                                                    (distance * distance);
+    }
+    return color_t(0);
+}
+
 color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                                           SceneObject *obj,
                                           vector3_t view_direction,
                                           int inside_obj,
                                           int refract,
-                                          int depth) 
+                                          int depth)
 {
 
     if(depth <= 0) {
@@ -179,33 +208,23 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
         }
     }
 
+    SceneObject *refraction_obj = NULL;
     vector3_t normal =
         (intersection_point - obj->get_location()).normalize() * inside_obj;
     double cosI = normal.dot(view_direction); //cos-theta of incident ray
-    vector3_t reflection_direction = view_direction - (normal * cosI * 2);
-    ray_t reflected_ray(intersection_point, reflection_direction.normalize());
-    SceneObject *reflection_obj = NULL;
-    SceneObject *refraction_obj = NULL;
-    material_t material;
 
     if(obj_material.reflection > 0) {
-        double distance = 0;
-        if (int result = cast_ray(reflected_ray, distance, material,
-            refraction_obj, obj) != 0) {
-            vector3_t reflection_intersection = reflected_ray.start +
-                (reflected_ray.direction * distance);
-                reflection_sum = calculate_illumination(reflection_intersection,
-                                                        refraction_obj,
-                                                        reflected_ray.direction,
-                                                        result,
-                                                        refract,
-                                                        depth-1);
-                reflection_sum = reflection_sum / (distance*distance);
-
-        }
+        reflection_sum += calculate_reflection(intersection_point,
+                                               view_direction,
+                                               obj,
+                                               normal,
+                                               cosI,
+                                               refract,
+                                               depth);
     }
 
     if(obj_material.refraction > 0.0) {
+        material_t material;
         double distance = 0;
 
         double n = refract/obj_material.refraction_index;
@@ -253,7 +272,6 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     if (brightness_sum.b > 1) {
         brightness_sum.b = 1;
     }
-
 
     return brightness_sum;
 }
