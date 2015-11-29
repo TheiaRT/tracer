@@ -160,6 +160,49 @@ color_t RayTracer::calculate_reflection(vector3_t intersection_point,
     return color_t(0);
 }
 
+color_t RayTracer::calculate_refraction(vector3_t intersection_point,
+                                        vector3_t view_direction,
+                                        SceneObject *obj,
+                                        vector3_t normal,
+                                        double cosI,
+                                        double obj_refract_index,
+                                        int depth,
+                                        int inside_obj)
+{
+    material_t material;
+    SceneObject *refraction_obj;
+    double distance = 0;
+
+    double n = obj_refract_index/obj->get_material().refraction_index;
+    cosI = -normal.dot(view_direction);
+    double cosT = 1.0 - n * n * (1.0 - cosI * cosI);
+    vector3_t refraction_direction =
+        view_direction * n + normal * (n * cosI - sqrtf(cosT));
+
+    ray_t refracted_ray(intersection_point,
+        refraction_direction.normalize());
+
+    if(cosT > 0.0) {
+        if(inside_obj == -1) {
+            obj = NULL;
+        }
+        if (int result = cast_ray(refracted_ray, distance, material,
+                refraction_obj, obj)) {
+
+            vector3_t refraction_intersection = refracted_ray.start +
+                    (refracted_ray.direction * distance);
+
+            return calculate_illumination(refraction_intersection,
+                                          refraction_obj,
+                                          refracted_ray.direction,
+                                          result,
+                                          obj->get_material().refraction_index,
+                                          depth-1);
+        }
+    }
+    return color_t(0);
+}
+
 color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                                           SceneObject *obj,
                                           vector3_t view_direction,
@@ -224,37 +267,14 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     }
 
     if(obj_material.refraction > 0.0) {
-        material_t material;
-        double distance = 0;
-
-        double n = refract/obj_material.refraction_index;
-        normal = normal * inside_obj;
-        cosI = -normal.dot(view_direction);
-        double cosT = 1.0 - n * n * (1.0 - cosI * cosI);
-        vector3_t refraction_direction =
-            view_direction * n + normal * (n * cosI - sqrtf(cosT));
-
-        ray_t refracted_ray(intersection_point,
-            refraction_direction.normalize());
-
-        if(cosT > 0.0) {
-            if(inside_obj == -1) {
-                obj = NULL;
-            }
-            if (int result = cast_ray(refracted_ray, distance, material,
-                    refraction_obj, obj)) {
-
-                vector3_t refraction_intersection = refracted_ray.start +
-                        (refracted_ray.direction * distance);
-
-                refraction_sum = calculate_illumination(refraction_intersection,
-                                                        refraction_obj,
-                                                        refracted_ray.direction,
-                                                        result,
-                                                        obj_material.refraction_index,
-                                                        depth-1);
-            }
-        }
+        refraction_sum += calculate_refraction(intersection_point,
+                                               view_direction,
+                                               obj,
+                                               normal,
+                                               cosI,
+                                               refract,
+                                               depth,
+                                               inside_obj);
     }
 
     brightness_sum += diffuse_sum  * obj_material.diffuse;
