@@ -11,19 +11,18 @@
             },
             "radius":10.0
         },
-        "scene_objects":[
-            {
-                "object_type":"sphere",
-                "loc":{"x":10, "y":10, "z":50.0},
-                "material":{
-                    "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
-                    "diffuse":{"r":1, "g":1, "b":1, "a":1},
-                    "emission":{},
-                    "reflection":0
-                },
-                "radius":10.0
-            }
-        ],
+        {
+            "object_type":"sphere",
+            "loc":{"x":10, "y":10, "z":50.0},
+            "material":{
+                "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "reflection":0
+            },
+            "radius":10.0
+        }
+    ],
     "scene_lights":[
         {
             "object_type":"point_light",
