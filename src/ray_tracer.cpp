@@ -114,7 +114,7 @@ color_t RayTracer::calculate_specular(
     material_t material = obj->get_material();
     vector3_t normal = (intersection_point - obj->get_location()).normalize();
     double reflection = normal.dot(light_direction) * 2.0;
-    vector3_t phong_dir = (light_direction - normal) * reflection;
+    vector3_t phong_dir = light_direction - (normal * reflection);
     double phong_term = phong_dir.dot(view_dir);
     if (phong_term > 1) {
         phong_term = 1;

@@ -15,7 +15,6 @@
         "object_type":"sphere",
             "loc":{"x":-5, "y":0, "z":40.0},
             "material":{
-                "ambient":{"r":0, "g":0, "b":1, "a":1},
                 "diffuse":{"r":1, "g":1, "b":1, "a":1},
                 "emission":{},
                 "reflection":0
@@ -53,7 +52,7 @@
                 "emission":{},
                 "reflection":0,
                 "refraction":1,
-                "refraction_index":1.6
+                "refraction_index":1
             },
             "radius":3.0
     }
