@@ -52,6 +52,7 @@ struct material_t {
     double reflection;
     double refraction;
     double refraction_index;
+    bool texture;
 
     material_t() :
         ambient(color_t()),
@@ -60,7 +61,8 @@ struct material_t {
         emission(color_t()),
         reflection(0.0f),
         refraction(0),
-        refraction_index(0)
+        refraction_index(0),
+        texture(false)
     {
     }
 
@@ -94,6 +96,17 @@ struct material_t {
         refraction(refraction),
         refraction_index(refraction_index)
     {
+    }
+
+    color_t texture(vector3_t point) {
+        double modx = fabs(fmod(point.x, 1.0));
+        double mody = fabs(fmod(point.y, 1.0));
+        double modz = fabs(fmod(point.z, 1.0));
+        
+        if (modx < 0.5 && mody < 0.5) {
+            return color_t(0.1);
+        }
+        return color_t(0);
     }
 };
 

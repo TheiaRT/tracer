@@ -127,7 +127,7 @@ color_t RayTracer::calculate_specular(SceneObject *obj,
     }
     double distance = light_loc.distance_from(intersection_point);
     color_t intensity = light->get_intensity() / (distance * distance);
-    phong_term = pow(phong_term, material.reflection);
+    phong_term = pow(phong_term, material.reflection + 1);
     return (phong_term < 0 ? color_t() : intensity * phong_term);
 }
 
@@ -283,6 +283,8 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     //brightness_sum += specular_sum * obj_material.specular;
     brightness_sum += reflection_sum * color_t(obj_material.reflection);
     brightness_sum += refraction_sum * color_t(obj_material.refraction);
+
+    brightness_sum += obj_material.texture(intersection_point);
 
 
     if (brightness_sum.r > 1) {
