@@ -248,6 +248,8 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                     intersection_point,
                     light,
                     view_direction);
+        } else {
+            diffuse_sum  += calculate_diffuse(obj, intersection_point, light) * temp_material.refraction;
         }
     }
 
