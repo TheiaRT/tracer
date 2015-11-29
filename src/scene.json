@@ -52,9 +52,9 @@
                 "emission":{},
                 "reflection":0,
                 "refraction":1,
-                "refraction_index":1
+                "refraction_index":2
             },
-            "radius":3.0
+            "radius":15.0
     }
     ],
     "scene_lights":[

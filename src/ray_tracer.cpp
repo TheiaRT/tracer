@@ -13,6 +13,9 @@
 #define REFRACTION_INDEX_WATER 1.3330
 #define REFRACTION_INDEX_GLASS 1.52
 
+#define HORIZONTAL_ASPECT 4
+#define VERTICAL_ASPECT 3
+
 RayTracer::RayTracer(std::vector<SceneObject *> scene,
                      std::vector<SceneObject *> lights)
 {
@@ -34,9 +37,11 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
     // We project through a 4:3 viewport that scales with width and height,
     // Centered at 0,0,0
     for (size_t x = 0; x < width; x++) {
-        ray.start.x = -2 + ((x/(double)width) * 4);
+        ray.start.x = -(HORIZONTAL_ASPECT/2) 
+                        + ((x / (double)width) * HORIZONTAL_ASPECT);
         for (size_t y = 0; y < height; y++) {
-            ray.start.y = -1.5 + ((y/(double)height) * 3);
+            ray.start.y = -(VERTICAL_ASPECT/2) 
+                        + ((y/(double)height) * VERTICAL_ASPECT);
             ray.direction = (ray.start - eye).normalize();
             double distance;
             material_t material;
@@ -60,8 +65,11 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
     return image;
 }
 
-int RayTracer::cast_ray(ray_t ray, double &distance,
-        material_t &material, SceneObject *&object, SceneObject *ignore)
+int RayTracer::cast_ray(ray_t ray,
+                        double &distance,
+                        material_t &material,
+                        SceneObject *&object,
+                        SceneObject *ignore)
 {
     int dir;
     int min_dir;
@@ -88,25 +96,23 @@ int RayTracer::cast_ray(ray_t ray, double &distance,
     return false;
 }
 
-color_t RayTracer::calculate_diffuse(
-        SceneObject *obj,
-        vector3_t intersection_point,
-        PointLight *light)
+color_t RayTracer::calculate_diffuse(SceneObject *obj,
+                                     vector3_t intersection_point,
+                                     PointLight *light)
 {
     vector3_t light_loc = light->get_location();
     vector3_t light_direction =
         (light_loc - intersection_point).normalize();
     vector3_t normal = (intersection_point - obj->get_location()).normalize();
     double distance = light_loc.distance_from(intersection_point);
-    color_t intensity = light->get_intensity_percent() / (distance * distance);
+    color_t intensity = light->get_intensity() / (distance * distance);
     return intensity * normal.dot(light_direction);
 }
 
-color_t RayTracer::calculate_specular(
-        SceneObject *obj,
-        vector3_t intersection_point,
-        PointLight *light,
-        vector3_t view_dir)
+color_t RayTracer::calculate_specular(SceneObject *obj,
+                                      vector3_t intersection_point,
+                                      PointLight *light,
+                                      vector3_t view_dir)
 {
     vector3_t light_loc = light->get_location();
     vector3_t light_direction =
@@ -120,18 +126,18 @@ color_t RayTracer::calculate_specular(
         phong_term = 1;
     }
     double distance = light_loc.distance_from(intersection_point);
-    color_t intensity = light->get_intensity_percent() / (distance * distance);
+    color_t intensity = light->get_intensity() / (distance * distance);
     phong_term = pow(phong_term, material.reflection);
     return (phong_term < 0 ? color_t() : intensity * phong_term);
 }
 
-color_t RayTracer::calculate_illumination(
-        vector3_t intersection_point,
-        SceneObject *obj,
-        vector3_t view_direction,
-        int inside_obj,
-        int refract,
-        int depth) {
+color_t RayTracer::calculate_illumination(vector3_t intersection_point,
+                                          SceneObject *obj,
+                                          vector3_t view_direction,
+                                          int inside_obj,
+                                          int refract,
+                                          int depth) 
+{
 
     if(depth <= 0) {
         return color_t(0);
@@ -219,15 +225,15 @@ color_t RayTracer::calculate_illumination(
             if (int result = cast_ray(refracted_ray, distance, material,
                     refraction_obj, obj)) {
 
-                    vector3_t refraction_intersection = refracted_ray.start +
+                vector3_t refraction_intersection = refracted_ray.start +
                         (refracted_ray.direction * distance);
 
-                    refraction_sum = calculate_illumination(refraction_intersection,
-                                                            refraction_obj,
-                                                            refracted_ray.direction,
-                                                            result,
-                                                            obj_material.refraction_index,
-                                                            depth-1);
+                refraction_sum = calculate_illumination(refraction_intersection,
+                                                        refraction_obj,
+                                                        refracted_ray.direction,
+                                                        result,
+                                                        obj_material.refraction_index,
+                                                        depth-1);
             }
         }
     }

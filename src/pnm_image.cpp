@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "pnm_image.h"
 
 PnmImage::PnmImage(size_t width, size_t height, long denom) {
@@ -23,9 +21,6 @@ void PnmImage::init(size_t width, size_t height, long denom) {
     this->denominator = denom;
 
     this->pixels = new pixel_t*[height];
-    if (this->pixels == NULL) {
-        std::cout << "NULL" << std::endl;
-    }
     for (size_t i = 0; i < height; i++) {
         this->pixels[i] = new pixel_t[width];
     }

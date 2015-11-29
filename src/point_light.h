@@ -14,7 +14,7 @@ public:
     int intersect_ray(ray_t ray, double &distance);
     double distance_from(vector3_t point);
     vector3_t get_location();
-    color_t get_intensity_percent();
+    color_t get_intensity();
 
 private:
     void init(vector3_t loc, color_t intensity);
