@@ -23,9 +23,9 @@ void PointLight::init(vector3_t loc, color_t intensity)
     this->material.diffuse = color_t(1, 1, 1, 1);
 }
 
-bool PointLight::intersect_ray(ray_t ray, double &distance)
+int PointLight::intersect_ray(ray_t ray, double &distance)
 {
-    return false;
+    return 0;
 }
 
 double PointLight::distance_from(vector3_t point)

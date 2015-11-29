@@ -49,15 +49,17 @@ struct material_t {
     color_t diffuse;
     color_t specular;
     color_t emission;
-    double shine;
-    double refraction_index; //if 0 ignore
+    double reflection;
+    double refraction;
+    double refraction_index;
 
     material_t() :
         ambient(color_t()),
         diffuse(color_t()),
         specular(color_t()),
         emission(color_t()),
-        shine(0.0f),
+        reflection(0.0f),
+        refraction(0),
         refraction_index(0)
     {
     }
@@ -66,13 +68,14 @@ struct material_t {
                color_t diffuse,
                color_t specular,
                color_t emission,
-               double shine) :
+               double reflection) :
         ambient(ambient),
         diffuse(diffuse),
         specular(specular),
         emission(emission),
-        shine(shine),
-        refraction_index(0)
+        reflection(reflection),
+        refraction(0),
+        refraction_index(1)
     {
     }
 
@@ -80,13 +83,15 @@ struct material_t {
                color_t diffuse,
                color_t specular,
                color_t emission,
-               double shine,
+               double reflection,
+               double refraction,
                double refraction_index) :
         ambient(ambient),
         diffuse(diffuse),
         specular(specular),
         emission(emission),
-        shine(shine),
+        reflection(reflection),
+        refraction(refraction),
         refraction_index(refraction_index)
     {
     }

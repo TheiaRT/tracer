@@ -8,7 +8,7 @@ class Sphere : public SceneObject {
 public:
     Sphere(vector3_t loc, material_t material, double radius);
     Sphere(double x, double y, double z, material_t material, double radius);
-    bool intersect_ray(ray_t ray, double &distance);
+    int intersect_ray(ray_t ray, double &distance);
 
 private:
     double radius;

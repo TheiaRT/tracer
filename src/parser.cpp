@@ -46,13 +46,16 @@ material_t Parser::json_to_material(Json::Value json_material)
         json_to_color(json_material["diffuse"]),
         json_to_color(json_material["specular"]),
         json_to_color(json_material["emission"]),
-        json_material["shine"].asDouble()
+        json_material["reflection"].asDouble()
     );
 
-    // optionally set index of refraction. If material is not refractive,
-    // it need not be specified and will default to 0
+    // optionally set refraction amount, and index of refraction.
+    // If unspecified default to 0 and 1 respectively
+    mat.refraction =
+        json_material.get("refraction", Json::Value(0.0)).asDouble();
     mat.refraction_index =
-        json_material.get("refraction_index", Json::Value(0.0)).asDouble();
+        json_material.get("refraction_index", Json::Value(1)).asDouble();
+
 
     return mat;
 }
@@ -126,6 +129,6 @@ void Parser::parse_file(
             }
         }
     } else {
-
+        std::cerr << "Error parsing scene" << std::endl;
     }
 }

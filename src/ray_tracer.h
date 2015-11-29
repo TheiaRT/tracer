@@ -21,7 +21,7 @@ public:
 
 private:
     std::vector<SceneObject *> scene, lights;
-    bool cast_ray(ray_t r,
+    int cast_ray(ray_t r,
             double &distance,
             material_t &material,
             SceneObject *&obj,
@@ -29,6 +29,8 @@ private:
     color_t calculate_illumination(vector3_t intersection_point,
             SceneObject *obj,
             vector3_t view_direction,
+            int inside_obj,
+            int refraction_index,
             int depth);
     color_t calculate_diffuse(
             SceneObject *obj,
