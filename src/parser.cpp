@@ -55,6 +55,7 @@ material_t Parser::json_to_material(Json::Value json_material)
         json_material.get("refraction", Json::Value(0.0)).asDouble();
     mat.refraction_index =
         json_material.get("refraction_index", Json::Value(1)).asDouble();
+    mat.texture = json_material.get("texture", Json::Value(false)).asBool();
 
 
     return mat;

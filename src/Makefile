@@ -3,7 +3,8 @@ CFLAGS = -g -std=c++11
 
 all: test
 	./test -s scene.json -o output.pnm; open output.pnm
-
+snowman: test
+	./test -s snowman.json -o snowman.pnm; open snowman.pnm
 
 test: ray_tracer.o parser.o jsoncpp.o main.o
 	$(CXX) $(CFLAGS) pnm_image.o jsoncpp.o parser.o ray_tracer.o sphere.o point_light.o main.o -o test

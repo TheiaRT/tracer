@@ -284,7 +284,7 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     brightness_sum += reflection_sum * color_t(obj_material.reflection);
     brightness_sum += refraction_sum * color_t(obj_material.refraction);
 
-    brightness_sum += obj_material.get_texture(intersection_point);
+    brightness_sum = brightness_sum * obj_material.get_texture(intersection_point);
 
 
     if (brightness_sum.r > 1) {
