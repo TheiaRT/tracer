@@ -14,8 +14,7 @@ int main()
     int port = 4555;
 
     fprintf(stderr, "Starting server.\n");
-    s.start(host, port);
-
+    assert(true == s.start(host, port));
     assert(true == c.connect(host, port));
     assert(true == c.send_data(to_send));
     assert(to_send == c.receive());

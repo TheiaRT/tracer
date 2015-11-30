@@ -11,6 +11,7 @@
 class TCPClient {
 public:
     TCPClient();
+    ~TCPClient();
     bool connect(std::string host, int port);
     bool send_data(std::string data);
     std::string receive(int size=512);

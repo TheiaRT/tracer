@@ -4,13 +4,14 @@
 #include <iostream> /* cout, string */
 #include <thread> /* thread */
 #include <atomic> /* atomic_bool */
+#include <functional> /* function */
 #include <string.h> /* strlen */
 #include <sys/socket.h> /* socket, accept */
 #include <arpa/inet.h> /* inet_addr */
 #include <unistd.h> /* close */
 
 
-typedef std::string (*message_handler)(const std::string req);
+typedef std::function<std::string(std::string)> message_handler;
 std::string tcp_server_default_cat(const std::string req);
 
 class TCPServer {

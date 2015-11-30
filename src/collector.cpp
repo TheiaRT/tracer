@@ -1,37 +1,38 @@
-/* #include <future>
-   #include <chrono> */
+#include <functional>
 
 #include "collector.h"
 
 
-Collector::Collector(std::string scene) : scene(scene)
+Collector::Collector(std::string scene, size_t width, size_t height)
+    : scene(scene),
+      pixmap(PnmImage(width, height))
 {
+    server = new TCPServer([=](std::string req) {
+        return this->serve_request(req);
+    });
 }
 
-/* Unchecked runtime error if nthreads < 1. */
-bool Collector::start(std::string host, int port, int nthreads=1)
+bool Collector::start(std::string host, int port)
 {
-    this->host = host;
-    this->port = port;
-    threads.reserve(nthreads);
-
-    for (int i = 0; i < nthreads; i++) {
-        threads[i] = std::thread(serve_work);
-    }
+    return server->start(host, port);
 }
 
 void Collector::stop()
 {
-    for (std::thread t : threads) {
-        /* TODO: try/wait for join, force kill after timeout */
-        t.join();
-    }
+    server->stop();
 }
 
-/* listen on socket, wait for connections */
-/* TODO: add */
-void Collector::serve_work()
+std::string Collector::serve_request(std::string req)
 {
+    if (req == "HAVE WORK") {
+        return process_work(req) ? "true" : "false";
+    }
+    else if (req == "NEED WORK") {
+        return generate_work();
+    }
+    else {
+        return "BAD REQUEST";
+    }
 }
 
 /* TODO: remove sample */

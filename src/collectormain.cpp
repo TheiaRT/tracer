@@ -3,11 +3,13 @@
 
 int main()
 {
-    Collector c("");
-    /* this does not block */
-    c.start("localhost", 8000, 5);
+    std::string host = "0.0.0.0";
+    int port = 8000;
 
-    Worker w("localhost", 8000);
+    Collector c("", 100, 100);
+    c.start(host, port);
+
+    Worker w(host, port);
     if (w.get_work()) {
         w.trace_and_send_work();
     }

@@ -6,6 +6,11 @@ TCPClient::TCPClient() : sock(-1), port(0), address("")
 {
 }
 
+TCPClient::~TCPClient()
+{
+    close(sock);
+}
+
 bool TCPClient::connect(std::string address, int port)
 {
     /* New client; sock does not exist */
