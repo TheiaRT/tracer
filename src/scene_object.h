@@ -20,6 +20,7 @@ public:
         return (at_point - loc).normalize();
     }
 
+
 protected:
     vector3_t loc;
     material_t material;
