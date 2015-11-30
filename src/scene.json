@@ -5,7 +5,7 @@
             "loc":{"x":10, "y":10, "z":50.0},
             "material":{
                 "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
-                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "diffuse":{"r":0, "g":0, "b":1, "a":1},
                 "emission":{},
                 "reflection":1
             },
@@ -27,7 +27,7 @@
             "object_type":"sphere",
             "loc":{"x":-10, "y":10, "z":50.0},
             "material":{
-                "diffuse":{"r":0.1, "g":0.1, "b":2, "a":1},
+                "diffuse":{"r":2, "g":2, "b":2, "a":1},
                 "emission":{},
                 "reflection":0,
                 "texture":true

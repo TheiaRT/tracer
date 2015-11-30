@@ -15,7 +15,7 @@
 
 #define HORIZONTAL_ASPECT 4
 #define VERTICAL_ASPECT 3
-
+using namespace std;
 RayTracer::RayTracer(std::vector<SceneObject *> scene,
                      std::vector<SceneObject *> lights)
 {
@@ -93,6 +93,7 @@ int RayTracer::cast_ray(ray_t ray,
         distance = min_distance;
         return min_dir;
     }
+
     return false;
 }
 
