@@ -37,10 +37,10 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
     // We project through a 4:3 viewport that scales with width and height,
     // Centered at 0,0,0
     for (size_t x = 0; x < width; x++) {
-        ray.start.x = -(HORIZONTAL_ASPECT/2)
+        ray.start.x = -(HORIZONTAL_ASPECT / 2)
                         + ((x / (double)width) * HORIZONTAL_ASPECT);
         for (size_t y = 0; y < height; y++) {
-            ray.start.y = -(VERTICAL_ASPECT/2)
+            ray.start.y = -(VERTICAL_ASPECT / 2)
                         + ((y/(double)height) * VERTICAL_ASPECT);
             ray.direction = (ray.start - eye).normalize();
             double distance;
@@ -51,11 +51,11 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
                 vector3_t intersection_point = ray.start +
                     (ray.direction * distance);
                 color_t color = calculate_illumination(intersection_point,
-                        obj,
-                        ray.direction,
-                        result,
-                        REFRACTION_INDEX_AIR,
-                        MAX_DEPTH);
+                                                       obj,
+                                                       ray.direction,
+                                                       result,
+                                                       REFRACTION_INDEX_AIR,
+                                                       MAX_DEPTH);
                 long denom = image.get_denominator();
                 pixel_t pixel = color.to_pixel(denom);
                 image.set_pixel(x, y, pixel);
