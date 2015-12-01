@@ -36,7 +36,11 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
 {
 
     PnmImage image(width, height);
-    image.insert_chunk(render_pixel_chunk(30, 30, 200, 200, width, height, image.get_denominator()), 30, 30, 200, 200);
+    image.insert_chunk(render_pixel_chunk(0, 0, width, height/2, width, height, image.get_denominator()), 0, 0, width, height/2);
+    image.insert_chunk(render_pixel_chunk(0, height/2, width, height/2,
+                                          width, height,
+                                          image.get_denominator()),
+                       0, height/2, width, height/2);
     return image;
 
 }
