@@ -34,17 +34,35 @@ RayTracer::~RayTracer()
  */
 PnmImage RayTracer::render_image(size_t width, size_t height)
 {
+
     PnmImage image(width, height);
+    image.insert_chunk(render_pixel_chunk(30, 30, 200, 200, width, height, image.get_denominator()), 30, 30, 200, 200);
+    return image;
+
+}
+
+pixel_t **RayTracer::render_pixel_chunk(size_t startx,
+                                        size_t starty,
+                                        size_t chunk_width,
+                                        size_t chunk_height,
+                                        size_t image_width,
+                                        size_t image_height,
+                                        long denom) 
+{
+    pixel_t **pixels = new pixel_t*[chunk_height];
+    for (size_t i = 0; i < chunk_height; i++) {
+        pixels[i] = new pixel_t[chunk_width];
+    }
     vector3_t eye = vector3_t(0, 0, -3); // simulate the location of an eye
     ray_t ray(vector3_t(0, 0, 0), vector3_t(0, 0, 1));
     // We project through a 4:3 viewport that scales with width and height,
     // Centered at 0,0,0
-    for (size_t x = 0; x < width; x++) {
+    for (size_t x = 0; x < chunk_width; x++) {
         ray.start.x = -(HORIZONTAL_ASPECT / 2)
-                        + ((x / (double)width) * HORIZONTAL_ASPECT);
-        for (size_t y = 0; y < height; y++) {
+                        + (((x + startx) / (double)image_width) * HORIZONTAL_ASPECT);
+        for (size_t y = 0; y < chunk_height; y++) {
             ray.start.y = -(VERTICAL_ASPECT / 2)
-                        + ((y/(double)height) * VERTICAL_ASPECT);
+                        + (((y + starty)/(double)image_height) * VERTICAL_ASPECT);
             ray.direction = (ray.start - eye).normalize();
             double distance;
             material_t material;
@@ -63,13 +81,11 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
                                                        result,
                                                        REFRACTION_INDEX_AIR,
                                                        MAX_DEPTH);
-                long denom = image.get_denominator();
-                pixel_t pixel = color.to_pixel(denom);
-                image.set_pixel(x, y, pixel);
+                pixels[y][x]  = color.to_pixel(denom);
             }
         }
     }
-    return image;
+    return pixels;
 }
 
 /*
