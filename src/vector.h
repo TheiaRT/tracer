@@ -146,8 +146,15 @@ struct vector_t {
     }
 };
 
-typedef vector_t<3> vector3_t;
-typedef vector_t<2> vector2_t;
+struct vector3_t : vector_t<3> {
+    vector3_t(double v=0) : vector_t<3>(v)
+    {
+    }
+
+    vector3_t(double x, double y, double z) : vector_t<3>({x, y, z})
+    {
+    }
+};
 
 struct ray_t {
     vector3_t start, direction;
