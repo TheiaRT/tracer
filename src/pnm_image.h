@@ -4,17 +4,8 @@
 #include <cstdio>
 #include <inttypes.h>
 
-struct pixel_t {
-    long r, g, b;
+#include "pixel.h"
 
-    pixel_t() : r(0), g(0), b(0)
-    {
-    }
-
-    pixel_t(long r, long g, long b) : r(r), g(g), b(b)
-    {
-    }
-};
 
 class PnmImage {
 public:
