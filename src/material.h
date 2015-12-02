@@ -7,46 +7,40 @@
 struct color_t {
     double r, g, b, a;
 
-    color_t()
+    color_t() : r(0), g(0), b(0), a(0)
     {
-            r = g = b = a = 0;
     }
 
-    color_t(double val)
+    color_t(double val) : r(val), g(val), b(val), a(val)
     {
-            r = g = b = a = val;
     }
 
-    color_t(double r, double g, double b, double a)
+    color_t(double r, double g, double b, double a) : r(r), g(g), b(b), a(a)
     {
-            this->r = r;
-            this->g = g;
-            this->b = b;
-            this->a = a;
     }
 
     void operator+=(const color_t &other)
     {
-            this->r += other.r;
-            this->g += other.g;
-            this->b += other.b;
-            this->b += other.a;
+        r += other.r;
+        g += other.g;
+        b += other.b;
+        a += other.a;
     }
 
     color_t operator*(const color_t &other)
     {
-            return color_t(r * other.r, g * other.g, b * other.b, a * other.a);
+        return color_t(r * other.r, g * other.g, b * other.b, a * other.a);
     }
 
     color_t operator/(double d)
     {
-            return color_t(r / d, g / d, b / d, a / d);
+        return color_t(r / d, g / d, b / d, a / d);
     }
 
     /* Need to scale the doubles to ints. */
     pixel_t to_pixel(long denom)
     {
-            return pixel_t(r * denom, g * denom, b * denom);
+        return pixel_t(r * denom, g * denom, b * denom);
     }
 };
 
@@ -55,7 +49,88 @@ struct material_t {
     color_t diffuse;
     color_t specular;
     color_t emission;
-    double shine;
+    double reflection;
+    double refraction;
+    double refraction_index;
+    bool texture;
+
+    material_t() :
+        ambient(color_t()),
+        diffuse(color_t()),
+        specular(color_t()),
+        emission(color_t()),
+        reflection(0.0f),
+        refraction(0),
+        refraction_index(0),
+        texture(false)
+    {
+    }
+
+    material_t(color_t ambient,
+               color_t diffuse,
+               color_t specular,
+               color_t emission,
+               double reflection) :
+        ambient(ambient),
+        diffuse(diffuse),
+        specular(specular),
+        emission(emission),
+        reflection(reflection),
+        refraction(0),
+        refraction_index(1)
+    {
+    }
+
+    material_t(color_t ambient,
+               color_t diffuse,
+               color_t specular,
+               color_t emission,
+               double reflection,
+               double refraction,
+               double refraction_index) :
+        ambient(ambient),
+        diffuse(diffuse),
+        specular(specular),
+        emission(emission),
+        reflection(reflection),
+        refraction(refraction),
+        refraction_index(refraction_index)
+    {
+    }
+    material_t(color_t ambient,
+               color_t diffuse,
+               color_t specular,
+               color_t emission,
+               double reflection,
+               double refraction,
+               double refraction_index,
+               bool texture) :
+        ambient(ambient),
+        diffuse(diffuse),
+        specular(specular),
+        emission(emission),
+        reflection(reflection),
+        refraction(refraction),
+        refraction_index(refraction_index),
+        texture(texture)
+    {
+    }
+
+    color_t get_texture(vector3_t point) {
+        double modx = fabs(fmod(point.x, 1.0));
+        double mody = fabs(fmod(point.y, 1.0));
+        double modz = fabs(fmod(point.z, 1.0));
+
+        if (texture) {
+            if( modx < 0.5 ^ mody < 0.5) {
+                return color_t(0.1);
+            } else {
+                return color_t(1);
+            }
+            //return color_t(modx, mody, modz, 1);
+        }
+        return color_t(1);
+    }
 };
 
 #endif

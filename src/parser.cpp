@@ -2,6 +2,7 @@
  * http://open-source-parsers.github.io/jsoncpp-docs/
  */
 #include "parser.h"
+#include <iostream>
 
 
 Parser::Parser(std::string filename)
@@ -9,6 +10,9 @@ Parser::Parser(std::string filename)
     this->filename = filename;
     converters.insert(
         std::make_pair("sphere", (json_converter)&Parser::json_to_sphere)
+    );
+    converters.insert(
+        std::make_pair("point_light", (json_converter)&Parser::json_to_point_light)
     );
 }
 
@@ -38,13 +42,24 @@ color_t Parser::json_to_color(Json::Value json_color)
 
 material_t Parser::json_to_material(Json::Value json_material)
 {
-    return {
-        .ambient = json_to_color(json_material["ambient"]),
-        .diffuse = json_to_color(json_material["diffuse"]),
-        .specular = json_to_color(json_material["specular"]),
-        .emission = json_to_color(json_material["emission"]),
-        .shine = json_material["shine"].asDouble()
-    };
+    material_t mat = material_t(
+        json_to_color(json_material["ambient"]),
+        json_to_color(json_material["diffuse"]),
+        json_to_color(json_material["specular"]),
+        json_to_color(json_material["emission"]),
+        json_material["reflection"].asDouble()
+    );
+
+    // optionally set refraction amount, and index of refraction.
+    // If unspecified default to 0 and 1 respectively
+    mat.refraction =
+        json_material.get("refraction", Json::Value(0.0)).asDouble();
+    mat.refraction_index =
+        json_material.get("refraction_index", Json::Value(1)).asDouble();
+    mat.texture = json_material.get("texture", Json::Value(false)).asBool();
+
+
+    return mat;
 }
 
 Sphere *Parser::json_to_sphere(Json::Value json_sphere)
@@ -56,9 +71,17 @@ Sphere *Parser::json_to_sphere(Json::Value json_sphere)
     );
 }
 
-std::vector<SceneObject *> Parser::parse_file()
+PointLight *Parser::json_to_point_light(Json::Value json_point_light) {
+
+    return new PointLight(
+            json_to_vector3(json_point_light["loc"]),
+            json_to_color(json_point_light["intensity"]));
+}
+
+void Parser::parse_file(
+        std::vector<SceneObject *> &scene_objs,
+        std::vector<SceneObject *> &scene_lights)
 {
-    std::vector<SceneObject *> scene_objs;
     std::ifstream contents;
     contents.open(filename);
     /* root is the top-level handle on the json object we parse */
@@ -90,6 +113,23 @@ std::vector<SceneObject *> Parser::parse_file()
                 std::cerr << "UNKNOWN TYPE " << type << std::endl;
             }
         }
+        Json::Value scene_lights_json = root["scene_lights"];
+        for (Json::ValueIterator itr = scene_lights_json.begin();
+             itr != scene_lights_json.end(); itr++) {
+
+            /* We branch based on the type of object we encounter
+             * in the scene file.
+             */
+            std::string type = (*itr)["object_type"].asString();
+            if (valid_object_type(type)) {
+                json_converter c = converters[type];
+                scene_lights.push_back((this->*c)(*itr));
+            }
+            else {
+                std::cerr << "UNKNOWN TYPE " << type << std::endl;
+            }
+        }
+    } else {
+        std::cerr << "Error parsing scene" << std::endl;
     }
-    return scene_objs;
 }
