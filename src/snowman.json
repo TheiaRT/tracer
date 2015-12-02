@@ -114,7 +114,7 @@
                 "refraction":0.4,
                 "refraction_index":1.4
             },
-            "radius":0.05
+            "radius":0.5
         }
 
     ],

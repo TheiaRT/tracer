@@ -36,11 +36,14 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
 {
 
     PnmImage image(width, height);
-    image.insert_chunk(render_pixel_chunk(0, 0, width, height/2, width, height, image.get_denominator()), 0, 0, width, height/2);
-    image.insert_chunk(render_pixel_chunk(0, height/2, width, height/2,
-                                          width, height,
-                                          image.get_denominator()),
-                       0, height/2, width, height/2);
+    image.insert_chunk(
+            render_pixel_chunk(0, 0, width, height/2, width, height, image.get_denominator()),
+            0, 0, width, height/2);
+    image.insert_chunk(
+            render_pixel_chunk(0, height/2, width, height/2,
+                               width, height,
+                               image.get_denominator()),
+            0, height/2, width, height/2);
     return image;
 
 }
@@ -57,10 +60,11 @@ pixel_t **RayTracer::render_pixel_chunk(size_t startx,
     for (size_t i = 0; i < chunk_height; i++) {
         pixels[i] = new pixel_t[chunk_width];
     }
-    vector3_t eye = vector3_t(0, 0, -3); // simulate the location of an eye
+    /* simulate the location of an eye */
+    vector3_t eye = vector3_t(0, 0, -3); 
     ray_t ray(vector3_t(0, 0, 0), vector3_t(0, 0, 1));
-    // We project through a 4:3 viewport that scales with width and height,
-    // Centered at 0,0,0
+    /* We project through a 4:3 viewport that scales with width and height,
+     * Centered at 0,0,0 */
     for (size_t x = 0; x < chunk_width; x++) {
         ray.start.x = -(HORIZONTAL_ASPECT / 2)
                         + (((x + startx) / (double)image_width) * HORIZONTAL_ASPECT);
@@ -72,13 +76,13 @@ pixel_t **RayTracer::render_pixel_chunk(size_t startx,
             material_t material;
             SceneObject *obj;
 
-            //Call cast ray to find the first intersecting object
+            /* Call cast ray to find the first intersecting object */
             if (int result = cast_ray(ray, distance, material, obj, NULL)) {
                 vector3_t intersection_point = ray.start +
                     (ray.direction * distance);
-                 // Recursively calculate the color of a pixel by calling
-                 // calculate illumination with the direction of the ray and
-                 // the intersecting object.
+                 /* Recursively calculate the color of a pixel by calling 
+                  * calculate illumination with the direction of the ray and
+                  * the intersecting object. */
                 color_t color = calculate_illumination(intersection_point,
                                                        obj,
                                                        ray.direction,
@@ -266,7 +270,7 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                                           int refract,
                                           int depth)
 {
-    // If depth is 0, stop reflecting ray and return base color
+    /* If depth is 0, stop reflecting ray and return base color */
     if(depth <= 0) {
         return color_t(0);
     }
@@ -279,11 +283,11 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     color_t refraction_sum = color_t();
     size_t num_lights = lights.size();
 
-    // Calculate diffuse and specular lighting for each light in the scene,
-    // strinking intersection_point
+    /* Calculate diffuse and specular lighting for each light in the scene, 
+     * strinking intersection_point */
     for (size_t i = 0; i < num_lights; i++) {
 
-        //calculate direction from intersection point to light
+        /* calculate direction from intersection point to light */
         PointLight *light = (PointLight *) lights[i];
         vector3_t light_loc = light->get_location();
         vector3_t direction = light_loc - intersection_point;
@@ -293,8 +297,8 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
         material_t temp_material;
         SceneObject *temp_obj = NULL;
 
-        // Determine if there are intersecting objects between
-        // intersection_point and light in order to render shadow
+        /* Determine if there are intersecting objects between
+         * intersection_point and light in order to render shadow */
         bool in_shadow = cast_ray(shadow_ray,
                 distance,
                 temp_material,
@@ -311,22 +315,23 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                     light,
                     incident_direction);
         } else {
-            // if there is an intersecting object between intersection_point,
-            // and light, scale the diffuse lighting by the refraction component
-            // of the material. Opaque materials which do not refract light will
-            // cast a darker shadow.
+            /* if there is an intersecting object between intersection_point,
+             * and light, scale the diffuse lighting by the refraction component
+             * of the material. Opaque materials which do not refract light will
+             * cast a darker shadow. */
             diffuse_sum  += calculate_diffuse(obj, intersection_point, light)
-            * temp_material.refraction;
+                                            * temp_material.refraction;
         }
     }
 
     SceneObject *refraction_obj = NULL;
     vector3_t normal = obj->normal(intersection_point) * inside_obj;
-    double cosI = normal.dot(incident_direction); //cos-theta of incident ray
+    /* cos-theta of incident ray */
+    double cosI = normal.dot(incident_direction); 
 
-    // Call reflection and refraction helper functions to recursively Determine
-    // accumulated brightness from refrected and refracted rays at
-    // intersection_point
+    /* Call reflection and refraction helper functions to recursively Determine
+     * accumulated brightness from refrected and refracted rays at
+     * intersection_point */
     if(obj_material.reflection > 0) {
         reflection_sum += calculate_reflection(intersection_point,
                                                incident_direction,
@@ -348,27 +353,20 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                                                inside_obj);
     }
 
-    // increment brightness by the diffuse lighting at intersection_point and
-    // the accumulated sums of reflected and refracted rays.
+    /* increment brightness by the diffuse lighting at intersection_point and
+     * the accumulated sums of reflected and refracted rays. */
     brightness_sum += diffuse_sum  * obj_material.diffuse;
-    //TODO: Make specular calculations work!
-    //brightness_sum += specular_sum * obj_material.specular;
     brightness_sum += reflection_sum * color_t(obj_material.reflection);
     brightness_sum += refraction_sum * color_t(obj_material.refraction);
 
     brightness_sum = brightness_sum * obj_material.get_texture(intersection_point);
 
 
-    // Filter brightness_sum greater than 1
-    if (brightness_sum.r > 1) {
-        brightness_sum.r = 1;
-    }
-    if (brightness_sum.g > 1) {
-        brightness_sum.g = 1;
-    }
-    if (brightness_sum.b > 1) {
-        brightness_sum.b = 1;
-    }
+    /* Filter brightness_sum greater than 1 */
+    
+    brightness_sum.r = fmin(brightness_sum.r, 1);
+    brightness_sum.g = fmin(brightness_sum.g, 1);
+    brightness_sum.b = fmin(brightness_sum.b, 1);
 
     return brightness_sum;
 }
