@@ -2,12 +2,10 @@
 #define COLLECTOR_H
 
 #include <iostream>
-#include <vector>
-#include <thread>
-#include <queue>
 
 #include "pnm_image.h"
 #include "vector.h"
+#include "work_queue.h"
 #include "tcp_server.h"
 
 
@@ -20,7 +18,7 @@ public:
 private:
     std::string scene;
     PnmImage pixmap;
-    std::queue<vector2_t> work_queue;
+    WorkQueue queue;
     TCPServer *server;
 
     /* in a thread, listens and accepts connections in order to send workers
