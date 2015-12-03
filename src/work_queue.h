@@ -4,47 +4,8 @@
 #include <map>
 #include <stdlib.h>
 
+#include "work.h"
 
-struct work_t {
-    static const int INVALID_ID = -1;
-    static const int NEW_ID = -2;
-
-    int id;
-    int top_x, top_y;
-    int bot_x, bot_y;
-    bool done;
-
-    work_t() : id(INVALID_ID)
-    {
-    }
-
-    work_t(int top_x, int top_y, int bot_x, int bot_y)
-        : id(NEW_ID),
-          top_x(top_x), top_y(top_y), bot_x(bot_x), bot_y(bot_y),
-          done(false)
-    {
-    }
-
-    static work_t invalid()
-    {
-        return work_t();
-    }
-
-    bool validp()
-    {
-        return id != INVALID_ID;
-    }
-
-    bool newp()
-    {
-        return id == NEW_ID;
-    }
-
-    bool donep()
-    {
-        return done;
-    }
-};
 
 class WorkQueue {
 public:
