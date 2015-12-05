@@ -60,7 +60,9 @@ bool TCPClient::connect(std::string address, int port)
 
 bool TCPClient::send_data(std::string data)
 {
-    if (send(sock, data.c_str(), data.length(), 0) < 0) {
+    std::cerr << strlen(data.c_str()) << std::endl;
+    std::cerr << data.size() << std::endl;
+    if (send(sock, data.c_str(), data.size(), 0) < 0) {
         perror("Send failed.");
         return false;
     }

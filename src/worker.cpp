@@ -69,6 +69,7 @@ bool Worker::trace_and_send_work()
     if (send_and_receive(json_work, resp) == false) {
         return false;
     }
+    std::cerr << "test" << std::endl;
 
     have_work = false;
     return true;
@@ -103,16 +104,20 @@ std::string Worker::trace()
 bool Worker::send_and_receive(std::string req, std::string &resp)
 {
     TCPClient client;
+    std::cerr << "1" << std::endl;
     if (client.connect(collector_host, collector_port) == false) {
         return false;
     }
 
+    std::cerr << "2" << std::endl;
     // std::cout << "sending data: " << req << std::endl;
     if (client.send_data(req) == false) {
         return false;
     }
 
+    std::cerr << "3" << std::endl;
     resp = client.receive();
+    std::cerr << "4" << std::endl;
     // std::cout << "got data: " << resp << std::endl;
     return true;
 }

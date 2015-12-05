@@ -119,7 +119,7 @@ struct material_t {
     color_t get_texture(vector3_t point) {
         double modx = fabs(fmod(point.x, 1.0));
         double mody = fabs(fmod(point.y, 1.0));
-        double modz = fabs(fmod(point.z, 1.0));
+//        double modz = fabs(fmod(point.z, 1.0));
 
         if (texture) {
             if( modx < 0.5 ^ mody < 0.5) {
