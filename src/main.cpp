@@ -14,12 +14,19 @@ int main(int argc, char **argv)
 {
     string scene_name = "";
     FILE *out_file = stdout;
+    int vp_width = 2000, vp_height = 1500;
     for (int i = 0; i < argc; i++) {
         if (strcmp(argv[i], "-s") == 0) {
             scene_name = string(argv[++i]);
         }
         else if (strcmp(argv[i], "-o") == 0) {
             out_file = fopen(argv[++i], "w+");
+        }
+        else if (strcmp(argv[i], "-vpw") == 0) {
+            vp_width = atoi(argv[++i]);
+        }
+        else if (strcmp(argv[i], "-vph") == 0) {
+            vp_height = atoi(argv[++i]);
         }
     }
 
@@ -29,7 +36,7 @@ int main(int argc, char **argv)
 
     parser.parse(scene_objects, scene_lights);
     RayTracer tracer(scene_objects, scene_lights);
-    PnmImage image = tracer.render_image(4000, 3000);
+    PnmImage image = tracer.render_image(vp_width, vp_height);
 
     for (SceneObject *s : scene_objects) {
         delete (Sphere *) s;
