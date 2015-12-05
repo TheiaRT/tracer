@@ -104,38 +104,38 @@ static bool read_from_sock(int client, std::string &res)
     FD_ZERO(&read_set);
     FD_SET(client, &read_set);
 
-    /* See what kind of state the descriptor is in. */
-    int r = select(client + 1, &read_set, NULL, NULL, &timeout);
-    if (r < 0) {
-        perror("Select failed.");
-        return false;
-    }
-    else if (r == 0) {
-        /* Read timed out, most likely after an initial read. So it's fine to
-           just return false. */
-        return false;
-    }
-    else {
-        int size = 1024;
-        char buffer[size];
-        bzero(buffer, size);
-        int recvd = 0;
+    int size = 1024;
+    char buffer[size];
+    bzero(buffer, size);
+    int recvd = 0;
 
-        if ((recvd = recv(client, buffer, size - 1, 0)) > 0) {
-            res += buffer;
-
-            /* Recurse and see if there's any more to recv. We don't really
-               care about return value here since we've had at least one
-               successful read. */
-            read_from_sock(client, res);
-            return true;
-        }
-        else {
-            /* We are not expecting any 0-sized messages. */
-            perror("Receive failed.");
+    int r;
+    do {
+        /* See what kind of state the descriptor is in. */
+        r = select(client + 1, &read_set, NULL, NULL, &timeout);
+        if (r < 0) {
+            perror("Select failed.");
             return false;
         }
-    }
+        else if (r == 0) {
+            /* Read timed out, most likely after an initial read. So it's fine to
+               just return false. */
+            break;
+        }
+        else {
+            if ((recvd = recv(client, buffer, size - 1, 0)) > 0) {
+                res += buffer;
+                bzero(buffer, size);
+            }
+            else {
+                /* We are not expecting any 0-sized messages. */
+                perror("Receive failed.");
+                return false;
+            }
+        }
+    } while (r > 0);
+
+    return true;
 }
 
 bool TCPServer::dispatch_handler(int client)
