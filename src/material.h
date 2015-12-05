@@ -1,7 +1,7 @@
 #ifndef MATERIALS_H
 #define MATERIALS_H
 
-/* TODO: make pixel.h a new file */
+#include "pixel.h"
 #include "pnm_image.h"
 
 struct color_t {
