@@ -2,9 +2,9 @@
 #define PIXEL_H
 
 #include <iostream>
-#include <sstream>
 
 #include "dist/json/json.h"
+#include "misc.h"
 
 
 struct pixel_t {
@@ -19,29 +19,51 @@ struct pixel_t {
     {
     }
 
-    std::string to_json()
+    pixel_t(Json::Value root) : r(root["r"].asInt()),
+                                g(root["g"].asInt()),
+                                b(root["b"].asInt())
     {
-        std::ostringstream strs;
+    }
+
+    Json::Value to_json_value()
+    {
         Json::Value root;
         root["r"] = (int)r;
         root["g"] = (int)g;
         root["b"] = (int)b;
-        strs << root;
-        return strs.str();
+        return root;
+    }
+
+    std::string to_json()
+    {
+        return json_to_string(to_json_value());
     }
 
     static bool from_json(std::string json, pixel_t &res)
     {
         Json::Value root;
         Json::Reader reader;
-        if (reader.parse(json, root)) {
-            res = pixel_t(root["r"].asInt(),
-                          root["g"].asInt(),
-                          root["b"].asInt());
+        if (reader.parse(json, root, false)) {
+            res = pixel_t(root);
             return true;
         }
 
         return false;
+    }
+
+    static pixel_t **from_json_value(Json::Value json_pixels,
+                                     int width,
+                                     int height)
+    {
+        pixel_t **pixels = new pixel_t*[height];
+        for (int y = 0; y < height; y++) {
+            pixels[y] = new pixel_t[width];
+            for (int x = 0; x < width; x++) {
+                pixels[y][x] = pixel_t(json_pixels[y][x]);
+            }
+        }
+
+        return pixels;
     }
 };
 
