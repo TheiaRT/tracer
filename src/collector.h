@@ -2,6 +2,7 @@
 #define COLLECTOR_H
 
 #include <iostream>
+#include "dist/json/json.h"
 
 #include "pnm_image.h"
 #include "vector.h"
@@ -11,21 +12,25 @@
 
 class Collector {
 public:
-    Collector(std::string scene, size_t width, size_t height);
+    Collector(std::string filename, size_t width, size_t height);
+    ~Collector();
     bool start(std::string host, int port);
     void stop();
+    void write_image(std::string filename);
 
 private:
-    std::string scene;
+    Json::Value scene;
     PnmImage pixmap;
     WorkQueue queue;
     TCPServer *server;
+    size_t vp_width, vp_height;
 
-    /* in a thread, listens and accepts connections in order to send workers
-       work */
+    /* In a thread, listens and accepts connections in order to send workers
+       work. */
     std::string serve_request(std::string req);
     std::string generate_work();
-    bool process_work(std::string work);
+    std::string generate_error(std::string type);
+    void process_work(Json::Value work, Json::Value pixels);
 };
 
 #endif
