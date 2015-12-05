@@ -18,8 +18,6 @@ public:
 
 private:
     int sock;
-    std::string address;
-    int port;
     struct sockaddr_in server;
 };
 

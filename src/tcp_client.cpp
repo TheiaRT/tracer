@@ -2,7 +2,7 @@
 
 #include "tcp_client.h"
 
-TCPClient::TCPClient() : sock(-1), port(0), address("")
+TCPClient::TCPClient() : sock(-1)
 {
 }
 
@@ -74,7 +74,7 @@ std::string TCPClient::receive(int size)
     char cbuffer[size];
     bzero(cbuffer, size);
     int recvd = 0;
-    while((recvd = recv(sock, cbuffer, size, 0)) > 0) {
+    while((recvd = recv(sock, cbuffer, size - 1, 0)) > 0) {
         buffer += cbuffer;
         bzero(cbuffer, size);
     }
