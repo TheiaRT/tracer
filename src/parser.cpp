@@ -7,12 +7,30 @@
 
 Parser::Parser(std::string filename)
 {
-    this->filename = filename;
+    init();
+
+    std::ifstream contents(filename, std::ifstream::binary);
+
+    /* root is the top-level handle on the json object we parse */
+    Json::Reader reader;
+    if (reader.parse(contents, root, false) == false) {
+        std::cerr << "Error parsing scene" << std::endl;
+    }
+}
+
+Parser::Parser(Json::Value root) : root(root)
+{
+    init();
+}
+
+void Parser::init()
+{
     converters.insert(
         std::make_pair("sphere", (json_converter)&Parser::json_to_sphere)
     );
     converters.insert(
-        std::make_pair("point_light", (json_converter)&Parser::json_to_point_light)
+        std::make_pair("point_light",
+                       (json_converter)&Parser::json_to_point_light)
     );
 }
 
@@ -78,59 +96,45 @@ PointLight *Parser::json_to_point_light(Json::Value json_point_light) {
             json_to_color(json_point_light["intensity"]));
 }
 
-void Parser::parse_file(
-        std::vector<SceneObject *> &scene_objs,
-        std::vector<SceneObject *> &scene_lights)
+void Parser::parse(std::vector<SceneObject *> &scene_objs,
+                   std::vector<SceneObject *> &scene_lights)
 {
-    std::ifstream contents;
-    contents.open(filename);
-    /* root is the top-level handle on the json object we parse */
-    Json::Value root;
-    Json::Reader reader;
+    /* The list of scene objects is referenced by key:
+     * "scene_objects"
+     */
+    Json::Value scene_objs_json = root["scene_objects"];
+    /* Create scene_obj from each item in JSON "scene_objects"[]
+     * based on object_type; append object into scene_objs vector
+     */
+    for (Json::ValueIterator itr = scene_objs_json.begin();
+         itr != scene_objs_json.end(); itr++) {
 
-    bool json_parse_successful = reader.parse(contents, root);
-    if (json_parse_successful) {
-        /* The list of scene objects is referenced by key:
-         * "scene_objects"
+        /* We branch based on the type of object we encounter
+         * in the scene file.
          */
-        Json::Value scene_objs_json = root["scene_objects"];
-        /* Create scene_obj from each item in JSON "scene_objects"[]
-         * based on object_type; append object into scene_objs vector
+        std::string type = (*itr)["object_type"].asString();
+        if (valid_object_type(type)) {
+            json_converter c = converters[type];
+            scene_objs.push_back((this->*c)(*itr));
+        }
+        else {
+            std::cerr << "UNKNOWN TYPE " << type << std::endl;
+        }
+    }
+    Json::Value scene_lights_json = root["scene_lights"];
+    for (Json::ValueIterator itr = scene_lights_json.begin();
+         itr != scene_lights_json.end(); itr++) {
+
+        /* We branch based on the type of object we encounter
+         * in the scene file.
          */
-        for (Json::ValueIterator itr = scene_objs_json.begin();
-             itr != scene_objs_json.end(); itr++) {
-
-            /* We branch based on the type of object we encounter
-             * in the scene file.
-             */
-            std::string type = (*itr)["object_type"].asString();
-            if (valid_object_type(type)) {
-                json_converter c = converters[type];
-                scene_objs.push_back((this->*c)(*itr));
-            }
-            else {
-                std::cerr << "UNKNOWN TYPE " << type << std::endl;
-            }
-
-            /* More branches to follow... */
+        std::string type = (*itr)["object_type"].asString();
+        if (valid_object_type(type)) {
+            json_converter c = converters[type];
+            scene_lights.push_back((this->*c)(*itr));
         }
-        Json::Value scene_lights_json = root["scene_lights"];
-        for (Json::ValueIterator itr = scene_lights_json.begin();
-             itr != scene_lights_json.end(); itr++) {
-
-            /* We branch based on the type of object we encounter
-             * in the scene file.
-             */
-            std::string type = (*itr)["object_type"].asString();
-            if (valid_object_type(type)) {
-                json_converter c = converters[type];
-                scene_lights.push_back((this->*c)(*itr));
-            }
-            else {
-                std::cerr << "UNKNOWN TYPE " << type << std::endl;
-            }
+        else {
+            std::cerr << "UNKNOWN TYPE " << type << std::endl;
         }
-    } else {
-        std::cerr << "Error parsing scene" << std::endl;
     }
 }

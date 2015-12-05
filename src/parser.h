@@ -16,12 +16,13 @@
 class Parser {
 public:
     Parser(std::string filename);
-    void parse_file(
-            std::vector<SceneObject *> &scene_objs,
-            std::vector<SceneObject *> &scene_lights);
+    Parser(Json::Value root);
+    void init();
+    void parse(std::vector<SceneObject *> &scene_objs,
+               std::vector<SceneObject *> &scene_lights);
 
 private:
-    std::string filename;
+    Json::Value root;
 
     typedef SceneObject *(Parser::*json_converter)(Json::Value);
     std::map<std::string, json_converter> converters;

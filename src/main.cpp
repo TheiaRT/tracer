@@ -27,9 +27,9 @@ int main(int argc, char **argv)
     std::vector<SceneObject *> scene_objects;
     std::vector<SceneObject *> scene_lights;
 
-    parser.parse_file(scene_objects, scene_lights);
+    parser.parse(scene_objects, scene_lights);
     RayTracer tracer(scene_objects, scene_lights);
-    PnmImage image = tracer.render_image(800, 600);
+    PnmImage image = tracer.render_image(4000, 3000);
 
     for (SceneObject *s : scene_objects) {
         delete (Sphere *) s;
