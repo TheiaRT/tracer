@@ -14,6 +14,7 @@ public:
     ~PnmImage();
     void init(size_t width, size_t height, long denom);
     static PnmImage read(FILE *fp);
+    bool write(std::string filename);
     bool write(FILE *fp);
     bool set_pixel(size_t x, size_t y, pixel_t pixel);
     long get_denominator();
