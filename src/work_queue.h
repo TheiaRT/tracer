@@ -14,6 +14,8 @@ public:
     void add(work_t work);
     work_t get();
     work_t remove(int id);
+    void split(work_t overall, size_t chunks);
+    bool emptyp();
 
 private:
     size_t current_id;
@@ -22,7 +24,6 @@ private:
     std::map<int,work_t> work_map;
 
     int next_id();
-    bool emptyp();
     bool fullp();
     work_t dequeue();
     void expand();

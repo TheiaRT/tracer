@@ -17,6 +17,7 @@ public:
     bool start(std::string host, int port);
     void stop();
     void write_image(std::string filename);
+    bool done();
 
 private:
     Json::Value scene;

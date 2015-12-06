@@ -73,6 +73,25 @@ struct work_t {
         root["done"] = done;
         return root;
     }
+
+    work_t *split(size_t chunks_count)
+    {
+        work_t *chunks = new work_t[chunks_count];
+        int width = this->width / chunks_count;
+
+        for (size_t i = 0; i < chunks_count; i++) {
+            chunks[i].y = this->y;
+            chunks[i].height = this->height;
+            chunks[i].x = i * width;
+            chunks[i].width = width;
+            chunks[i].image_width = this->image_width;
+            chunks[i].image_height = this->image_height;
+            chunks[i].denominator = this->denominator;
+            chunks[i].done = false;
+            chunks[i].id = NEW_ID;
+        }
+        return chunks;
+    }
 };
 
 #endif

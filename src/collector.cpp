@@ -14,8 +14,8 @@ Collector::Collector(std::string filename, size_t width, size_t height)
         std::cerr << "Error parsing scene" << std::endl;
     }
 
-    // std::cout << "scene:" << std::endl;
-    // std::cout << scene << std::endl;
+    work_t initial = work_t(0, 0, width, height, width, height, 255);
+    queue.split(initial, 2);
 
     server = new TCPServer([=](std::string req) {
         return this->serve_request(req);
@@ -63,11 +63,16 @@ std::string Collector::serve_request(std::string req)
 /* TODO: remove sample */
 std::string Collector::generate_work()
 {
-    work_t example(0, 0, vp_width, vp_height, vp_width, vp_height, 255);
+    //work_t example(0, 0, vp_width, vp_height, vp_width, vp_height, 255);
     Json::Value root;
     root["scene"] = scene;
-    root["work"] = example.to_json_value();
+    root["work"] = queue.get().to_json_value();
     return json_to_string(root);
+}
+
+bool Collector::done() 
+{
+    return queue.emptyp();
 }
 
 std::string Collector::generate_error(std::string type)

@@ -8,5 +8,7 @@ int main()
 
     Collector c("snowman.json", 400, 300);
     c.start(host, port);
-    while(1);
+    std::cin >> port;
+    c.stop();
+    c.write_image("snowman.pnm");
 }

@@ -100,3 +100,12 @@ void WorkQueue::expand()
     delete [] array;
     array = bigger_array;
 }
+
+void WorkQueue::split(work_t overall, size_t chunks)
+{
+    work_t *chunked_work = overall.split(chunks);
+
+    for (size_t i = 0; i < chunks; i++) {
+        add(chunked_work[i]);
+    }
+}
