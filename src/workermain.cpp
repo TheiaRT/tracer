@@ -15,14 +15,12 @@ int main(int argc, char **argv)
         }
     }
     Worker w(host, port);
-    if (w.get_work() == false) {
-        std::cerr << "No more work.\n";
-        return 1;
+    while (w.get_work() == true) {
+        if (w.trace_and_send_work() == false) {
+            std::cerr << "Could not send work.\n";
+            //return 2;
+        }
     }
 
-    if (w.trace_and_send_work() == false) {
-        std::cerr << "Could not send work.\n";
-        return 2;
-    }
-
+    return 0;
 }
