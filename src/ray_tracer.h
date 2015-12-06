@@ -7,8 +7,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "pnm_image.h"
-#include "vector.h"
+#include "util/pnm/pnm_image.h"
+#include "util/vector/vector.h"
 #include "scene_object.h"
 #include "point_light.h"
 #include "scene.h"

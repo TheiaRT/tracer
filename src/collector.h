@@ -2,13 +2,13 @@
 #define COLLECTOR_H
 
 #include <iostream>
-#include "dist/json/json.h"
 #include <mutex>
 
-#include "pnm_image.h"
-#include "vector.h"
+#include "dist/json/json.h"
+#include "util/pnm/pnm_image.h"
+#include "util/vector/vector.h"
+#include "util/tcp/tcp_server.h"
 #include "work_queue.h"
-#include "tcp_server.h"
 
 
 class Collector {

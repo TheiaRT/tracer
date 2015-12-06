@@ -2,8 +2,8 @@
 #include <cmath>
 #include <cassert>
 
-#include "vector.h"
-#include "pnm_image.h"
+#include "util/vector/vector.h"
+#include "util/pnm/pnm_image.h"
 #include "ray_tracer.h"
 #include "point_light.h"
 

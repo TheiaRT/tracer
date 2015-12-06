@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "pnm_image.h"
-#include "tcp_client.h"
+#include "util/pnm/pnm_image.h"
+#include "util/tcp/tcp_client.h"
 #include "ray_tracer.h"
 
 

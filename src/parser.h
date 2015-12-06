@@ -6,11 +6,11 @@
 #include <vector>
 #include <map>
 
-#include "vector.h"
+#include "util/vector/vector.h"
 #include "scene_object.h"
 #include "sphere.h"
-#include "material.h"
 #include "point_light.h"
+#include "material.h"
 #include "scene.h"
 
 

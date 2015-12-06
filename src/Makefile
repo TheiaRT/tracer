@@ -29,8 +29,12 @@ jsoncpp.o:
 
 ray_tracer.o: pnm_image.o ray_tracer.cpp point_light.cpp sphere.cpp material.h scene_object.h sphere.h
 	$(CXX) $(CFLAGS) -c ray_tracer.cpp sphere.cpp point_light.cpp
-pnm_image.o: pnm_image.cpp
-	$(CXX) $(CFLAGS) -c pnm_image.cpp
+pnm_image.o: util/pnm/pnm_image.cpp
+	$(CXX) $(CFLAGS) -c util/pnm/pnm_image.cpp
+tcp_client.o: util/tcp/tcp_client.cpp
+	$(CXX) $(CFLAGS) -c util/tcp/tcp_client.cpp
+tcp_server.o: util/tcp/tcp_server.cpp
+	$(CXX) $(CFLAGS) -c util/tcp/tcp_server.cpp
 tests:  pnm_tests
 	$(CXX) $(CFLAGS) pnm_image.o pnm_tests.cpp -o unittest
 pnm_tests: pnm_image.o

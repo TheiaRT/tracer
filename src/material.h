@@ -1,8 +1,8 @@
 #ifndef MATERIALS_H
 #define MATERIALS_H
 
-#include "pixel.h"
-#include "pnm_image.h"
+#include "util/pnm/pixel.h"
+#include "util/pnm/pnm_image.h"
 
 struct color_t {
     double r, g, b, a;

@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "dist/json/json.h"
-#include "misc.h"
+#include "../../dist/json/json.h"
+#include "../../misc.h"
 
 
 struct pixel_t {
