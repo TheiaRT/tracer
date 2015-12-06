@@ -16,7 +16,7 @@ int main(int argc, char **argv)
             scene_name = string(argv[++i]);
         }
         else if (strcmp(argv[i], "-o") == 0) {
-            out_file = argv[++i];
+            out_file = string(argv[++i]);
         }
         else if (strcmp(argv[i], "-vpw") == 0) {
             vp_width = atoi(argv[++i]);
