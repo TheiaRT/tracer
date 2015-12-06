@@ -1,0 +1,17 @@
+\subsection{Diagrams}
+
+We have updated the vocabulary in the diagram obj-diagram.png to reflect 
+an accurate description of the roles of various processes in the system.
+
+\subsection{Progress}
+
+We can adequately render spheres with diffuse color, and load a scene from
+an external description. We are able to render frames in independent processes,
+but cannot yet render a single image across multiple processes. 
+
+\subsection{Vocabulary}
+
+We have transitioned from the terms ``Client'' and ``Server'' to the terms
+``Worker'' and ``Collector.'' Worker processes handle rendering of an arbitrary
+chunk of the image, which it then sends to the collector process, which collects
+rendered chunks and assembles them into a finished image.

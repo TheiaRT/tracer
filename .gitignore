@@ -34,3 +34,9 @@
 # Linked executables (keep updated)
 src/test
 src/unittest
+
+# LaTeX artifacts
+*.aux
+*.log
+*.pdf
+# You should be compiling right before you provide
