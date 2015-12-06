@@ -39,9 +39,8 @@ bool Worker::parse_work_message(std::string json_message,
     Json::Value message;
     Json::Reader reader;
     if (reader.parse(json_message, message, false) == false) {
-        std::cout << json_message << std::endl;
-        std::cout << "could not parse message: " << json_message << std::endl;
-        std::cout << reader.getFormattedErrorMessages() << std::endl;
+        std::cerr << "could not parse message: " << json_message << std::endl;
+        std::cerr << reader.getFormattedErrorMessages() << std::endl;
         return false;
     }
 
@@ -61,10 +60,13 @@ bool Worker::parse_work_message(std::string json_message,
 bool Worker::trace_and_send_work()
 {
     if (!have_work) {
+        std::cerr << "no work to trace" << std::endl;
         return false;
     }
 
+    std::cerr << "trace start...";
     std::string json_work = trace();
+    std::cerr << " done" << std::endl;
     std::string resp;
     /* send the json work to the server */
     if (send_and_receive(json_work, resp) == false) {
@@ -108,13 +110,15 @@ bool Worker::send_and_receive(std::string req, std::string &resp)
         return false;
     }
 
-    // std::cout << "sending data: " << req << std::endl;
     if (client.send_data(req) == false) {
         return false;
     }
 
     resp = client.receive();
-    // std::cout << "got data: " << resp << std::endl;
+    if (resp == std::string()) {
+        return false;
+    }
+
     return true;
 }
 
