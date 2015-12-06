@@ -11,11 +11,12 @@
 #include "vector.h"
 #include "scene_object.h"
 #include "point_light.h"
+#include "scene.h"
+
 
 class RayTracer {
 public:
-    RayTracer(std::vector<SceneObject *> scene,
-              std::vector<SceneObject *> lights);
+    RayTracer(scene_t scene);
     ~RayTracer();
     PnmImage render_image(size_t width, size_t height);
     pixel_t **render_pixel_chunk(size_t x,
@@ -27,7 +28,7 @@ public:
                                  long denom);
 
 private:
-    std::vector<SceneObject *> scene, lights;
+    scene_t scene;
     int cast_ray(ray_t r,
             double &distance,
             material_t &material,

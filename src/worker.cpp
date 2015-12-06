@@ -49,11 +49,10 @@ bool Worker::parse_work_message(std::string json_message,
     }
 
     work = work_t(message["work"]);
-    std::vector<SceneObject *> objects, lights;
-    Parser p(message["scene"]);
-    p.parse(objects, lights);
 
-    tracer = new RayTracer(objects, lights);
+    Parser p(message["scene"]);
+    tracer = new RayTracer(p.parse());
+
     return true;
 }
 

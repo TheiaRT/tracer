@@ -96,9 +96,10 @@ PointLight *Parser::json_to_point_light(Json::Value json_point_light) {
             json_to_color(json_point_light["intensity"]));
 }
 
-void Parser::parse(std::vector<SceneObject *> &scene_objs,
-                   std::vector<SceneObject *> &scene_lights)
+scene_t Parser::parse()
 {
+    scene_t scene;
+
     /* The list of scene objects is referenced by key:
      * "scene_objects"
      */
@@ -115,7 +116,7 @@ void Parser::parse(std::vector<SceneObject *> &scene_objs,
         std::string type = (*itr)["object_type"].asString();
         if (valid_object_type(type)) {
             json_converter c = converters[type];
-            scene_objs.push_back((this->*c)(*itr));
+            scene.objects.push_back((this->*c)(*itr));
         }
         else {
             std::cerr << "UNKNOWN TYPE " << type << std::endl;
@@ -131,10 +132,12 @@ void Parser::parse(std::vector<SceneObject *> &scene_objs,
         std::string type = (*itr)["object_type"].asString();
         if (valid_object_type(type)) {
             json_converter c = converters[type];
-            scene_lights.push_back((this->*c)(*itr));
+            scene.lights.push_back((this->*c)(*itr));
         }
         else {
             std::cerr << "UNKNOWN TYPE " << type << std::endl;
         }
     }
+
+    return scene;
 }

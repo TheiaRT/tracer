@@ -11,6 +11,7 @@
 #include "sphere.h"
 #include "material.h"
 #include "point_light.h"
+#include "scene.h"
 
 
 class Parser {
@@ -18,8 +19,7 @@ public:
     Parser(std::string filename);
     Parser(Json::Value root);
     void init();
-    void parse(std::vector<SceneObject *> &scene_objs,
-               std::vector<SceneObject *> &scene_lights);
+    scene_t parse();
 
 private:
     Json::Value root;

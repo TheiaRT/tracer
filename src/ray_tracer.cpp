@@ -15,17 +15,14 @@
 
 #define HORIZONTAL_ASPECT 4
 #define VERTICAL_ASPECT 3
-using namespace std;
-RayTracer::RayTracer(std::vector<SceneObject *> scene,
-                     std::vector<SceneObject *> lights)
+
+
+RayTracer::RayTracer(scene_t scene) : scene(scene)
 {
-    this->scene = scene;
-    this->lights = lights;
 }
 
 RayTracer::~RayTracer()
 {
-
 }
 
 /**
@@ -116,17 +113,17 @@ int RayTracer::cast_ray(ray_t ray,
     int dir;
     int min_dir;
     double min_distance = MAX_DISTANCE;
-    size_t num_objects = scene.size();
+    size_t num_objects = scene.objects.size();
 
     for (size_t i = 0; i < num_objects; i++) {
         double temp_distance = MAX_DISTANCE;
-        if (scene[i] != ignore
-            && (dir = scene[i]->intersect_ray(ray, temp_distance)) != 0) {
+        if (scene.objects[i] != ignore &&
+            (dir = scene.objects[i]->intersect_ray(ray, temp_distance)) != 0) {
             if (temp_distance < min_distance) {
                 min_dir = dir;
                 min_distance = temp_distance;
-                material = scene[i]->get_material();
-                object = scene[i];
+                material = scene.objects[i]->get_material();
+                object = scene.objects[i];
             }
         }
     }
@@ -280,14 +277,14 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     color_t specular_sum = color_t();
     color_t reflection_sum = color_t();
     color_t refraction_sum = color_t();
-    size_t num_lights = lights.size();
+    size_t num_lights = scene.lights.size();
 
     /* Calculate diffuse and specular lighting for each light in the scene,
      * strinking intersection_point */
     for (size_t i = 0; i < num_lights; i++) {
 
         /* calculate direction from intersection point to light */
-        PointLight *light = (PointLight *) lights[i];
+        PointLight *light = (PointLight *) scene.lights[i];
         vector3_t light_loc = light->get_location();
         vector3_t direction = light_loc - intersection_point;
         ray_t shadow_ray(intersection_point, direction.normalize());

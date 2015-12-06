@@ -31,20 +31,9 @@ int main(int argc, char **argv)
     }
 
     Parser parser(scene_name);
-    std::vector<SceneObject *> scene_objects;
-    std::vector<SceneObject *> scene_lights;
-
-    parser.parse(scene_objects, scene_lights);
-    RayTracer tracer(scene_objects, scene_lights);
+    scene_t scene = parser.parse();
+    RayTracer tracer(scene);
     PnmImage image = tracer.render_image(vp_width, vp_height);
-
-    for (SceneObject *s : scene_objects) {
-        delete (Sphere *) s;
-    }
-
-    for (SceneObject *l : scene_lights) {
-        delete (PointLight *) l;
-    }
 
     if (out_file == NULL) {
         return 2;
