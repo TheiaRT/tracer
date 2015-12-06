@@ -18,7 +18,11 @@ public:
     bool write(FILE *fp);
     bool set_pixel(size_t x, size_t y, pixel_t pixel);
     long get_denominator();
-    void insert_chunk(pixel_t **chunk, size_t x, size_t y, size_t width, size_t height);
+    void insert_chunk(pixel_t **chunk,
+                      size_t x,
+                      size_t y,
+                      size_t width,
+                      size_t height);
 
 private:
     size_t width, height;

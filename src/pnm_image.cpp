@@ -73,7 +73,11 @@ bool PnmImage::set_pixel(size_t x, size_t y, pixel_t pixel) {
     return true;
 }
 
-void PnmImage::insert_chunk(pixel_t **chunk, size_t startx, size_t starty, size_t width, size_t height)
+void PnmImage::insert_chunk(pixel_t **chunk,
+                            size_t startx,
+                            size_t starty,
+                            size_t width,
+                            size_t height)
 {
     for (size_t x = 0; x < width; x++) {
         for (size_t y = 0; y < height; y++) {

@@ -118,8 +118,8 @@ static bool read_from_sock(int client, std::string &res)
             return false;
         }
         else if (r == 0) {
-            /* Read timed out, most likely after an initial read. So it's fine to
-               just return false. */
+            /* Read timed out, most likely after an initial read. So it's fine
+               to just return false. */
             break;
         }
         else {

@@ -33,14 +33,14 @@ PnmImage RayTracer::render_image(size_t width, size_t height)
 {
 
     PnmImage image(width, height);
-    image.insert_chunk(
-            render_pixel_chunk(0, 0, width, height/2, width, height, image.get_denominator()),
-            0, 0, width, height/2);
-    image.insert_chunk(
-            render_pixel_chunk(0, height/2, width, height/2,
-                               width, height,
-                               image.get_denominator()),
-            0, height/2, width, height/2);
+    image.insert_chunk(render_pixel_chunk(0, 0, width, height/2,
+                                          width, height,
+                                          image.get_denominator()),
+                       0, 0, width, height/2);
+    image.insert_chunk(render_pixel_chunk(0, height/2, width, height/2,
+                                          width, height,
+                                          image.get_denominator()),
+                       0, height/2, width, height/2);
     return image;
 
 }
@@ -64,10 +64,10 @@ pixel_t **RayTracer::render_pixel_chunk(size_t startx,
      * Centered at 0,0,0 */
     for (size_t x = 0; x < chunk_width; x++) {
         ray.start.x = -(HORIZONTAL_ASPECT / 2)
-                        + (((x + startx) / (double)image_width) * HORIZONTAL_ASPECT);
+            + (((x + startx) / (double)image_width) * HORIZONTAL_ASPECT);
         for (size_t y = 0; y < chunk_height; y++) {
             ray.start.y = -(VERTICAL_ASPECT / 2)
-                        + (((y + starty)/(double)image_height) * VERTICAL_ASPECT);
+                + (((y + starty)/(double)image_height) * VERTICAL_ASPECT);
             ray.direction = (ray.start - eye).normalize();
             double distance;
             material_t material;
@@ -234,8 +234,8 @@ color_t RayTracer::calculate_refraction(vector3_t intersection_point,
     ray_t refracted_ray(intersection_point,
         refraction_direction.normalize());
 
-    if(cosT > 0.0) {
-        if(inside_obj == -1) {
+    if (cosT > 0.0) {
+        if (inside_obj == -1) {
             obj = NULL;
         }
         if (int inside = cast_ray(refracted_ray, distance, material,
@@ -267,12 +267,12 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                                           int depth)
 {
     /* If depth is 0, stop reflecting ray and return base color */
-    if(depth <= 0) {
+    if (depth <= 0) {
         return color_t(0);
     }
 
-    material_t obj_material = obj->get_material();
-    color_t brightness_sum = obj_material.ambient;
+    material_t mat = obj->get_material();
+    color_t brightness_sum = mat.ambient;
     color_t diffuse_sum = color_t();
     color_t specular_sum = color_t();
     color_t reflection_sum = color_t();
@@ -329,7 +329,7 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
     /* Call reflection and refraction helper functions to recursively Determine
      * accumulated brightness from refrected and refracted rays at
      * intersection_point */
-    if(obj_material.reflection > 0) {
+    if (mat.reflection > 0) {
         reflection_sum += calculate_reflection(intersection_point,
                                                incident_direction,
                                                obj,
@@ -339,7 +339,7 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                                                depth);
     }
 
-    if(obj_material.refraction > 0.0) {
+    if (mat.refraction > 0.0) {
         refraction_sum += calculate_refraction(intersection_point,
                                                incident_direction,
                                                obj,
@@ -352,11 +352,11 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
 
     /* increment brightness by the diffuse lighting at intersection_point and
      * the accumulated sums of reflected and refracted rays. */
-    brightness_sum += diffuse_sum  * obj_material.diffuse;
-    brightness_sum += reflection_sum * color_t(obj_material.reflection);
-    brightness_sum += refraction_sum * color_t(obj_material.refraction);
+    brightness_sum += diffuse_sum  * mat.diffuse;
+    brightness_sum += reflection_sum * color_t(mat.reflection);
+    brightness_sum += refraction_sum * color_t(mat.refraction);
 
-    brightness_sum = brightness_sum * obj_material.get_texture(intersection_point);
+    brightness_sum = brightness_sum * mat.get_texture(intersection_point);
 
 
     /* Filter brightness_sum greater than 1 */

@@ -30,8 +30,10 @@ struct work_t {
     }
 
     work_t(Json::Value json_work)
-        : id(json_work["id"].asInt()), x(json_work["x"].asInt()), y(json_work["y"].asInt()),
-          width(json_work["width"].asInt()), height(json_work["height"].asInt()),
+        : id(json_work["id"].asInt()),
+          x(json_work["x"].asInt()), y(json_work["y"].asInt()),
+          width(json_work["width"].asInt()),
+          height(json_work["height"].asInt()),
           image_width(json_work["image_width"].asInt()),
           image_height(json_work["image_height"].asInt()),
           denominator(json_work["denominator"].asInt()),

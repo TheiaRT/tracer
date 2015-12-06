@@ -91,8 +91,10 @@ bool TCPClient::send_data(std::string data, int size)
 
     int ntries = 10;
     int sent;
+    const char *datas = data.c_str();
+    int len = data.length();
     std::cerr << "sending...";
-    while (ntries-- > 0 && (sent = send(sock, data.c_str(), data.length(), 0)) < 0) {
+    while (ntries-- > 0 && (sent = send(sock, datas, len, 0)) < 0) {
         if (sent < 0 && ntries == 0) {
             perror("Send failed.");
             return false;
@@ -109,7 +111,7 @@ std::string TCPClient::receive(int size)
     char cbuffer[size];
     bzero(cbuffer, size);
     int recvd = 0;
-    while((recvd = recv(sock, cbuffer, size - 1, 0)) > 0) {
+    while ((recvd = recv(sock, cbuffer, size - 1, 0)) > 0) {
         buffer += cbuffer;
         bzero(cbuffer, size);
     }

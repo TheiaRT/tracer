@@ -4,10 +4,13 @@
 #include "collector.h"
 
 
-Collector::Collector(std::string filename, size_t width, size_t height, size_t splits)
+Collector::Collector(std::string filename,
+                     size_t width,
+                     size_t height,
+                     size_t splits)
     : vp_width(width), vp_height(height), pixmap(PnmImage(width, height))
 {
-    
+
     std::ifstream ifile(filename, std::ifstream::binary);
 
     Json::Reader reader;
@@ -73,7 +76,7 @@ std::string Collector::generate_work()
     return json_to_string(root);
 }
 
-bool Collector::finish() 
+bool Collector::finish()
 {
     finished.lock();
     finished.unlock();
