@@ -16,6 +16,7 @@ public:
     work_t remove(int id);
     void split(work_t overall, size_t chunks);
     bool emptyp();
+    bool isdone(int id);
 
 private:
     size_t current_id;

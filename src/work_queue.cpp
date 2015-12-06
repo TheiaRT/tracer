@@ -101,6 +101,11 @@ void WorkQueue::expand()
     array = bigger_array;
 }
 
+bool WorkQueue::isdone(int id)
+{
+    return work_map[id].done;
+}
+
 void WorkQueue::split(work_t overall, size_t chunks)
 {
     work_t *chunked_work = overall.split(chunks);

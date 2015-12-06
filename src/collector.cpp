@@ -96,8 +96,14 @@ void Collector::process_work(Json::Value json_work, Json::Value json_pixels)
     pixel_t **pixels = pixel_t::from_json_value(json_pixels,
                                                 work.width,
                                                 work.height);
-    pixmap.insert_chunk(pixels, work.x, work.y, work.width, work.height);
-    remaining_work--;
+
+    std::cerr << work.id << std::endl;
+    if (!queue.isdone(work.id)) {
+        pixmap.insert_chunk(pixels, work.x, work.y, work.width, work.height);
+        remaining_work--;
+        queue.remove(work.id);
+        std::cerr << "Insert!" << std::endl;
+    }
     if (remaining_work == 0) {
         finished.unlock();
     }
