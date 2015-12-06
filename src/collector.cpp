@@ -4,9 +4,10 @@
 #include "collector.h"
 
 
-Collector::Collector(std::string filename, size_t width, size_t height)
+Collector::Collector(std::string filename, size_t width, size_t height, size_t splits)
     : vp_width(width), vp_height(height), pixmap(PnmImage(width, height))
 {
+    
     std::ifstream ifile(filename, std::ifstream::binary);
 
     Json::Reader reader;
@@ -15,7 +16,9 @@ Collector::Collector(std::string filename, size_t width, size_t height)
     }
 
     work_t initial = work_t(0, 0, width, height, width, height, 255);
-    queue.split(initial, 2);
+    queue.split(initial, splits);
+    remaining_work = splits;
+    finished.lock();
 
     server = new TCPServer([=](std::string req) {
         return this->serve_request(req);
@@ -70,9 +73,11 @@ std::string Collector::generate_work()
     return json_to_string(root);
 }
 
-bool Collector::done() 
+bool Collector::finish() 
 {
-    return queue.emptyp();
+    finished.lock();
+    finished.unlock();
+    return true;
 }
 
 std::string Collector::generate_error(std::string type)
@@ -92,6 +97,10 @@ void Collector::process_work(Json::Value json_work, Json::Value json_pixels)
                                                 work.width,
                                                 work.height);
     pixmap.insert_chunk(pixels, work.x, work.y, work.width, work.height);
+    remaining_work--;
+    if (remaining_work == 0) {
+        finished.unlock();
+    }
 }
 
 void Collector::write_image(std::string filename)
