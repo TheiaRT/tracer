@@ -19,18 +19,18 @@ struct pixel_t {
     {
     }
 
-    pixel_t(Json::Value root) : r(root["r"].asInt()),
-                                g(root["g"].asInt()),
-                                b(root["b"].asInt())
+    pixel_t(Json::Value root) : r(root[0].asInt()),
+                                g(root[1].asInt()),
+                                b(root[2].asInt())
     {
     }
 
     Json::Value to_json_value()
     {
         Json::Value root;
-        root["r"] = (int)r;
-        root["g"] = (int)g;
-        root["b"] = (int)b;
+        root.append((int)r);
+        root.append((int)g);
+        root.append((int)b);
         return root;
     }
 
