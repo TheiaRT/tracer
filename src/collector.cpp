@@ -35,6 +35,7 @@ Collector::~Collector()
 
 bool Collector::start(std::string host, int port)
 {
+    std::cout << "Listening on " << host << ":" << port << "...\n";
     return server->start(host, port);
 }
 

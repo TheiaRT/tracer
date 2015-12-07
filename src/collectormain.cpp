@@ -15,6 +15,12 @@ int main(int argc, char **argv)
         if (strcmp(argv[i], "-s") == 0) {
             scene_name = string(argv[++i]);
         }
+	else if (strcmp(argv[i], "-h") == 0) {
+	  host = string(argv[++i]);
+	}
+	else if (strcmp(argv[i], "-p") == 0) {
+	  port = atoi(argv[++i]);
+	}
         else if (strcmp(argv[i], "-o") == 0) {
             out_file = string(argv[++i]);
         }
