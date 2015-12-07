@@ -14,7 +14,6 @@ int main(int argc, char **argv)
         }
         else if (strcmp(argv[i], "-p") == 0) {
             port = atoi(argv[++i]);
-
         }
     }
     Worker w(host, port);
