@@ -7,7 +7,7 @@
 Collector::Collector(std::string filename,
                      size_t width,
                      size_t height,
-                     size_t splits)
+                     size_t num_splits)
     : vp_width(width), vp_height(height), pixmap(PnmImage(width, height))
 {
 
@@ -18,11 +18,13 @@ Collector::Collector(std::string filename,
         std::cerr << "Error parsing scene" << std::endl;
     }
 
+    /* Split the work (a render of the whole scene) into num_splits pieces. */
     work_t initial = work_t(0, 0, width, height, width, height, 255);
-    queue.split(initial, splits);
-    remaining_work = splits;
+    queue.split(initial, num_splits);
+    remaining_work = num_splits;
     finished.lock();
 
+    /* Every request hits this lambda. */
     server = new TCPServer([=](std::string req) {
         return this->serve_request(req);
     });
@@ -67,16 +69,16 @@ std::string Collector::serve_request(std::string req)
     }
 }
 
-/* TODO: remove sample */
 std::string Collector::generate_work()
 {
-    //work_t example(0, 0, vp_width, vp_height, vp_width, vp_height, 255);
     Json::Value root;
     root["scene"] = scene;
+    /* Return work from the queue, but don't remove it just yet. */
     root["work"] = queue.get().to_json_value();
     return json_to_string(root);
 }
 
+/* Allows Collector process to finish when it acquires the lock. */
 bool Collector::finish()
 {
     finished.lock();
@@ -92,22 +94,24 @@ std::string Collector::generate_error(std::string type)
     return json_to_string(error);
 }
 
-/* parse work, store in pixmap */
-/* TODO: remove sample */
+/* Parse work, store in pixmap. */
 void Collector::process_work(Json::Value json_work, Json::Value json_pixels)
 {
     work_t work = work_t(json_work);
-    pixel_t **pixels = pixel_t::from_json_value(json_pixels,
-                                                work.width,
-                                                work.height);
 
     std::cerr << work.id << std::endl;
     if (!queue.isdone(work.id)) {
-        pixmap.insert_chunk(pixels, work.x, work.y, work.width, work.height);
-        remaining_work--;
+        /* This comes first so we don't double-assign. */
         queue.remove(work.id);
+        remaining_work--;
+        pixel_t **pixels = pixel_t::from_json_value(json_pixels,
+                                                    work.width,
+                                                    work.height);
+        pixmap.insert_chunk(pixels, work.x, work.y, work.width, work.height);
         std::cerr << "Insert!" << std::endl;
     }
+
+    /* Finished rendering everything! */
     if (remaining_work == 0) {
         finished.unlock();
     }
