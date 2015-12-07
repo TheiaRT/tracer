@@ -321,7 +321,6 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
         }
     }
 
-    //SceneObject *refraction_obj = NULL;
     vector3_t normal = obj->normal(intersection_point) * inside_obj;
     /* cos-theta of incident ray */
     double cosI = normal.dot(incident_direction);
