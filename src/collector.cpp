@@ -8,7 +8,7 @@ Collector::Collector(std::string filename,
                      size_t width,
                      size_t height,
                      size_t num_splits)
-    : vp_width(width), vp_height(height), pixmap(PnmImage(width, height))
+    : pixmap(PnmImage(width, height))
 {
 
     std::ifstream ifile(filename, std::ifstream::binary);

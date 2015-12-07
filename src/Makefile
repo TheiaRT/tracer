@@ -1,5 +1,5 @@
 CXX = g++
-CFLAGS = -g -std=c++11 -pthread  # -Wall # -Wpedantic # -Werror
+CFLAGS = -g -std=c++11 -pthread -Wall -Wpedantic # -Werror
 LFLAGS = -lpthread
 
 all: ray_tracer.o parser.o jsoncpp.o worker.o collector.o main.o
@@ -39,7 +39,7 @@ tests:  pnm_tests
 	$(CXX) $(CFLAGS) pnm_image.o pnm_tests.cpp -o unittest
 pnm_tests: pnm_image.o
 	$(CXX) $(CFLAGS) -c pnm_tests.cpp
-worker_test: workermain.cpp jsoncpp.o collector.o worker.o work_queue.o tcp_client.o tcp_server.o pnm_image.o parser.o ray_tracer.o misc.o
-	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o point_light.o sphere.o misc.o workermain.cpp -o worker_test
-collector_test: collectormain.cpp jsoncpp.o collector.o worker.o work_queue.o tcp_client.o tcp_server.o pnm_image.o parser.o ray_tracer.o misc.o
-	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o point_light.o sphere.o misc.o collectormain.cpp -o collector_test
+worker_test: workermain.cpp jsoncpp.o collector.o worker.o work_queue.o tcp_client.o tcp_server.o pnm_image.o parser.o ray_tracer.o json_util.o
+	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o point_light.o sphere.o json_util.o workermain.cpp -o worker_test
+collector_test: collectormain.cpp jsoncpp.o collector.o worker.o work_queue.o tcp_client.o tcp_server.o pnm_image.o parser.o ray_tracer.o json_util.o
+	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o point_light.o sphere.o json_util.o collectormain.cpp -o collector_test

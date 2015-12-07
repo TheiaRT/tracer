@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "../../dist/json/json.h"
-#include "../../misc.h"
+#include "../../json_util.h"
 
 
 struct pixel_t {

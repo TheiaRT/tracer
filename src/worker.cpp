@@ -1,7 +1,7 @@
 #include "work.h"
 #include "parser.h"
 #include "worker.h"
-#include "misc.h"
+#include "json_util.h"
 
 Worker::Worker(std::string host, int port)
     : collector_host(host), collector_port(port)

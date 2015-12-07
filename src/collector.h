@@ -25,7 +25,6 @@ private:
     PnmImage pixmap;
     WorkQueue queue;
     TCPServer *server;
-    size_t vp_width, vp_height;
     std::mutex finished;
     size_t remaining_work;
 
