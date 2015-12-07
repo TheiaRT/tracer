@@ -1,5 +1,5 @@
-CXX = clang++
-CFLAGS = -g -std=c++11  # -Wall # -Wpedantic # -Werror
+CXX = g++
+CFLAGS = -g -std=c++11 -pthread  # -Wall # -Wpedantic # -Werror
 LFLAGS = -lpthread
 
 all: ray_tracer.o parser.o jsoncpp.o worker.o collector.o main.o
