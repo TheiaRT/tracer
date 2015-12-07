@@ -16,7 +16,7 @@ bool TCPClient::connect(std::string address, int port)
             return false;
         }
 
-#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+#if defined(__APPLE__) && defined(__MACH__)
         int set = 1;
         setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, (void *)&set, sizeof(set));
 #endif
