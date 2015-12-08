@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "tcp_server.h"
 
 std::string tcp_server_default_cat(const std::string req)
