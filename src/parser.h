@@ -9,6 +9,7 @@
 #include "util/vector/vector.h"
 #include "scene_object.h"
 #include "sphere.h"
+#include "box.h"
 #include "point_light.h"
 #include "material.h"
 #include "scene.h"
@@ -33,5 +34,6 @@ private:
     color_t     json_to_color(Json::Value json_color);
     material_t  json_to_material(Json::Value json_material);
     Sphere     *json_to_sphere(Json::Value json_sphere);
+    Box        *json_to_box(Json::Value json_box);
     PointLight *json_to_point_light(Json::Value json_point_light);
 };
