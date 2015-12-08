@@ -4,6 +4,10 @@
 #include "util/pnm/pnm_image.h"
 #include "util/vector/vector.h"
 #include "material.h"
+#include <cmath>
+
+
+enum { INSIDE_HIT = -1, MISS, OUTSIDE_HIT };
 
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */
 class SceneObject {
@@ -16,7 +20,7 @@ public:
     vector3_t get_location() {
         return loc;
     }
-    vector3_t normal(vector3_t at_point) {
+    virtual vector3_t normal(vector3_t at_point) {
         return (at_point - loc).normalize();
     }
 

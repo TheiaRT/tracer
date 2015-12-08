@@ -1,9 +1,5 @@
 #include "sphere.h"
-#include <iostream>
 
-#define MISS 0
-#define OUTSIDE_HIT 1
-#define INSIDE_HIT -1
 
 Sphere::Sphere(vector3_t loc, material_t material, double radius)
 {

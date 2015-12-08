@@ -1,0 +1,40 @@
+{
+    "scene_objects":[
+    {
+        "object_type":"box",
+        "min":{"x":-20, "y":0, "z":80.0},
+        "max":{"x":30, "y":30, "z":70.0},
+        "material":{
+        "ambient":{"r":0.1, "g":0.1, "b":0.1, "a":1},
+        "diffuse":{"r":1, "g":1, "b":1, "a":1},
+        "emission":{},
+        "reflection":100
+
+        }
+
+    },
+    {
+        "object_type":"sphere",
+        "loc":{"x":-10, "y":20, "z":50.0},
+        "material":{
+            "ambient":{"r":0.7, "g":0.1, "b":0.1, "a":1},
+            "emission":{},
+            "texture":true
+            
+        },
+        "radius":10.0
+    }
+    ],
+    "scene_lights":[
+        {
+            "object_type":"point_light",
+            "loc":{"x":0, "y":0, "z":-2000},
+            "intensity":{"r":2000000, "g":2000000, "b":2000000}
+        },
+        {
+            "object_type":"point_light",
+            "loc":{"x":-20, "y":0, "z":30},
+            "intensity":{"r":200, "g":200, "b":200}
+        }
+    ]
+}
