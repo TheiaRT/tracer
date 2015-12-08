@@ -105,15 +105,22 @@ void Collector::process_work(Json::Value json_work, Json::Value json_pixels)
     work_t work = work_t(json_work);
 
     std::cerr << work.id << std::endl;
+    queue_lock.lock();
     if (!queue.isdone(work.id)) {
         /* This comes first so we don't double-assign. */
         queue.remove(work.id);
         remaining_work--;
+        queue_lock.unlock();
         pixel_t **pixels = pixel_t::from_json_value(json_pixels,
                                                     work.width,
                                                     work.height);
         pixmap.insert_chunk(pixels, work.x, work.y, work.width, work.height);
         std::cerr << "Insert!" << std::endl;
+    }
+    /* Need else case so we can a) unlock early in above case and b) unlock if
+       above case does not happen. */
+    else {
+        queue_lock.unlock();
     }
 
     /* Finished rendering everything! */

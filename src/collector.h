@@ -25,7 +25,7 @@ private:
     PnmImage pixmap;
     WorkQueue queue;
     TCPServer *server;
-    std::mutex finished;
+    std::mutex finished, queue_lock;
     size_t remaining_work;
 
     /* In a thread, listens and accepts connections in order to send workers
