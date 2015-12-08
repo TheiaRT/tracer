@@ -2,8 +2,9 @@
 
 
 Box::Box(vector3_t min, vector3_t max, material_t material)
-    : min(min), max(max), material(material)
+    : min(min), max(max)
 {
+    this->material = material;
 }
 
 /* TODO: can be optimized. See MIT paper and Scratchapixel. */
@@ -64,7 +65,11 @@ int Box::intersect_ray(ray_t ray, double &distance)
         }
     }
 
-    // std::cerr << "distance: " << distance << std::endl;
 
     return OUTSIDE_HIT;
+}
+
+vector3_t Box::normal(vector3_t at_point)
+{
+    return vector3_t(0, 0, -1);
 }
