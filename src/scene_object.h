@@ -19,7 +19,7 @@ public:
     vector3_t get_location() {
         return loc;
     }
-    vector3_t normal(vector3_t at_point) {
+    virtual vector3_t normal(vector3_t at_point) {
         return (at_point - loc).normalize();
     }
 
