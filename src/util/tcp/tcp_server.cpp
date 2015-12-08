@@ -75,6 +75,7 @@ void TCPServer::stop()
 bool TCPServer::serve_loop()
 {
     client_len = sizeof(client_addr);
+    std::vector<std::thread *> threads;
 
     /* While we haven't called ::stop()... */
     while (*running == true) {
@@ -87,10 +88,16 @@ bool TCPServer::serve_loop()
             return false;
         }
 
-        if (dispatch_handler(child_sock) == false) {
-            perror("Could not write response.");
-            return false;
-        }
+        std::thread *tp = new std::thread(
+            [=](int sock) {
+                dispatch_handler(sock);
+            },
+            child_sock
+        );
+    }
+
+    for (std::thread *tp : threads) {
+        delete tp;
     }
 
     return true;
