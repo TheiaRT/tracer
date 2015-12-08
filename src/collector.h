@@ -31,7 +31,7 @@ private:
     /* In a thread, listens and accepts connections in order to send workers
        work. */
     std::string serve_request(std::string req);
-    std::string generate_work();
+    std::string generate_work(bool has_work);
     std::string generate_error(std::string type);
     void process_work(Json::Value work, Json::Value pixels);
 };

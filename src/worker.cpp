@@ -4,7 +4,7 @@
 #include "json_util.h"
 
 Worker::Worker(std::string host, int port)
-    : collector_host(host), collector_port(port)
+    : collector_host(host), collector_port(port), have_scene(false)
 {
     tracer = NULL;
 }
@@ -50,7 +50,12 @@ bool Worker::parse_work_message(std::string json_message,
 
     work = work_t(message["work"]);
 
-    Parser p(message["scene"]);
+    if (have_scene == false) {
+        scene = message["scene"];
+        have_scene = true;
+    }
+
+    Parser p(scene);
     tracer = new RayTracer(p.parse());
 
     return true;
@@ -125,5 +130,11 @@ std::string Worker::generate_work_request()
 {
     Json::Value root;
     root["status"] = "need_work";
+
+    /* Already have the scene; no need to send it again. */
+    if (have_scene == true) {
+        root["have_scene"] = true;
+    }
+
     return json_to_string(root);
 }

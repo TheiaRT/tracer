@@ -62,17 +62,22 @@ std::string Collector::serve_request(std::string req)
         return json_to_string(root);
     }
     else if (root["status"] == "need_work") {
-        return generate_work();
+        return generate_work(root["have_scene"].asBool());
     }
     else {
         return generate_error("bad_request");
     }
 }
 
-std::string Collector::generate_work()
+std::string Collector::generate_work(bool has_scene)
 {
     Json::Value root;
-    root["scene"] = scene;
+    /* No need to send scene if client already has it. */
+    if (has_scene == false) {
+        root["scene"] = scene;
+        std::cout << "client needs scene" << std::endl;
+    }
+
     /* Return work from the queue, but don't remove it just yet. */
     root["work"] = queue.get().to_json_value();
     return json_to_string(root);

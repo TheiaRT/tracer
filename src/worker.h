@@ -22,6 +22,8 @@ private:
     bool have_work;
     work_t work;
     RayTracer *tracer;
+    bool have_scene;
+    Json::Value scene;
 
     std::string trace();
     bool parse_work_message(std::string json_message,
