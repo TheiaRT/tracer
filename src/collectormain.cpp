@@ -1,12 +1,21 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "collector.h"
 #include "worker.h"
 
 
 using namespace std;
 
-static bool eq(char *a, char *b)
+static bool eq(char *a, const char *b)
 {
     return strcmp(a, b) == 0;
+}
+
+static void error(const char *msg)
+{
+    std::cerr << msg << std::endl;
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv)
@@ -15,7 +24,7 @@ int main(int argc, char **argv)
     int port = 8000;
 
     int vp_width = 2000, vp_height = 1500;
-    size_t splits = 4;
+    size_t num_splits = 4;
 
     std::string scene_name;
     std::string out_file;
@@ -28,23 +37,43 @@ int main(int argc, char **argv)
             host = string(argv[++i]);
         }
         else if (eq(arg, "-p") || eq(arg, "--port")) {
-            port = atoi(argv[++i]);
+            try {
+                port = stoi(argv[++i]);
+            }
+            catch(...) {
+                error("Invalid port.");
+            }
         }
         else if (eq(arg, "-o") || eq(arg, "--outfile")) {
             out_file = string(argv[++i]);
         }
         else if (eq(arg, "-vpw") || eq(arg, "--viewport-width")) {
-            vp_width = atoi(argv[++i]);
+            try {
+                vp_width = stoi(argv[++i]);
+            }
+            catch(...) {
+                error("Invalid viewport width.");
+            }
         }
         else if (eq(arg, "-vph") || eq(arg, "--viewport-height")) {
-            vp_height = atoi(argv[++i]);
+            try {
+                vp_height = stoi(argv[++i]);
+            }
+            catch(...) {
+                error("Invalid viewport height.");
+            }
         }
         else if (eq(arg, "-spl") || eq(arg, "--split")) {
-            splits = atoi(argv[++i]);
+            try {
+                num_splits = stoi(argv[++i]);
+            }
+            catch(...) {
+                error("Invalid number of splits.");
+            }
         }
     }
 
-    Collector c(scene_name, vp_width, vp_height, splits);
+    Collector c(scene_name, vp_width, vp_height, num_splits);
     c.start(host, port);
     c.finish();
 

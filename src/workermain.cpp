@@ -1,12 +1,21 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "collector.h"
 #include "worker.h"
 
 
 using namespace std;
 
-static bool eq(char *a, char *b)
+static bool eq(char *a, const char *b)
 {
     return strcmp(a, b) == 0;
+}
+
+static void error(const char *msg)
+{
+    std::cerr << msg << std::endl;
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv)
@@ -19,7 +28,12 @@ int main(int argc, char **argv)
             host = string(argv[++i]);
         }
         else if (eq(arg, "-p") || eq(arg, "--port")) {
-            port = atoi(argv[++i]);
+            try {
+                port = stoi(argv[++i]);
+            }
+            catch(...) {
+                error("Invalid port.");
+            }
         }
     }
 
