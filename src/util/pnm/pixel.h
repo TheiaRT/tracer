@@ -19,9 +19,9 @@ struct pixel_t {
     {
     }
 
-    json_pixelel_t(Json::Value json_pixel) : r(json_pixel[0].asInt()),
-                                             g(json_pixel[1].asInt()),
-                                             b(json_pixel[2].asInt())
+    pixel_t(Json::Value json_pixel) : r(json_pixel[0].asInt()),
+                                      g(json_pixel[1].asInt()),
+                                      b(json_pixel[2].asInt())
     {
     }
 
