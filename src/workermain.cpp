@@ -38,6 +38,7 @@ int main(int argc, char **argv)
     }
 
     Worker w(host, port);
+    std::cout << "Connecting to " << host << ":" << port << "..." << std::endl;
     while (w.get_work() == true) {
         if (w.trace_and_send_work() == false) {
             std::cerr << "Could not send work.\n";
