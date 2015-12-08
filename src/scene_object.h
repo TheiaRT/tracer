@@ -5,6 +5,9 @@
 #include "util/vector/vector.h"
 #include "material.h"
 
+
+enum { INSIDE_HIT = -1, MISS, OUTSIDE_HIT };
+
 /* Virtual Object Class. All 3d objects in our scene inherit from this class. */
 class SceneObject {
 public:

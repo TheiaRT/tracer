@@ -1,9 +1,11 @@
 CXX = g++
 CFLAGS = -O3 -g -std=c++11 -pthread -Wall -Wpedantic # -Werror
 LFLAGS = -lpthread
+SCENE_OBJECTS = sphere.cpp box.cpp point_light.cpp
+OBJECT_OFILES = $(SCENE_OBJECTS:.cpp=.o)
 
 all: ray_tracer.o parser.o jsoncpp.o worker.o collector.o main.o
-	$(CXX) $(CFLAGS) pnm_image.o jsoncpp.o parser.o ray_tracer.o sphere.o point_light.o main.o -o test
+	$(CXX) $(CFLAGS) pnm_image.o jsoncpp.o parser.o ray_tracer.o $(OBJECT_OFILES) main.o -o test
 clean:
 	rm -f *.o
 
@@ -27,8 +29,8 @@ collector.o: collector.cpp pnm_image.o work_queue.o tcp_server.o jsoncpp.o
 jsoncpp.o:
 	$(CXX) $(CFLAGS) -c dist/jsoncpp.cpp
 
-ray_tracer.o: pnm_image.o ray_tracer.cpp point_light.cpp sphere.cpp material.h scene_object.h sphere.h
-	$(CXX) $(CFLAGS) -c ray_tracer.cpp sphere.cpp point_light.cpp
+ray_tracer.o: pnm_image.o ray_tracer.cpp $(SCENE_OBJECTS) material.h scene_object.h
+	$(CXX) $(CFLAGS) -c ray_tracer.cpp $(SCENE_OBJECTS)
 pnm_image.o: util/pnm/pnm_image.cpp
 	$(CXX) $(CFLAGS) -c util/pnm/pnm_image.cpp
 tcp_client.o: util/tcp/tcp_client.cpp
@@ -40,6 +42,6 @@ tests:  pnm_tests
 pnm_tests: pnm_image.o
 	$(CXX) $(CFLAGS) -c pnm_tests.cpp
 worker: workermain.cpp jsoncpp.o collector.o worker.o work_queue.o tcp_client.o tcp_server.o pnm_image.o parser.o ray_tracer.o json_util.o
-	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o point_light.o sphere.o json_util.o workermain.cpp -o worker
+	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o $(OBJECT_OFILES) json_util.o workermain.cpp -o worker
 collector: collectormain.cpp jsoncpp.o collector.o worker.o work_queue.o tcp_client.o tcp_server.o pnm_image.o parser.o ray_tracer.o json_util.o
-	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o point_light.o sphere.o json_util.o collectormain.cpp -o collector
+	$(CXX) $(CFLAGS) jsoncpp.o work_queue.o tcp_client.o tcp_server.o pnm_image.o collector.o worker.o parser.o ray_tracer.o $(OBJECT_OFILES) json_util.o collectormain.cpp -o collector

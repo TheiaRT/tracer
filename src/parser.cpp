@@ -29,6 +29,9 @@ void Parser::init()
         std::make_pair("sphere", (json_converter)&Parser::json_to_sphere)
     );
     converters.insert(
+        std::make_pair("box", (json_converter)&Parser::json_to_box)
+    );
+    converters.insert(
         std::make_pair("point_light",
                        (json_converter)&Parser::json_to_point_light)
     );
@@ -87,6 +90,15 @@ Sphere *Parser::json_to_sphere(Json::Value json_sphere)
         json_to_material(json_sphere["material"]),
         json_sphere["radius"].asDouble()
         );
+}
+
+Box *Parser::json_to_box(Json::Value json_box)
+{
+    return new Box(
+        json_to_vector3(json_box["min"]),
+        json_to_vector3(json_box["max"]),
+        json_to_material(json_box["material"])
+    );
 }
 
 PointLight *Parser::json_to_point_light(Json::Value json_point_light) {
