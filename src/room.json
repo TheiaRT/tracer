@@ -1,0 +1,128 @@
+{
+    "scene_objects":[
+        {
+            "object_type":"box",
+            "min":{"x":-30, "y":-40, "z":0.0},
+            "max":{"x":-20, "y":70, "z":70.0},
+            "material":{
+                "ambient":{"r":0.25, "g":0.25, "b":0.25, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "texture":true
+
+            }
+
+        },
+        {
+            "object_type":"box",
+            "min":{"x":-30, "y":30, "z":0.0},
+            "max":{"x":30, "y":60, "z":70.0},
+            "material":{
+                "ambient":{"r":0.25, "g":0.25, "b":0.25, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "texture":true
+
+            }
+
+        },
+        {
+            "object_type":"box",
+            "min":{"x":-30, "y":-20, "z":0.0},
+            "max":{"x":30, "y":-10, "z":70.0},
+            "material":{
+                "ambient":{"r":0.25, "g":0.25, "b":0.25, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "texture":true
+
+            }
+
+        },
+        {
+            "object_type":"box",
+            "min":{"x":-30, "y":-40, "z":70.0},
+            "max":{"x":30, "y":70, "z":80.0},
+            "material":{
+                "ambient":{"r":0.25, "g":0.25, "b":0.25, "a":1},
+                "diffuse":{"r":0.5, "g":0.5, "b":0.5, "a":1},
+                "emission":{},
+                "reflection":100
+
+            }
+
+        },
+        {
+            "object_type":"box",
+            "min":{"x":20, "y":-40, "z":0.0},
+            "max":{"x":30, "y":70, "z":70.0},
+            "material":{
+                "ambient":{"r":0.25, "g":0.25, "b":0.25, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "texture":true
+
+            }
+
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":0, "y":10, "z":50.0},
+            "material":{
+                "ambient":{"r":0.2, "g":0.2, "b":0.2, "a":1},
+                "diffuse":{"r":1, "g":1, "b":1, "a":1},
+                "emission":{},
+                "reflection":100
+
+            },
+            "radius":10.0
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":10, "y":10, "z":60.0},
+            "material":{
+                "ambient":{"r":0.2, "g":0.2, "b":0.2, "a":1},
+                "diffuse":{"r":0.2, "g":0.2, "b":0.9, "a":1},
+                "emission":{}
+
+            },
+            "radius":5.0
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":-15, "y":15, "z":60.0},
+            "material":{
+                "diffuse":{"r":0.8, "g":0.2, "b":0.8, "a":1},
+                "ambient":{"r":0.2, "g":0.2, "b":0.2, "a":1},
+                "emission":{},
+                "texture":true
+
+            },
+            "radius":5.0
+        },
+        {
+            "object_type":"sphere",
+            "loc":{"x":-10, "y":10, "z":30.0},
+            "material":{
+                "ambient":{"r":0.2, "g":0.2, "b":0.2, "a":1},
+                "emission":{},
+                "refraction":1,
+                "refraction_index":1.1
+
+            },
+            "radius":5.0
+        }
+    ],
+    "scene_lights":[
+        {
+            "object_type":"point_light",
+            "loc":{"x":0, "y":0, "z":-2000},
+            "intensity":{"r":2000000, "g":2000000, "b":2000000}
+        },
+        {
+            "object_type":"point_light",
+            "loc":{"x":-10, "y":0, "z":0},
+            "intensity":{"r":200, "g":200, "b":1000}
+        }
+    ]
+}
