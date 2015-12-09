@@ -4,6 +4,9 @@
 Box::Box(vector3_t min, vector3_t max, material_t material)
     : min(min), max(max)
 {
+    this->loc = vector3_t((min.x + max.x)/2,
+                          (min.y + max.y)/2,
+                          (min.z + max.z)/2);
     this->material = material;
 }
 
@@ -71,5 +74,43 @@ int Box::intersect_ray(ray_t ray, double &distance)
 
 vector3_t Box::normal(vector3_t at_point)
 {
-    return vector3_t(0, 0, -1);
+
+    vector3_t normal(0, 0, 0);
+    double xmin = min.x;
+    double xmax = max.x;
+
+    if (xmax < xmin) {
+        std::swap(xmin, xmax);
+    }
+    double ymin = min.y;
+    double ymax = max.y;
+
+    if (ymax < ymin) {
+        std::swap(ymin, ymax);
+    }
+    double zmin = min.z;
+    double zmax = max.z;
+
+    if (zmax < zmin) {
+        std::swap(zmin, zmax);
+    }
+    if (std::abs(at_point.x - xmin) < 0.1) {
+        normal.x = -1;
+    }
+    if (std::abs(at_point.x - xmax) < 0.1) {
+        normal.x = 1;
+    }
+    if (std::abs(at_point.y - ymin) < 0.1) {
+        normal.y = -1;
+    }
+    if (std::abs(at_point.y - ymax) < 0.1) {
+        normal.y = 1;
+    }
+    if (at_point.z == zmin) {
+        normal.z = -1;
+    }
+    if (at_point.z == zmax) {
+        normal.z = 1;
+    }
+    return normal.normalize();
 }
