@@ -4,6 +4,7 @@
 #include "util/pnm/pnm_image.h"
 #include "util/vector/vector.h"
 #include "material.h"
+#include <cmath>
 
 
 enum { INSIDE_HIT = -1, MISS, OUTSIDE_HIT };

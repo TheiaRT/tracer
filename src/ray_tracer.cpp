@@ -149,6 +149,7 @@ color_t RayTracer::calculate_diffuse(SceneObject *obj,
     vector3_t normal = obj->normal(intersection_point);
     double distance = light_loc.distance_from(intersection_point);
     color_t intensity = light->get_intensity() / (distance * distance);
+
     return intensity * normal.dot(light_direction);
 }
 
@@ -299,14 +300,13 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
                 distance,
                 temp_material,
                 temp_obj, obj) ||
-            shadow_ray.direction.dot(
-                    (intersection_point-obj->get_location())
-                    .normalize()) < 0;
+            shadow_ray.direction.dot(obj->normal(intersection_point)) < 0;
 
 
         if (!in_shadow) {
 
             diffuse_sum  += calculate_diffuse(obj, intersection_point, light);
+
             specular_sum += calculate_specular(obj,
                     intersection_point,
                     light,
