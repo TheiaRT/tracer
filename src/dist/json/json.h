@@ -1485,6 +1485,7 @@ private:
   Location current_;
   Location lastValueEnd_;
   Value* lastValue_;
+  int stackDepth_;
   std::string commentsBefore_;
   Features features_;
   bool collectComments_;
