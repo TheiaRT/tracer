@@ -161,8 +161,8 @@ better code. This was not a problem.
 
 \section{Bug report}
 
-We had three difficult bugs, the last of which we have still not managed to
-track down.
+We had several difficult bugs, one of which we have still not managed to track
+down.
 
 \subsection{JSON? What JSON?}
 
@@ -199,6 +199,25 @@ only got noticed when \verb|read_from_sock| tried to \verb|bzero()| a variable.
 
 \verb|Read_from_sock| was rewritten as an iterative function, and order was
 restored.
+
+\subsection{JsonCpp keeps global state}
+
+We use JsonCpp as our JSON serialization and deserialization library. This is
+for the most part an excellent library, but when we started running into errors
+when ray tracing with multiple Workers. We noticed that JsonCpp would
+occasionally throw a runtime error about blowing the stack. This error message
+only cropped up when using two or more Workers.
+
+Max decided to track down where this error message came from, and found out that
+there was an artificial cap on the recursion allowed in the JSON
+parser. Interestingly enough, the recursion count was kept in a \textit{global
+  variable}, allowing all instances of the \verb|Json::Reader| class to
+increment it at the creation of each new stack frame. Naturally, we ``blew the
+stack'' early and often.
+
+The fix (submitted as a pull request to the JsonCpp project) is to localize the
+\verb|stackDepth| variable to each instance of the \verb|Json::Reader| class by
+making it a member variable. The problem disappears after patching the library.
 
 \subsection{Sockets randomly closing}
 
