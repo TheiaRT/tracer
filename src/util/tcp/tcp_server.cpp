@@ -96,6 +96,7 @@ bool TCPServer::serve_loop()
             },
             child_sock
         );
+        threads.push_back(tp);
     }
 
     for (std::thread *tp : threads) {
