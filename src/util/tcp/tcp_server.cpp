@@ -115,7 +115,7 @@ static bool read_from_sock(int client, std::string &res)
     FD_SET(client, &read_set);
 
     int size = 1024;
-    char buffer[size];
+    char *buffer = new char[size];
     bzero(buffer, size);
     int recvd = 0;
 
@@ -145,6 +145,7 @@ static bool read_from_sock(int client, std::string &res)
         }
     } while (r > 0);
 
+    delete [] buffer;
     return true;
 }
 

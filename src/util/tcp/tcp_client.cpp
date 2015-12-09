@@ -108,7 +108,7 @@ bool TCPClient::send_data(std::string data, int size)
 std::string TCPClient::receive(int size)
 {
     std::string buffer = "";
-    char cbuffer[size];
+    char *cbuffer = new char[size];
     bzero(cbuffer, size);
     int recvd = 0;
     while ((recvd = recv(sock, cbuffer, size - 1, 0)) > 0) {
@@ -121,6 +121,7 @@ std::string TCPClient::receive(int size)
         return std::string();
     }
 
+    delete [] cbuffer;
     close(sock);
     return buffer;
 }
