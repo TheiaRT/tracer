@@ -23,7 +23,7 @@ void PnmImage::init(size_t width, size_t height, long denom) {
     this->denominator = denom;
 
     this->pixels = new pixel_t*[height];
-    for (size_t i = 0; i < width; i++) {
+    for (size_t i = 0; i < height; i++) {
         this->pixels[i] = new pixel_t[width];
     }
 }
