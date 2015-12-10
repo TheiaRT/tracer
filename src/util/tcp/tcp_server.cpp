@@ -110,7 +110,7 @@ static bool read_from_sock(int client, std::string &res)
 {
     fd_set read_set;
     /* Timeout after 0.01 seconds. */
-    struct timeval timeout = { .tv_sec = 0, .tv_usec = 10000 };
+    struct timeval timeout = { .tv_sec = 1, .tv_usec = 0 };
     FD_ZERO(&read_set);
     FD_SET(client, &read_set);
 

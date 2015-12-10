@@ -60,48 +60,11 @@ bool TCPClient::connect(std::string address, int port)
 
 bool TCPClient::send_data(std::string data, int size)
 {
-#if 0
-    int length = data.length(), total_sent = 0;
-    const char *datas = data.c_str();
-    while (total_sent < length) {
-        int to_send = length - total_sent;
-        int this_length = to_send < size ? to_send : size;
-        std::cerr << "sending " << this_length << " bytes...";
-        int nwritten;
-#if defined(__linux__)
-        int flags = MSG_NOSIGNAL;
-#else
-        int flags = 0;
-#endif
-        if ((nwritten = send(sock, datas + total_sent, this_length, 0)) < 0) {
-            perror("Send failed.");
-            return false;
-        }
-        std::cerr << " done" << std::endl;
-        if (nwritten != this_length) {
-            perror("Could not send message.");
-            return false;
-        }
-
-        total_sent += this_length;
+    if (send(sock, data.c_str(), data.length(), 0) < 0) {
+        perror("Send failed.");
+        return false;
     }
 
-    return true;
-#endif
-
-    int ntries = 10;
-    int sent;
-    const char *datas = data.c_str();
-    int len = data.length();
-    std::cerr << "sending...";
-    while (ntries-- > 0 && (sent = send(sock, datas, len, 0)) < 0) {
-        if (sent < 0 && ntries == 0) {
-            perror("Send failed.");
-            return false;
-        }
-    }
-
-    std::cerr << " done" << std::endl;
     return true;
 }
 
