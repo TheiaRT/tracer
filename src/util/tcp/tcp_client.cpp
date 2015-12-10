@@ -10,7 +10,7 @@ bool TCPClient::connect(std::string address, int port)
 {
     /* New client; sock does not exist */
     if (sock == -1) {
-        sock = socket(AF_INET, SOCK_STREAM, 0);
+        sock = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
         if (sock < 0) {
             perror("Could not create socket.");
             return false;
