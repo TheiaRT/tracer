@@ -211,8 +211,8 @@ occasionally throw a runtime error about blowing the stack. This error message
 only cropped up when using two or more Workers.
 
 Max decided to track down where this error message came from, and found out that
-there was an artificial cap on the recursion allowed in the JSON
-parser. Interestingly enough, the recursion count was kept in a \textit{global
+there was an artificial cap on the recursion allowed in the JSON parser.
+Interestingly enough, the recursion count was kept in a \textit{global
   variable}, allowing all instances of the \verb|Json::Reader| class to
 increment it at the creation of each new stack frame. Naturally, we ``blew the
 stack'' early and often.
@@ -220,6 +220,9 @@ stack'' early and often.
 The fix (submitted as a pull request to the JsonCpp project) is to localize the
 \verb|stackDepth| variable to each instance of the \verb|Json::Reader| class by
 making it a member variable. The problem disappears after patching the library.
+
+The team submitted a pull request to the JsonCpp library with a fix for the
+issue.
 
 \subsection{Sockets randomly closing}
 
