@@ -240,9 +240,9 @@ no longer write.
 While researching the SIGPIPE errors after the presentation, Max realized that a
 SIGPIPE indicates that the connection is no longer open, and the socket is
 invalid. Perhaps it was not some bizarre system issue after all! After some
-investigation into the `TCPServer` class, it became evident that the unforgiving
-timeout in `read_from_sock` closed the connection too early. The timeout was
-increased from 0.01 seconds to 1 second and all was well.
+investigation into the `TCPServer' class, it became evident that the unforgiving
+timeout in \verb|read_from_sock| closed the connection too early. The timeout
+was increased from 0.01 seconds to 1 second and all was well.
 
 \section{Code overview}
 
