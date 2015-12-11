@@ -246,7 +246,70 @@ was increased from 0.01 seconds to 1 second and all was well.
 
 \section{Code overview}
 
-%% TODO: put stuff here
+We have a significant number of modules, utility classes, and some bundled
+requirements.
+
+\subsection{Collector}
+
+\verb|Collector| is a networked producer of coordinate ranges and consumer of
+pixels. It acts as a TCP server and serves coordinates to \verb|Worker|s that
+request it. It also fields requests from \verb|Worker|s submitting pixels.
+
+\subsection{Worker}
+
+\verb|Worker| is a networked consumer of coordinate ranges and producer of
+pixels. It acts as a TCP client and sends pixels to \verb|Collector|s.
+
+\subsection{WorkQueue}
+
+\verb|WorkQueue| is a circular queue with constant-time insert, remove, and
+lookup. It ensures that \verb|Collector| processes work with extreme fault
+tolerance and speed.
+
+\subsection{RayTracer}
+
+\verb|RayTracer| is the class that controls all of the actual rendering,
+\verb|PnmImage| manipulation, and file writing.
+
+\subsection{Parser}
+
+\verb|Parser| is responsible for the management of scene description files. Our
+scene descriptions are stored in JavaScript Object Notation (JSON), and
+\verb|Parser| loads, parses, and creates in-memory representations of the
+scenes. \verb|RayTracer| uses \verb|Parser|.
+
+\subsection{SceneObject}
+
+\verb|SceneObject| is the overarching virtual class in the 3D object class
+heirarchy. It contains traits such as \verb|loc| for location, \verb|material|
+for material, and methods such as \verb|get_location()| and \verb|get_normal()|.
+\verb|Sphere|, \verb|PointLight|, and \verb|Box| all inherit from this class.
+
+\subsection{TCPServer}
+
+C++ does not have a built-in or easily bundled TCP server implementation, so we
+wrote our own. It supports only basic functions like \verb|start|,
+\verb|serve_request|, and \verb|stop|. It is created with a callback function of
+signature \verb|string -> string| that handles all requests.
+
+\subsection{TCPSocket}
+
+C++ also does not have a built-in or easily bundled TCP client implementation,
+so we wrote our own. It supports only basic functions like \verb|connect|,
+\verb|send_data|, and \verb|receive|.
+
+\subsection{PnmImage}
+
+\verb|PnmImage| is responsible for the creation and writing of collections of
+pixels to disk. \verb|RayTracer| manages a \verb|PnmImage|, both alone and in
+\verb|Collector|.
+
+\subsection{Miscelleaneous other}
+
+There are numerous other modules like \verb|vector3_t|, \verb|pixel_t|, and
+\verb|material_t|, that are little more than their types and are fairly
+self-explanatory. Upon request, further information about any requested module
+can be produced.
 
 \section{Update from final design}
 
