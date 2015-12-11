@@ -289,6 +289,11 @@ heirarchy. It contains traits such as \verb|loc| for location, \verb|material|
 for material, and methods such as \verb|get_location()| and \verb|get_normal()|.
 \verb|Sphere|, \verb|PointLight|, and \verb|Box| all inherit from this class.
 
+\subsection{Our File Format}
+
+In JSON, we represent our scene as two lists: \verb|scene_objects| and 
+\verb|scene_lights|. \verb|Scene_objects| contains objects representing
+figures in the scene, while \verb|scene_lights| describes the illuminations.
 \subsection{TCPServer}
 
 C++ does not have a built-in or easily bundled TCP server implementation, so we
@@ -317,12 +322,12 @@ can be produced.
 
 \subsection{The work of others}
 The contents of ./dist are the work of others, with some small patches as
-described in our bug report. 
+described in our bug report.
 
 \section{Building and Running our Work}
 
 To build our project, run \verb|make worker collector|. This should
-produce two executables, \verb|worker| and \verb|collector|. 
+produce two executables, \verb|worker| and \verb|collector|.
 
 
 To start a collector that will render ``scene.json'' 
@@ -332,10 +337,10 @@ and place the result in ``output.pnm,'' run
 
 Use the \verb|-vpw <width>| and \verb|-vph <height>| options to set the 
 width and height. Use the \verb|-spl <splits>| option to set the number
-of columns to divide the image into. 
+of columns to divide the image into.
 
 Once a collector is running, start a worker using \verb|./worker|. 
-To connect to a remote collector, use \verb|./worker -h <host> -p <port>|. 
+To connect to a remote collector, use \verb|./worker -h <host> -p <port>|.
 
 \section{Update from final design}
 
