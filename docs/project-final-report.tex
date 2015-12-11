@@ -289,7 +289,7 @@ wrote our own. It supports only basic functions like \verb|start|,
 \verb|serve_request|, and \verb|stop|. It is created with a callback function of
 signature \verb|string -> string| that handles all requests.
 
-\subsection{TCPSocket}
+\subsection{TCPClient}
 
 C++ also does not have a built-in or easily bundled TCP client implementation,
 so we wrote our own. It supports only basic functions like \verb|connect|,
@@ -307,6 +307,28 @@ There are numerous other modules like \verb|vector3_t|, \verb|pixel_t|, and
 \verb|material_t|, that are little more than their types and are fairly
 self-explanatory. Upon request, further information about any requested module
 can be produced.
+
+\subsection{The work of others}
+The contents of ./dist are the work of others, with some small patches as
+described in our bug report. 
+
+\section{Building and Running our Work}
+
+To build our project, run \verb|make worker collector|. This should
+produce two executables, \verb|worker| and \verb|collector|. 
+
+
+To start a collector that will render ``scene.json'' 
+and place the result in ``output.pnm,'' run
+\verb|./collector -s scene.json -o output.pnm|
+.
+
+Use the \verb|-vpw <width>| and \verb|-vph <height>| options to set the 
+width and height. Use the \verb|-spl <splits>| option to set the number
+of columns to divide the image into. 
+
+Once a collector is running, start a worker using \verb|./worker|. 
+To connect to a remote collector, use \verb|./worker -h <host> -p <port>|. 
 
 \section{Update from final design}
 
