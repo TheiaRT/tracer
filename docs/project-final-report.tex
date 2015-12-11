@@ -163,8 +163,7 @@ better code. This was not a problem.
 
 \section{Bug report}
 
-We had several difficult bugs, one of which we have still not managed to track
-down.
+We had several difficult bugs.
 
 \subsection{JSON? What JSON?}
 
@@ -173,14 +172,14 @@ the Collector. JsonCpp would complain about poorly formed documents, that it
 expected an open brace here, quote there, etc. Even after very detailed manual
 inspections, the transmitted JSON appeared completely fine.
 
-One time, however, Max noticed a non-ASCII character rendered as a question mark
+One time, however, we noticed a non-ASCII character rendered as a question mark
 in the JSON output. This kind of output only appears when the terminal can't
 render the (presumably invalid) character. On larger JSON files, these question
 mark characters appeared at very regular intervals - about every 512 bytes, the
 amount we \verb|recv()| each call.
 
 It turned out that the amount we \verb|recv()|'d completely filled our buffer,
-leaving room for no NUL-terminator, so we would read past the bounds of buffer
+leaving room for no NULL-terminator, so we would read past the bounds of buffer
 whenever we loaded JSON. If we \verb|recv()|'d one less character, the problem
 disappeared.
 
@@ -188,7 +187,7 @@ disappeared.
 
 After debugging the JSON issue mentioned above, the Worker could parse JSON,
 render pixels, and then send to the Collector. However, the Collector would exit
-with SIGBUS on images larger than roughly 200 by 300 pixels. When Max ran the
+with SIGBUS on images larger than roughly 200 by 300 pixels. When we ran the
 Collector under gdb and unrolled the stack, there were nearly 500 stack frames
 of the same function - \verb|read_from_sock|.
 
@@ -210,7 +209,7 @@ when ray tracing with multiple Workers. We noticed that JsonCpp would
 occasionally throw a runtime error about blowing the stack. This error message
 only cropped up when using two or more Workers.
 
-Max decided to track down where this error message came from, and found out that
+We decided to track down where this error message came from, and found out that
 there was an artificial cap on the recursion allowed in the JSON parser.
 Interestingly enough, the recursion count was kept in a \textit{global
   variable}, allowing all instances of the \verb|Json::Reader| class to
@@ -229,7 +228,7 @@ issue.
 Currently, Workers will fail to \verb|send()| messages, exiting the process with
 an error about using the wrong protocol for that type of socket. After some
 preliminary internet research, this error can occasionally appear when trying to
-\verb|send()| large messages. Our messages can be very large, so Max wrote some
+\verb|send()| large messages. Our messages can be very large, so we wrote some
 code to split the larger messages into 512 byte chunks and \verb|send()| those
 instead.
 
@@ -237,7 +236,7 @@ Instead of fixing the problem, the Workers then exited with SIGPIPE. At some
 point during the repeated \verb|send()|s, the pipe was closing and Workers could
 no longer write.
 
-While researching the SIGPIPE errors after the presentation, Max realized that a
+While researching the SIGPIPE errors after the presentation, we realized that a
 SIGPIPE indicates that the connection is no longer open, and the socket is
 invalid. Perhaps it was not some bizarre system issue after all! After some
 investigation into the `TCPServer' class, it became evident that the unforgiving
