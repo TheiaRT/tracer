@@ -30,28 +30,35 @@
 
 
 \subsection*{Abstract}
-We want to parallelize ray tracing across multiple machines instead of just
-multiple processes on one machine. These machines and processes need to
-communicate.
+We want to parallelize the ray tracing algorithm across multiple machines 
+instead of just multiple processes on one machine. These machines and 
+processes need to communicate over a network.
 
 \section{Design}
 
-We have a not-so-thin-server (``Collector''), and heavy-client (``Worker'')
-approach, where the Collector controls the scene(s) being worked on, and sends
-them to Workers to be rendered.
+We have dubbed our distribution/concurrency model a Worker/Collector Architecture. 
+The Collector in this model has knowedge of work to be done, and divides this work
+into chunks to be put on a work queue, and consumed by worker processes.
+The Woker processes consume work from the work queue, and produce results. Finally,
+the collector collects (consumes) these results, and assembles them into a cohesive
+whole.
 
-We chose this design because it offers the most extensibility and least amount
-of mutable resource sharing. It is also the easiest to employ in a practical
-manner. We could from this state create a wrapper for both Collectors and
-Workers, called Manager. This manager could orchestrate multi-scene rendering
-efforts, spin up remote workers, and more.\\ %% need line break here
+We chose this design because it offers high extensibility and keeps mutable 
+resource sharing to a minimum. We could extend this same architecture to
+many different divide-and-conquer problems. Furthermore, at no point in
+our model do the workers or collector have access to a shared mutable state.
+
+Our model is also the easiest to employ in a practical
+manner. Based on our current archtecture, we could create a wrapper for both 
+Collectors and Workers, called Manager. This manager could orchestrate multi-scene
+rendering efforts, spin up remote workers, and more.\\ %% need line break here
 
 \begin{center}
   \includegraphics[height=60mm]{obj-diagram.png}
 \end{center}
 
-In this state, we see two Workers and one Collector. The Collector is attempting
-to render an image with an arbitrary width and height. The Collector can be in
+This diagram shows two Workers and one Collector. The Collector produces an 
+image with an arbitrary width and height. The Collector can be in
 one of two states: assigning work, and outputting image. When the Collector is
 assigning work, it waits for messages from Workers, then allocates work to each
 Worker that asks. The Collector selects work based on the current front of a
