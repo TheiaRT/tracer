@@ -1,0 +1,63 @@
+README
+Arthur Berman, Max Bernstein, Thomas Colgrove, Kate Wasynczuk
+
+Code overview
+=============
+We have a significant number of modules, utility classes, and some bundled 
+requirements.
+Collector:
+Collector is a networked producer of coordinate ranges and consumer of pixels. 
+It acts as a TCP server and serves coordinates to Workers that request it. It 
+also fields requests from Workers submitting pixels.
+
+Worker:
+Worker is a networked consumer of coordinate ranges and producer of pixels. It 
+acts as a TCP client and sends pixels to Collectors.
+
+WorkQueue:
+WorkQueue is a circular queue with constant-time insert, remove, and lookup. It 
+ensures that Collector processes work with extreme fault tolerance and speed.
+
+RayTracer:
+RayTracer is the class that controls all of the actual rendering, PnmImage 
+manipulation, and file writing.
+The core work done by the RayTracer starts in cast_ray, which
+takes a ray and calculates the illumination at the first point it
+hits. This calculation is handled by calculate_illumination,
+which calls calculate_diffuse, calculate_reflection, and 
+calculate_refraction to determine the different impacts of light
+on the point.
+
+Parser:
+Parser is responsible for the management of scene de- scription files. Our scene 
+descriptions are stored in JavaScript Object Notation (JSON), and Parser loads, 
+parses, and creates in-memory representations of the scenes. RayTracer uses 
+Parser.
+
+
+SceneObject:
+SceneObject is the overarching virtual class in the 3D object class heirarchy.
+It contains traits such as loc for location, material for material, and methods
+such as get_location() and get_normal(). Sphere, PointLight, and Box all inherit
+from this class.
+
+Our File Format:
+In JSON, we represent our scene as two lists: scene_objects and scene_lights. 
+Scene_objects contains objects representing figures in the scene, while 
+scene_lights describes the illuminations.
+
+
+TCPServer:
+C++ does not have a built-in or easily bundled TCP server implementation, so we
+wrote our own. It supports only basic functions like start, serve_request, and
+stop. It is created with a callback function of signature string -> string that
+handles all requests.
+
+
+TCPClient:
+C++ also does not have a built-in or easily bundled TCP client implementation, 
+so we wrote our own. It sup- ports only basic functions like connect, send_data,
+and receive.
+PnmImage:
+PnmImage is responsible for the creation and writing of collections of pixels to
+disk. RayTracer manages a PnmImage, both alone and in Collector.
