@@ -197,13 +197,13 @@ color_t RayTracer::calculate_reflection(vector3_t intersection_point,
         reflection_obj, obj) != 0) {
         vector3_t reflection_intersection = reflected_ray.start +
             (reflected_ray.direction * distance);
-            return calculate_illumination(reflection_intersection,
-                                                    reflection_obj,
-                                                    reflected_ray.direction,
-                                                    inside,
-                                                    obj_refract_index,
-                                                    depth-1) /
-                                                    (distance * distance);
+        return calculate_illumination(reflection_intersection,
+                                      reflection_obj,
+                                      reflected_ray.direction,
+                                      inside,
+                                      obj_refract_index,
+                                      depth-1) /
+                                      (distance * distance);
     }
     return color_t(0);
 }
@@ -297,10 +297,10 @@ color_t RayTracer::calculate_illumination(vector3_t intersection_point,
         /* Determine if there are intersecting objects between
          * intersection_point and light in order to render shadow */
         bool in_shadow = cast_ray(shadow_ray,
-                distance,
-                temp_material,
-                temp_obj, obj) ||
-            shadow_ray.direction.dot(obj->normal(intersection_point)) < 0;
+                    distance,
+                    temp_material,
+                    temp_obj, obj) ||
+                shadow_ray.direction.dot(obj->normal(intersection_point)) < 0;
 
 
         if (!in_shadow) {

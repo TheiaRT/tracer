@@ -94,6 +94,8 @@ vector3_t Box::normal(vector3_t at_point)
     if (zmax < zmin) {
         std::swap(zmin, zmax);
     }
+
+    /* Find which face the intersection point is on */
     if (std::abs(at_point.x - xmin) < 0.1) {
         normal.x = -1;
     }

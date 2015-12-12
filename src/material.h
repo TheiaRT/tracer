@@ -122,6 +122,7 @@ struct material_t {
         double modz = fabs(fmod(point.z, 1.0));
 
         if (texture) {
+            /* Uncomment the following for checkerboard mode */
             /*if ((modx < 0.5) ^ (mody < 0.5)) {
                 return color_t(0.1);
             } else {
