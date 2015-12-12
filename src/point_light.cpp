@@ -9,6 +9,7 @@ PointLight::PointLight(vector3_t loc, double intensity)
 {
     init(loc, color_t(intensity));
 }
+
 PointLight::PointLight(vector3_t loc, color_t intensity)
 {
     init(loc, intensity);

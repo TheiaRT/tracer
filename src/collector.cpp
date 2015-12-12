@@ -56,12 +56,15 @@ std::string Collector::serve_request(std::string req)
 
     if (root["status"] == "have_work") {
         std::cout << "work: " << root["work"] << std::endl;
+        /* Add the pixels to the pixmap. */
         process_work(root["work"], root["pixels"]);
         Json::Value root;
         root["success"] = true;
         return json_to_string(root);
     }
     else if (root["status"] == "need_work") {
+        /* We want to reduce network slowdown by only sending the scene when
+           necessary. */
         return generate_work(root["have_scene"].asBool());
     }
     else {
@@ -72,6 +75,7 @@ std::string Collector::serve_request(std::string req)
 std::string Collector::generate_work(bool has_scene)
 {
     Json::Value root;
+
     /* No need to send scene if client already has it. */
     if (has_scene == false) {
         root["scene"] = scene;
@@ -117,9 +121,9 @@ void Collector::process_work(Json::Value json_work, Json::Value json_pixels)
         pixmap.insert_chunk(pixels, work.x, work.y, work.width, work.height);
         std::cerr << "Insert!" << std::endl;
     }
-    /* Need else case so we can a) unlock early in above case and b) unlock if
-       above case does not happen. */
     else {
+        /* Need else case so we can a) unlock early in above case and b) unlock
+           if above case does not happen. */
         queue_lock.unlock();
     }
 

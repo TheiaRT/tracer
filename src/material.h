@@ -97,6 +97,7 @@ struct material_t {
         refraction_index(refraction_index)
     {
     }
+
     material_t(color_t ambient,
                color_t diffuse,
                color_t specular,
