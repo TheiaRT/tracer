@@ -21,7 +21,8 @@ void WorkQueue::add(work_t work)
     if (work.newp()) {
         int id = next_id();
         work.id = id;
-        work_map.insert(std::make_pair(id, work));
+        /* make association between id and work item */
+        work_map.insert(std::make_pair(id, work)); 
     }
 
     array[tail] = work.id;
@@ -53,6 +54,8 @@ work_t WorkQueue::get()
     while ((w = dequeue()).validp()) {
         if (!w.donep()) {
             /* Got a work_t that has not yet been completed. */
+            /* Insert w back into the queue so that it can be
+             * assigned again */
             add(w);
             return w;
         }
@@ -109,7 +112,7 @@ bool WorkQueue::isdone(int id)
 void WorkQueue::split(work_t overall, size_t chunks)
 {
     work_t *chunked_work = overall.split(chunks);
-
+    /* divide the work_t into columns */
     for (size_t i = 0; i < chunks; i++) {
         add(chunked_work[i]);
     }
