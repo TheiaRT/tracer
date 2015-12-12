@@ -13,6 +13,7 @@ enum { INSIDE_HIT = -1, MISS, OUTSIDE_HIT };
 class SceneObject {
 public:
     virtual int intersect_ray(ray_t ray, double &distance) = 0;
+
     material_t get_material() {
         return material;
     }
@@ -23,7 +24,6 @@ public:
     virtual vector3_t normal(vector3_t at_point) {
         return (at_point - loc).normalize();
     }
-
 
 protected:
     vector3_t loc;

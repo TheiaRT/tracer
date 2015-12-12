@@ -19,6 +19,8 @@ bool Worker::get_work()
 {
     std::string work_request = generate_work_request();
     std::string json_message;
+
+    /* Request work from the server. */
     if (send_and_receive(work_request, json_message) == false) {
         return false;
     }
@@ -38,18 +40,22 @@ bool Worker::parse_work_message(std::string json_message,
 {
     Json::Value message;
     Json::Reader reader;
+
+    /* See if we got valid JSON work. */
     if (reader.parse(json_message, message, false) == false) {
         std::cerr << "could not parse message: " << json_message << std::endl;
         std::cerr << reader.getFormattedErrorMessages() << std::endl;
         return false;
     }
 
+    /* If we're done and the Collector has not yet shut down. */
     if (message["status"] == "no_work") {
         return false;
     }
 
     work = work_t(message["work"]);
 
+    /* Only set the scene if we don't have it yet. */
     if (have_scene == false) {
         scene = message["scene"];
         have_scene = true;
@@ -72,7 +78,7 @@ bool Worker::trace_and_send_work()
     std::string json_work = trace();
     std::cerr << " done" << std::endl;
     std::string resp;
-    /* send the json work to the server */
+    /* Send the json work to the server. */
     if (send_and_receive(json_work, resp) == false) {
         return false;
     }
@@ -81,7 +87,7 @@ bool Worker::trace_and_send_work()
     return true;
 }
 
-/* render the pixels and return json */
+/* Render the pixels and return JSON. */
 std::string Worker::trace()
 {
     pixel_t **pixels = tracer->render_pixel_chunk(work.x,

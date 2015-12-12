@@ -25,6 +25,7 @@ Parser::Parser(Json::Value root) : root(root)
 
 void Parser::init()
 {
+    /* We map object types to their JSON converters. */
     converters.insert(
         std::make_pair("sphere", (json_converter)&Parser::json_to_sphere)
     );
@@ -39,6 +40,7 @@ void Parser::init()
 
 bool Parser::valid_object_type(std::string type)
 {
+    /* Is the type in the map? */
     return converters.find(type) != converters.end();
 }
 
@@ -71,8 +73,8 @@ material_t Parser::json_to_material(Json::Value json_material)
         json_material["reflection"].asDouble()
     );
 
-    // optionally set refraction amount, and index of refraction.
-    // If unspecified default to 0 and 1 respectively
+    /* Pptionally set refraction amount, and index of refraction.
+       If unspecified default to 0 and 1 respectively. */
     mat.refraction =
         json_material.get("refraction", Json::Value(0.0)).asDouble();
     mat.refraction_index =
