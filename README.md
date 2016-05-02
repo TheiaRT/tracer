@@ -1,2 +1,1 @@
-# littletictactoeboardconcurrentswag
-For the concurrency project!
+docs/README
